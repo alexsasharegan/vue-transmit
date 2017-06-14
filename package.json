@@ -41,7 +41,9 @@
     "type": "git",
     "url": "https://github.com/enyo/dropzone.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash-es": "^4.17.4"
+  },
   "devDependencies": {
     "chai": "1.7.x",
     "grunt": "^0.4.4",
