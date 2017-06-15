@@ -29,9 +29,11 @@
 
 <script>
 import uniqueId from 'lodash-es/uniqueId'
+import has from 'lodash-es/has'
 import noop from 'lodash-es/noop'
-import DropzoneFile from './core/DropzoneFile.js'
-import Dropzone from './core/Dropzone.js'
+import DropzoneFile from './core/DropzoneFile'
+import Dropzone from './core/Dropzone'
+import props from './core/props'
 
 const hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g
 const hbsReplacer = (context = {}) => (match, capture) => context[capture] ? context[capture] : match
@@ -39,7 +41,7 @@ const hbsReplacer = (context = {}) => (match, capture) => context[capture] ? con
 export default {
     components: {},
 
-    props: {},
+    props,
 
     data() {
         return {
@@ -117,16 +119,13 @@ export default {
         },
 
         addFile(file) {
-            const vdzFile = new DropzoneFile({
-                id: uniqueId('vdz-file-'),
+            const vdzFile = DropzoneFile.fromNativeFile(file, {
                 upload: {
                     progress: 0,
                     total: file.size,
                     bytesSent: 0
                 }
             })
-
-            vdzFile.fromNativeFile(file)
 
             this.files.push(vdzFile)
             vdzFile.status = Dropzone.ADDED
@@ -516,7 +515,7 @@ export default {
                 )
             } else if (!Dropzone.isValidFile(file, this.acceptedFileTypes)) {
 
-                return done(this.dictInvalidFileType);
+                return done(this.dictInvalidFileType)
 
             } else if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
                 done(this.dictMaxFilesExceeded.replace(hbsRegex, hbsReplacer({ maxFiles: this.maxFiles })))
@@ -556,9 +555,83 @@ export default {
 
             return false
         },
-    },
 
-    filters: {},
+        drop(e) {
+            if (!e.dataTransfer) {
+                return
+            }
+
+            this.$emit("drop", e)
+
+            const files = Array.from(e.dataTransfer.files)
+
+            this.$emit("added-files", files)
+
+            if (files.length) {
+                const items = Array.from(e.dataTransfer.items)
+
+                if (items && items.length && items[0].webkitGetAsEntry) {
+                    this.addFilesFromItems(items)
+                } else {
+                    this.handleFiles(files)
+                }
+            }
+        },
+
+        paste(e) {
+            if (!has(e, ['clipboardData', 'items'])) {
+                return
+            }
+
+            this.$emit("paste", e)
+            const items = Array.from(e.clipboardData.items)
+
+            if (items.length) {
+                this.addFilesFromItems(items)
+            }
+        },
+
+        handleFiles(files) {
+            return files.map(file => this.addFile(file))
+        },
+
+        addFilesFromItems(items) {
+            items.forEach(item => {
+                if (item.webkitGetAsEntry) {
+                    const entry = item.webkitGetAsEntry()
+
+                    if (entry.isFile) {
+                        this.addFile(entry.getAsFile())
+                    } else if (entry.isDirectory) {
+                        this.addFilesFromDirectory(entry, entry.name)
+                    }
+
+                } else if (item.getAsFile) {
+                    if (item.kind === "file") {
+                        this.addFile(item.getAsFile())
+                    }
+                }
+            })
+        },
+
+        addFilesFromDirectory(directory, path) {
+            directory.createReader().readEntries(entries => {
+                entries.forEach(entry => {
+                    if (entry.isFile) {
+                        entry.file(file => {
+                            if (this.ignoreHiddenFiles && /^\./.test(file.name)) {
+                                return
+                            }
+                            file.fullPath = `${path}/${file.name}`
+                            this.addFile(file)
+                        }, console.error)
+                    } else if (entry.isDirectory) {
+                        this.addFilesFromDirectory(entry, `${path}/${entry.name}`)
+                    }
+                })
+            }, console.error)
+        },
+    },
 
     mounted() {
         this.URL = (_ref = window.URL) != null ? _ref : window.webkitURL
@@ -655,7 +728,8 @@ export default {
             }
         })(this))
         this.enable()
-        return this.init.call(this)
+
+        this.$emit('initialize', this)
     },
 
 }

@@ -1,3 +1,5 @@
+import uniqueId from "lodash-es/uniqueId"
+
 export default class DropzoneFile {
     constructor(...data) {
         Object.assign(this, this.constructor.defaults(), ...data)
@@ -9,7 +11,7 @@ export default class DropzoneFile {
         return this
     }
 
-    fromNativeFile(file) {
+    copyNativeFile(file) {
         if (file instanceof window.File) {
             // save reference for upload
             this._nativeFile = file
@@ -39,7 +41,7 @@ export default class DropzoneFile {
     static defaults() {
         return {
             _nativeFile: undefined,
-            id: undefined,
+            id: this.idFactory(),
             accepted: undefined,
             height: undefined,
             lastModified: undefined,
@@ -60,7 +62,11 @@ export default class DropzoneFile {
         }
     }
 
-    static factory(...args) {
-        return new this(...args)
+    static fromNativeFile(file, ...data) {
+        return new this(...data).copyNativeFile(file)
+    }
+
+    static idFactory() {
+        return uniqueId("vdz-file-")
     }
 }
