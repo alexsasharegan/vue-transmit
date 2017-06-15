@@ -1,23 +1,25 @@
 <template>
     <div>
-        <div class="uploader-action"
-             @click="handleClickUploaderAction">
-            <!---->
-        </div>
-        <div class="hidden-input-container">
-            <input type="file"
-                   ref="hiddenFileInput"
-                   :multiple="uploadMultiple"
-                   class="dz-hidden-input"
-                   :class="[maxFilesReachedClass]"
-                   :accept="filesToAccept"
-                   @change="onFileInputChange">
-        </div>
+        <slot class="vdz-dropzone"
+              @click="handleClickUploaderAction"
+              @dragstart="$emit('drag-start', $event)"
+              @dragend="$emit('drag-end', $event)"
+              @dragenter.stop="$emit('drag-enter', $event)"
+              @dragover="handleDragOver"
+              @dragleave="$emit('drag-leave', $event)"
+              @drop.stop="drop"></slot>
+        <input type="file"
+               ref="hiddenFileInput"
+               :multiple="uploadMultiple"
+               class="vdz-hidden-input"
+               :class="[maxFilesReachedClass]"
+               :accept="filesToAccept"
+               @change="onFileInputChange">
     </div>
 </template>
 
 <style lang="scss" scoped>
-    .dz-hidden-input {
+    .vdz-hidden-input {
         visibility: hidden;
         position: absolute;
         top: 0;
@@ -54,6 +56,10 @@ export default {
     },
 
     computed: {
+        inputEl() {
+            return this.$refs.hiddenFileInput
+        },
+
         filesToAccept() {
             return this.acceptedFileTypes.join(",")
         },
@@ -171,7 +177,9 @@ export default {
         },
 
         handleClickUploaderAction(e) {
-            //
+            if (this.clickable) {
+                this.inputEl.click()
+            }
         },
 
         enqueueFile(file) {
@@ -464,6 +472,21 @@ export default {
             return xhr.send(formData)
         },
 
+        updateTotalUploadProgress() {
+            let progress = this.activeFiles.reduce((memo, file) => {
+                memo.totalBytesSent += file.upload.bytesSent
+                memo.totalBytes += file.upload.total
+
+                return memo
+            }, { totalBytesSent: 0, totalBytes: 0, totalUploadProgress: 100 })
+
+            if (this.activeFiles.length) {
+                progress.totalUploadProgress = 100 * progress.totalBytesSent / progress.totalBytes
+            }
+
+            this.$emit("total-upload-progress", progress.totalUploadProgress, progress.totalBytes, progress.totalBytesSent)
+        },
+
         getParamName(index) {
             return this.paramName + (
                 this.uploadMultiple ? `[${index}]` : ''
@@ -631,103 +654,32 @@ export default {
                 })
             }, console.error)
         },
+
+        handleDragOver(e) {
+            let effect
+
+            try {
+                effect = e.dataTransfer.effectAllowed
+            } catch (error) { }
+
+            e.dataTransfer.dropEffect = 'move' === effect || 'linkMove' === effect ? 'move' : 'copy'
+
+            this.$emit('drag-over', e)
+        },
     },
 
     mounted() {
-        this.URL = (_ref = window.URL) != null ? _ref : window.webkitURL
-        this.on("uploadprogress", (function (this) {
-            return function () {
-                return this.updateTotalUploadProgress()
+        this.$on("upload-progress", this.updateTotalUploadProgress)
+
+        this.$on("removed-file", this.updateTotalUploadProgress)
+
+        this.on("canceled", (file) => this.$emit("complete", file))
+
+        this.on("complete", (file) => {
+            if (this.addedFiles.length === 0 && this.uploadingFiles.length === 0 && this.queuedFiles.length === 0) {
+                setTimeout(() => this.$emit("queue-complete", file), 0)
             }
-        })(this))
-        this.on("removedfile", (function (this) {
-            return function () {
-                return this.updateTotalUploadProgress()
-            }
-        })(this))
-        this.on("canceled", (function (this) {
-            return function (file) {
-                return this.$emit("complete", file)
-            }
-        })(this))
-        this.on("complete", (function (this) {
-            return function (file) {
-                if (this.addedFiles.length === 0 && this.uploadingFiles.length === 0 && this.queuedFiles.length === 0) {
-                    return setTimeout((function () {
-                        return this.$emit("queuecomplete")
-                    }), 0)
-                }
-            }
-        })(this))
-        noPropagation = function (e) {
-            e.stopPropagation()
-            if (e.preventDefault) {
-                return e.preventDefault()
-            } else {
-                return e.returnValue = false
-            }
-        }
-        this.listeners = [
-            {
-                element: this.element,
-                events: {
-                    "dragstart": (function (this) {
-                        return function (e) {
-                            return this.$emit("dragstart", e)
-                        }
-                    })(this),
-                    "dragenter": (function (this) {
-                        return function (e) {
-                            noPropagation(e)
-                            return this.$emit("dragenter", e)
-                        }
-                    })(this),
-                    "dragover": (function (this) {
-                        return function (e) {
-                            var efct
-                            try {
-                                efct = e.dataTransfer.effectAllowed
-                            } catch (_error) { }
-                            e.dataTransfer.dropEffect = 'move' === efct || 'linkMove' === efct ? 'move' : 'copy'
-                            noPropagation(e)
-                            return this.$emit("dragover", e)
-                        }
-                    })(this),
-                    "dragleave": (function (this) {
-                        return function (e) {
-                            return this.$emit("dragleave", e)
-                        }
-                    })(this),
-                    "drop": (function (this) {
-                        return function (e) {
-                            noPropagation(e)
-                            return this.drop(e)
-                        }
-                    })(this),
-                    "dragend": (function (this) {
-                        return function (e) {
-                            return this.$emit("dragend", e)
-                        }
-                    })(this)
-                }
-            }
-        ]
-        this.clickableElements.forEach((function (this) {
-            return function (clickableElement) {
-                return this.listeners.push({
-                    element: clickableElement,
-                    events: {
-                        "click": function (evt) {
-                            if ((clickableElement !== this.element) || (evt.target === this.element || Dropzone.elementInside(evt.target, this.element.querySelector(".dz-message")))) {
-                                this.hiddenFileInput.click()
-                            }
-                            return true
-                        }
-                    }
-                })
-            }
-        })(this))
-        this.enable()
+        })
 
         this.$emit('initialize', this)
     },
