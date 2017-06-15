@@ -2,7 +2,7 @@
     "name": "vue-dropzone",
     "version": "1.0.0",
     "description": "Vue.js drag & drop uploader based on Dropzone.js",
-    "main": "index.js",
+    "main": "dist/vue-dropzone.esm.js",
     "keywords": [
         "dragndrop",
         "drag and drop",
