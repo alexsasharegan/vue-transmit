@@ -34,7 +34,6 @@ import uniqueId from 'lodash-es/uniqueId'
 import has from 'lodash-es/has'
 import noop from 'lodash-es/noop'
 import DropzoneFile from './core/DropzoneFile'
-import Dropzone from './core/Dropzone'
 import props from './core/props'
 
 const hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g
@@ -77,19 +76,19 @@ export default {
         },
 
         addedFiles() {
-            return this.getFilesWithStatuses(Dropzone.ADDED)
+            return this.getFilesWithStatus(Dropzone.ADDED)
         },
 
         queuedFiles() {
-            return this.getFilesWithStatuses(Dropzone.QUEUED)
+            return this.getFilesWithStatus(Dropzone.QUEUED)
         },
 
         uploadingFiles() {
-            return this.getFilesWithStatuses(Dropzone.UPLOADING)
+            return this.getFilesWithStatus(Dropzone.UPLOADING)
         },
 
         activeFiles() {
-            return this.getFilesWithStatuses(Dropzone.UPLOADING, Dropzone.QUEUED)
+            return this.getFilesWithStatus(Dropzone.UPLOADING, Dropzone.QUEUED)
         },
 
         maxFilesReached() {
@@ -114,7 +113,7 @@ export default {
     },
 
     methods: {
-        getFilesWithStatuses(...statuses) {
+        getFilesWithStatus(...statuses) {
             return this.files.filter(f => statuses.includes(f.status))
         },
 
@@ -284,27 +283,21 @@ export default {
         },
 
         processQueue() {
-            const parallelUploads = this.parallelUploads
-            const processingLength = this.uploadingFiles().length
+            const processingLength = this.uploadingFiles.length
 
-            if (processingLength >= parallelUploads) {
+            if (processingLength >= this.parallelUploads || this.queuedFiles.length === 0) {
                 return
             }
 
             const queuedFiles = [...this.queuedFiles]
 
-            if (queuedFiles.length === 0) {
-                return
-            }
-
             if (this.uploadMultiple) {
-                return this.processFiles(this.queuedFiles.slice(0, parallelUploads - processingLength))
+                return this.processFiles(queuedFiles.slice(0, this.parallelUploads - processingLength))
             } else {
-                for (let i = processingLength; i < parellelUploads; i++) {
-                    if (!queuedFiles.length) {
-                        return
+                for (let i = processingLength; i < this.parallelUploads; i++) {
+                    if (queuedFiles.length) {
+                        this.processFile(queuedFiles.shift())
                     }
-                    this.processFile(queuedFiles.shift())
                 }
             }
         },

@@ -12,15 +12,48 @@
     "directories": {
         "test": "test"
     },
+    "scripts": {
+        "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+        "webpack-bundle-dev": "cross-env NODE_ENV=development webpack --progress --hide-modules -w",
+        "webpack-bundle-prod": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+        "bundle": "rollup -c ./rollup.config.js",
+        "test": "Hello World!"
+    },
     "dependencies": {
         "lodash-es": "^4.17.4"
     },
     "devDependencies": {
-        "coffee-script": "^1.3.3",
-        "mocha": "^1.21.5"
-    },
-    "scripts": {
-        "test": "mocha"
+        "autoprefixer": "^7.1.1",
+        "babel-core": "^6.25.0",
+        "babel-loader": "^7.0.0",
+        "babel-plugin-transform-object-rest-spread": "^6.23.0",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.5.2",
+        "babel-preset-stage-0": "^6.24.1",
+        "cross-env": "^5.0.1",
+        "css-loader": "^0.28.4",
+        "extract-text-webpack-plugin": "^2.1.2",
+        "file-loader": "^0.11.2",
+        "lodash": "^4.17.4",
+        "node-sass": "^4.5.3",
+        "optimize-css-assets-webpack-plugin": "^2.0.0",
+        "postcss-loader": "^2.0.6",
+        "rollup": "^0.43.0",
+        "rollup-plugin-buble": "^0.15.0",
+        "rollup-plugin-commonjs": "^8.0.2",
+        "rollup-plugin-node-resolve": "^3.0.0",
+        "rollup-plugin-uglify": "^2.0.1",
+        "rollup-plugin-vue": "^2.4.0",
+        "rollup-watch": "^4.0.0",
+        "sass-loader": "^6.0.6",
+        "style-loader": "^0.18.2",
+        "uglify-es": "^3.0.15",
+        "uglify-js-harmony": "^2.7.7",
+        "url-loader": "^0.5.9",
+        "vue-loader": "^12.2.1",
+        "vue-template-compiler": "^2.3.4",
+        "webpack": "^2.6.1",
+        "webpack-dev-server": "^2.4.5"
     },
     "repository": {
         "type": "git",
