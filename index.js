@@ -1,7 +1,7 @@
-import VueDropzone from "./src/VueDropzone.vue"
+import VueTransmit from "./src/VueTransmit.vue"
 
-export default {
+window.VueTransmit = {
     install(Vue, options) {
-        Vue.component("VueDropzone", VueDropzone)
+        Vue.component("VueTransmit", VueTransmit)
     }
 }

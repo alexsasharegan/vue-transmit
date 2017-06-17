@@ -1,7 +1,7 @@
 <template>
     <div>
         <slot class="vdz-dropzone"
-              @click="handleClickUploaderAction"
+              @click.native="handleClickUploaderAction"
               @dragstart="$emit('drag-start', $event)"
               @dragend="$emit('drag-end', $event)"
               @dragenter.stop="$emit('drag-enter', $event)"
@@ -38,11 +38,21 @@ import props from './core/props'
 
 const hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g
 const hbsReplacer = (context = {}) => (match, capture) => context[capture] ? context[capture] : match
+const Dropzone = {
+    ADDED: "added",
+    QUEUED: "queued",
+    ACCEPTED: "queued",
+    UPLOADING: "uploading",
+    PROCESSING: "uploading",
+    CANCELED: "canceled",
+    ERROR: "error",
+    SUCCESS: "success",
+}
 
 export default {
     components: {},
 
-    props,
+    props: props,
 
     data() {
         return {
@@ -442,7 +452,7 @@ export default {
                 "X-Requested-With": "XMLHttpRequest"
             }, this.headers)
 
-            for (headerName in headers) {
+            for (let headerName in headers) {
                 if (headers[headerName]) {
                     xhr.setRequestHeader(headerName, headers[headerName])
                 }
@@ -529,7 +539,7 @@ export default {
                             maxFileSize: this.maxFilesize
                         }))
                 )
-            } else if (!Dropzone.isValidFile(file, this.acceptedFileTypes)) {
+            } else if (!this.isValidFile(file, this.acceptedFileTypes)) {
 
                 return done(this.dictInvalidFileType)
 
@@ -666,9 +676,9 @@ export default {
 
         this.$on("removed-file", this.updateTotalUploadProgress)
 
-        this.on("canceled", (file) => this.$emit("complete", file))
+        this.$on("canceled", (file) => this.$emit("complete", file))
 
-        this.on("complete", (file) => {
+        this.$on("complete", (file) => {
             if (this.addedFiles.length === 0 && this.uploadingFiles.length === 0 && this.queuedFiles.length === 0) {
                 setTimeout(() => this.$emit("queue-complete", file), 0)
             }

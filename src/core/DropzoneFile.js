@@ -63,7 +63,8 @@ export default class DropzoneFile {
     }
 
     static fromNativeFile(file, ...data) {
-        return new this(...data).copyNativeFile(file)
+        const instance = new this(...data)
+        return instance.copyNativeFile(file)
     }
 
     static idFactory() {
