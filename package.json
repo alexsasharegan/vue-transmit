@@ -1,5 +1,5 @@
 {
-    "name": "vue-dropzone",
+    "name": "vue-transmit",
     "version": "1.0.0",
     "description": "Vue.js drag & drop uploader based on Dropzone.js",
     "main": "dist/vue-dropzone.esm.js",
@@ -57,7 +57,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/alexsasharegan/vue-dropzone.git"
+        "url": "git+https://github.com/alexsasharegan/vue-transmit.git"
     },
     "author": "Alex Regan <alex.joseph.regan@gmail.com> (https://github.com/alexsasharegan)",
     "license": "ISC",
