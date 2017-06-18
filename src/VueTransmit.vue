@@ -1,16 +1,18 @@
 <template>
     <div>
-        <slot class="vdz-dropzone"
-              @click.native="handleClickUploaderAction"
-              @dragstart="$emit('drag-start', $event)"
-              @dragend="$emit('drag-end', $event)"
-              @dragenter.stop="$emit('drag-enter', $event)"
-              @dragover="handleDragOver"
-              @dragleave="$emit('drag-leave', $event)"
-              @drop.stop="drop"></slot>
+        <div class="vdz-dropzone"
+             @click="handleClickUploaderAction"
+             @dragstart="$emit('drag-start', $event)"
+             @dragend="$emit('drag-end', $event)"
+             @dragenter.stop="$emit('drag-enter', $event)"
+             @dragover="handleDragOver"
+             @dragleave="$emit('drag-leave', $event)"
+             @drop.stop="drop">
+            <slot></slot>
+        </div>
         <input type="file"
                ref="hiddenFileInput"
-               :multiple="uploadMultiple"
+               :multiple="multiple"
                class="vdz-hidden-input"
                :class="[maxFilesReachedClass]"
                :accept="filesToAccept"
@@ -37,7 +39,7 @@ import DropzoneFile from './core/DropzoneFile'
 import props from './core/props'
 
 const hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g
-const hbsReplacer = (context = {}) => (match, capture) => context[capture] ? context[capture] : match
+const hbsReplacer = (context = {}) => (match, capture) => context[capture] !== undefined ? context[capture] : match
 const Dropzone = {
     ADDED: "added",
     QUEUED: "queued",
@@ -377,7 +379,11 @@ export default {
 
             let response = null
 
-            const handleError = () => files.map(this.errorProcessing(files, (response || this.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))), xhr))
+            const handleError = () => {
+                const message = response || this.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
+                this.errorProcessing(files, message, xhr)
+            }
+
             const updateProgress = (e) => {
                 let progress = 0
 
@@ -460,7 +466,7 @@ export default {
 
             const formData = new FormData()
 
-            for (key in this.params) {
+            for (let key in this.params) {
                 formData.append(key, this.params[key])
             }
 
