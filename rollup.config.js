@@ -3,6 +3,9 @@ const path = require("path")
 const vue = require("rollup-plugin-vue")
 const buble = require("rollup-plugin-buble")
 const resolve = require("rollup-plugin-node-resolve")
+const postcss = require("postcss")
+const autoprefixer = require("autoprefixer")
+const scss = require("rollup-plugin-scss")
 const commonjs = require("rollup-plugin-commonjs")
 const uglify = require("rollup-plugin-uglify")
 const { minify } = require("uglify-es")
@@ -29,10 +32,14 @@ module.exports = {
                 generateScopedName: "[name]__[local]"
             },
             css(style) {
-                fs.writeFileSync(`./dist/${name}.css`, new CleanCSS().minify(style).styles)
+                postcss([autoprefixer]).process(style).then(({ css }) => {
+                    fs.writeFileSync(`./dist/${name}.css`, new CleanCSS().minify(css).styles)
+                })
             }
         }),
-        buble(),
+        buble({
+            objectAssign: "Object.assign"
+        }),
         resolve({ external: ["vue"] }),
         commonjs(),
         uglify({}, minify)

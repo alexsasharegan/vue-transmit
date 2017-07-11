@@ -13,17 +13,15 @@
         "test": "test"
     },
     "scripts": {
-        "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-        "webpack-bundle-dev": "cross-env NODE_ENV=development webpack --progress --hide-modules -w",
-        "webpack-bundle-prod": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-        "bundle": "rollup -c ./rollup.config.js",
-        "test": "Hello World!"
+        "build": "rollup -c ./rollup.config.js",
+        "dev": "rollup -c ./rollup.config.js -w",
+        "test": "php -S localhost:3000 -t ./test/"
     },
     "dependencies": {
         "lodash-es": "^4.17.4"
     },
     "devDependencies": {
-        "autoprefixer": "^7.1.1",
+        "autoprefixer": "^7.1.2",
         "babel-core": "^6.25.0",
         "babel-loader": "^7.0.0",
         "babel-plugin-transform-object-rest-spread": "^6.23.0",
@@ -37,11 +35,13 @@
         "lodash": "^4.17.4",
         "node-sass": "^4.5.3",
         "optimize-css-assets-webpack-plugin": "^2.0.0",
+        "postcss": "^6.0.6",
         "postcss-loader": "^2.0.6",
         "rollup": "^0.43.0",
         "rollup-plugin-buble": "^0.15.0",
         "rollup-plugin-commonjs": "^8.0.2",
         "rollup-plugin-node-resolve": "^3.0.0",
+        "rollup-plugin-scss": "^0.3.0",
         "rollup-plugin-uglify": "^2.0.1",
         "rollup-plugin-vue": "^2.4.0",
         "rollup-watch": "^4.0.0",

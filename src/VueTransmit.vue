@@ -4,10 +4,10 @@
              @click="handleClickUploaderAction"
              @dragstart="$emit('drag-start', $event)"
              @dragend="$emit('drag-end', $event)"
-             @dragenter.stop="$emit('drag-enter', $event)"
-             @dragover="handleDragOver"
+             @dragenter.prevent.stop="$emit('drag-enter', $event)"
+             @dragover.prevent.stop="handleDragOver"
              @dragleave="$emit('drag-leave', $event)"
-             @drop.stop="drop">
+             @drop.prevent.stop="onDrop">
             <slot></slot>
         </div>
         <input type="file"
@@ -588,7 +588,8 @@ export default {
             return false
         },
 
-        drop(e) {
+        onDrop(e) {
+            console.log("Drop", e)
             if (!e.dataTransfer) {
                 return
             }
@@ -633,7 +634,7 @@ export default {
                     const entry = item.webkitGetAsEntry()
 
                     if (entry.isFile) {
-                        this.addFile(entry.getAsFile())
+                        entry.file(this.addFile)
                     } else if (entry.isDirectory) {
                         this.addFilesFromDirectory(entry, entry.name)
                     }
@@ -679,12 +680,9 @@ export default {
 
     mounted() {
         this.$on("upload-progress", this.updateTotalUploadProgress)
-
         this.$on("removed-file", this.updateTotalUploadProgress)
-
-        this.$on("canceled", (file) => this.$emit("complete", file))
-
-        this.$on("complete", (file) => {
+        this.$on("canceled", file => this.$emit("complete", file))
+        this.$on("complete", file => {
             if (this.addedFiles.length === 0 && this.uploadingFiles.length === 0 && this.queuedFiles.length === 0) {
                 setTimeout(() => this.$emit("queue-complete", file), 0)
             }
