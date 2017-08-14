@@ -1,68 +1,63 @@
 {
-    "name": "vue-transmit",
-    "version": "1.0.1",
-    "description": "Vue.js drag & drop uploader based on Dropzone.js",
-    "main": "dist/vue-dropzone.esm.js",
-    "keywords": [
-        "dragndrop",
-        "drag and drop",
-        "file upload",
-        "upload"
-    ],
-    "directories": {
-        "test": "test"
-    },
-    "scripts": {
-        "build": "rollup -c ./rollup.config.js",
-        "dev": "rollup -c ./rollup.config.js -w",
-        "test": "php -S localhost:3000 -t ./test/"
-    },
-    "dependencies": {
-        "lodash-es": "^4.17.4"
-    },
-    "devDependencies": {
-        "autoprefixer": "^7.1.2",
-        "babel-core": "^6.25.0",
-        "babel-loader": "^7.0.0",
-        "babel-plugin-transform-object-rest-spread": "^6.23.0",
-        "babel-plugin-transform-runtime": "^6.23.0",
-        "babel-preset-env": "^1.5.2",
-        "babel-preset-stage-0": "^6.24.1",
-        "cross-env": "^5.0.5",
-        "css-loader": "^0.28.4",
-        "extract-text-webpack-plugin": "^3.0.0",
-        "file-loader": "^0.11.2",
-        "lodash": "^4.17.4",
-        "node-sass": "^4.5.3",
-        "optimize-css-assets-webpack-plugin": "^3.0.0",
-        "postcss": "^6.0.9",
-        "postcss-loader": "^2.0.6",
-        "rollup": "^0.47.4",
-        "rollup-plugin-buble": "^0.15.0",
-        "rollup-plugin-commonjs": "^8.1.0",
-        "rollup-plugin-node-resolve": "^3.0.0",
-        "rollup-plugin-scss": "^0.3.0",
-        "rollup-plugin-uglify": "^2.0.1",
-        "rollup-plugin-vue": "^2.4.1",
-        "rollup-watch": "^4.3.1",
-        "sass-loader": "^6.0.6",
-        "style-loader": "^0.18.2",
-        "uglify-es": "^3.0.27",
-        "uglify-js-harmony": "^2.7.7",
-        "url-loader": "^0.5.9",
-        "vue-loader": "^13.0.4",
-        "vue-template-compiler": "^2.4.2",
-        "webpack": "^3.5.4",
-        "webpack-dev-server": "^2.7.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/alexsasharegan/vue-transmit.git"
-    },
-    "author": "Alex Regan <alex.joseph.regan@gmail.com> (https://github.com/alexsasharegan)",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/alexsasharegan/vue-dropzone/issues"
-    },
-    "homepage": "https://github.com/alexsasharegan/vue-dropzone#readme"
+  "name": "vue-transmit",
+  "version": "1.0.1",
+  "description": "Vue.js drag & drop uploader based on Dropzone.js",
+  "main": "dist/vue-dropzone.esm.js",
+  "keywords": ["dragndrop", "drag and drop", "file upload", "upload"],
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "rollup -c ./rollup.config.js",
+    "dev": "rollup -c ./rollup.config.js -w",
+    "test": "php -S localhost:3000 -t ./test/"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.5.2",
+    "babel-preset-stage-0": "^6.24.1",
+    "cross-env": "^5.0.5",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "lodash": "^4.17.4",
+    "node-sass": "^4.5.3",
+    "optimize-css-assets-webpack-plugin": "^3.0.0",
+    "postcss": "^6.0.9",
+    "postcss-loader": "^2.0.6",
+    "rollup": "^0.47.4",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^8.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-scss": "^0.3.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-plugin-vue": "^2.4.1",
+    "rollup-watch": "^4.3.1",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "uglify-es": "^3.0.27",
+    "uglify-js-harmony": "^2.7.7",
+    "url-loader": "^0.5.9",
+    "vue-loader": "^13.0.4",
+    "vue-template-compiler": "^2.4.2",
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexsasharegan/vue-transmit.git"
+  },
+  "author": "Alex Regan <alex.joseph.regan@gmail.com> (https://github.com/alexsasharegan)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexsasharegan/vue-dropzone/issues"
+  },
+  "homepage": "https://github.com/alexsasharegan/vue-dropzone#readme"
 }
