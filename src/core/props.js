@@ -240,8 +240,8 @@ export default {
 
       const srcRatio = width / height
 
-      info.optWidth = this.options.thumbnailWidth
-      info.optHeight = this.options.thumbnailHeight
+      info.optWidth = this.thumbnailWidth
+      info.optHeight = this.thumbnailHeight
 
       if (info.optWidth == null && info.optHeight == null) {
         info.optWidth = info.srcWidth

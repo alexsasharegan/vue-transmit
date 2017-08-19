@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="vdz-dropzone"
+    <div class="v-transmit-zone"
          @click="handleClickUploaderAction"
          @dragstart="$emit('drag-start', $event)"
          @dragend="$emit('drag-end', $event)"
@@ -13,7 +13,7 @@
     <input type="file"
            ref="hiddenFileInput"
            :multiple="multiple"
-           class="vdz-hidden-input"
+           class="v-transmit-hidden-input"
            :class="[maxFilesReachedClass]"
            :accept="filesToAccept"
            @change="onFileInputChange">
@@ -21,7 +21,7 @@
 </template>
 
 <style lang="scss" scoped>
-  .vdz-hidden-input {
+  .v-transmit-hidden-input {
     visibility: hidden;
     position: absolute;
     top: 0;
@@ -35,12 +35,11 @@
 import uniqueId from 'lodash-es/uniqueId'
 import has from 'lodash-es/has'
 import noop from 'lodash-es/noop'
-import DropzoneFile from './core/DropzoneFile'
+import VTransmitFile from './core/VTransmitFile'
 import props from './core/props'
+import { hbsReplacer, READY_STATES } from "./core/utils"
 
-const hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g
-const hbsReplacer = (context = {}) => (match, capture) => context[capture] !== undefined ? context[capture] : match
-const Dropzone = {
+const STATUSES = {
   ADDED: "added",
   QUEUED: "queued",
   ACCEPTED: "queued",
@@ -52,14 +51,19 @@ const Dropzone = {
 }
 
 export default {
-  props: props,
+  props,
   data() {
     return {
-      processingThumbnail: false,
+      processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
       thumbnailQueue: [],
       clickableElements: [],
       listeners: [],
       files: [],
+      defaultHeaders: {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+      }
     }
   },
   computed: {
@@ -79,16 +83,16 @@ export default {
       return this.files.filter(f => !f.accepted)
     },
     addedFiles() {
-      return this.getFilesWithStatus(Dropzone.ADDED)
+      return this.getFilesWithStatus(STATUSES.ADDED)
     },
     queuedFiles() {
-      return this.getFilesWithStatus(Dropzone.QUEUED)
+      return this.getFilesWithStatus(STATUSES.QUEUED)
     },
     uploadingFiles() {
-      return this.getFilesWithStatus(Dropzone.UPLOADING)
+      return this.getFilesWithStatus(STATUSES.UPLOADING)
     },
     activeFiles() {
-      return this.getFilesWithStatus(Dropzone.UPLOADING, Dropzone.QUEUED)
+      return this.getFilesWithStatus(STATUSES.UPLOADING, STATUSES.QUEUED)
     },
     maxFilesReached() {
       return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles
@@ -116,33 +120,27 @@ export default {
       this.$emit('added-files', files)
     },
     addFile(file) {
-      const vdzFile = DropzoneFile.fromNativeFile(file, {
-        upload: {
-          progress: 0,
-          total: file.size,
-          bytesSent: 0
-        }
-      })
-      this.files.push(vdzFile)
-      vdzFile.status = Dropzone.ADDED
-      this.$emit("added-file", file)
-      this.enqueueThumbnail(file)
+      const vTransmitFile = VTransmitFile.fromNativeFile(file)
+      vTransmitFile.status = STATUSES.ADDED
+      this.files.push(vTransmitFile)
+      this.$emit("added-file", vTransmitFile)
+      this.enqueueThumbnail(vTransmitFile)
 
-      return this.vdzAccept(vdzFile, error => {
+      return this.acceptFile(vTransmitFile, error => {
         if (error) {
-          vdzFile.accepted = false
-          this.errorProcessing([vdzFile], error)
+          vTransmitFile.accepted = false
+          this.errorProcessing([vTransmitFile], error)
         } else {
-          vdzFile.accepted = true
+          vTransmitFile.accepted = true
           if (this.autoQueue) {
-            this.enqueueFile(vdzFile)
+            this.enqueueFile(vTransmitFile)
           }
         }
-        return vdzFile
+        return vTransmitFile
       })
     },
     removeFile(file) {
-      if (file.status === Dropzone.UPLOADING) {
+      if (file.status === STATUSES.UPLOADING) {
         this.cancelUpload(file)
       }
       this.files = this.files.filter(f => f.id === file.id)
@@ -153,19 +151,22 @@ export default {
     },
     removeAllFiles(cancelInProgressUploads = false) {
       this.files.forEach(file => {
-        if (file.status !== Dropzone.UPLOADING || cancelInProgressUploads) {
+        if (file.status !== STATUSES.UPLOADING || cancelInProgressUploads) {
           this.removeFile(file)
         }
       })
     },
+    triggerBrowseFiles() {
+      this.inputEl.click()
+    },
     handleClickUploaderAction(e) {
       if (this.clickable) {
-        this.inputEl.click()
+        this.triggerBrowseFiles()
       }
     },
     enqueueFile(file) {
-      if (file.status === Dropzone.ADDED && file.accepted === true) {
-        file.status = Dropzone.QUEUED
+      if (file.status === STATUSES.ADDED && file.accepted === true) {
+        file.status = STATUSES.QUEUED
         if (this.autoProcessQueue) {
           setTimeout(this.processQueue, 0)
         }
@@ -174,12 +175,14 @@ export default {
       }
     },
     enqueueThumbnail(file) {
-      if (this.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.maxThumbnailFilesize * 1024 * 1024) {
+      if (this.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.maxThumbnailFileSize * 1024 * 1024) {
         this.thumbnailQueue.push(file)
         setTimeout(this.processThumbnailQueue, 0)
       }
     },
     processThumbnailQueue() {
+      // Employ a chain of self-calling, self-queuing createThumbnail calls
+      // so execution can stay as non-blocking as possible.
       if (this.processingThumbnail || this.thumbnailQueue.length === 0) {
         return
       }
@@ -189,25 +192,26 @@ export default {
         return this.processThumbnailQueue()
       })
     },
-    createThumbnail(file, cb = noop) {
-      const fileReader = new FileReader()
-      fileReader.onload = () => {
+    createThumbnail(file, callback = noop) {
+      const fr = new FileReader()
+      fr.addEventListener("load", () => {
         if (file.type === "image/svg+xml") {
-          this.$emit("thumbnail", file, fileReader.result)
-          return cb()
+          this.$emit("thumbnail", file, fr.result)
+          return callback()
         }
-        return this.createThumbnailFromUrl(file, fileReader.result, cb)
-      }
+        return this.createThumbnailFromUrl(file, fr.result, callback)
+      }, false)
 
-      return fileReader.readAsDataURL(file)
+      // FileReader requires a native File|Blob object
+      return fr.readAsDataURL(file.nativeFile)
     },
-    createThumbnailFromUrl(file, imageUrl, cb, crossOrigin) {
+    createThumbnailFromUrl(file, imageUrl, callback, crossOrigin) {
       const $img = document.createElement("img")
       if (crossOrigin) {
         $img.crossOrigin = crossOrigin
       }
 
-      $img.onload = () => {
+      $img.addEventListener("load", () => {
         const resizeInfo = this.resize(file)
         file.width = $img.width
         file.height = $img.height
@@ -218,12 +222,12 @@ export default {
           resizeInfo.trgHeight = resizeInfo.optHeight
         }
 
-        canvas = document.createElement("canvas")
-        ctx = canvas.getContext("2d")
+        const canvas = document.createElement("canvas")
+        const ctx = canvas.getContext("2d")
         canvas.width = resizeInfo.trgWidth
         canvas.height = resizeInfo.trgHeight
         ctx.drawImage(
-          img,
+          $img,
           (resizeInfo.srcX || 0),
           (resizeInfo.srcY || 0),
           resizeInfo.srcWidth,
@@ -236,12 +240,12 @@ export default {
         const thumbnail = canvas.toDataURL("image/png")
         this.$emit("thumbnail", file, thumbnail)
 
-        if (cb) {
-          return cb()
+        if (callback) {
+          return callback()
         }
-      }
-      if (cb) {
-        $img.onerror = cb
+      }, false)
+      if (callback) {
+        $img.addEventListener("error", callback, false)
       }
 
       return $img.src = imageUrl
@@ -267,11 +271,11 @@ export default {
       return this.processFiles([file])
     },
     processFiles(files) {
-      files.forEach(file => {
+      for (const file of files) {
         file.processing = true
-        file.status = Dropzone.UPLOADING
+        file.status = STATUSES.UPLOADING
         this.$emit("processing", file)
-      })
+      }
       if (this.uploadMultiple) {
         this.$emit("processing-multiple", files)
       }
@@ -282,18 +286,18 @@ export default {
       return this.files.filter(file => file.xhr === xhr)
     },
     cancelUpload(file) {
-      if (file.status === Dropzone.UPLOADING) {
+      if (file.status === STATUSES.UPLOADING) {
         const groupedFiles = this.getFilesWithXhr(file.xhr)
         file.xhr.abort()
-        groupedFiles.forEach(file => {
-          file.status = Dropzone.CANCELED
-          this.$emit("canceled", file)
-        })
+        for (const gFile of groupedFiles) {
+          gFile.status = STATUSES.CANCELED
+          this.$emit("canceled", gFile)
+        }
         if (this.uploadMultiple) {
           this.$emit("canceled-multiple", groupedFiles)
         }
-      } else if (file.status === Dropzone.ADDED || file.status === Dropzone.QUEUED) {
-        file.status = Dropzone.CANCELED
+      } else if (file.status === STATUSES.ADDED || file.status === STATUSES.QUEUED) {
+        file.status = STATUSES.CANCELED
         this.$emit("canceled", file)
         if (this.uploadMultiple) {
           this.$emit("canceled-multiple", [file])
@@ -307,133 +311,137 @@ export default {
     uploadFile(file) {
       return this.uploadFiles([file])
     },
+    /**
+     * @param {VTransmitFile[]}
+     */
     uploadFiles(files) {
+      let response = null
       const xhr = new XMLHttpRequest()
       xhr.timeout = this.timeout
-
-      files.forEach(file => file.xhr = xhr)
+      for (const file of files) {
+        file.xhr = xhr
+        file.startProgress()
+      }
       xhr.open(this.method, this.url, true)
-      xhr.withCredentials = this.withCredentials
+      xhr.withCredentials = Boolean(this.withCredentials)
 
-      let response = null
-      const handleError = () => {
-        const message = response || this.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
-        this.errorProcessing(files, message, xhr)
-      }
-      const updateProgress = (e) => {
-        let progress = 0
-
-        if (e) {
-          progress = 100 * e.loaded / e.total
-          files.forEach(file => Object.assign(file, {
-            upload: {
-              progress: progress,
-              total: e.total,
-              bytesSent: e.loaded
-            }
-          }))
-        } else {
-          let allFilesFinished = true
-          progress = 100
-
-          files.forEach(file => {
-            if (file.upload.progress !== 100 || file.upload.bytesSent !== file.upload.total) {
-              allFilesFinished = false
-            }
-
-            file.upload.progress = progress
-            file.upload.bytesSent = file.upload.total
-          })
-          if (allFilesFinished) {
-            return
-          }
-        }
-
-        files.forEach(file => this.$emit("upload-progress", file, progress, file.upload.bytesSent))
-      }
-
-      xhr.onload = (e) => {
-        if (files[0].status === Dropzone.CANCELED || xhr.readyState !== 4) {
+      const handleError = this.handleUploadError(files, xhr, response)
+      const updateProgress = this.handleUploadProgress(files)
+      xhr.addEventListener("error", handleError)
+      xhr.addEventListener("progress", updateProgress)
+      xhr.addEventListener("load", e => {
+        if (files[0].status === STATUSES.CANCELED || xhr.readyState !== READY_STATES.DONE) {
           return
         }
-
-        let response = xhr.responseText
-        if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
-          try {
-            response = JSON.parse(response)
-          } catch (err) {
-            response = "Invalid JSON response from server."
+        response = xhr.responseText
+        if (xhr.responseType !== "arraybuffer" && xhr.responseType !== "blob") {
+          if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
+            try {
+              response = JSON.parse(response)
+            } catch (err) {
+              response = "Invalid JSON response from server."
+            }
           }
         }
-
+        // Called at load (when complete) will enable all the progress done logic.
         updateProgress()
         if (xhr.status < 200 || xhr.status >= 300) {
           return handleError()
         } else {
-          return this.finished(files, response, e)
+          return this.uploadFinished(files, response, e)
         }
-      }
+      })
 
-      xhr.onerror = () => {
-        if (files[0].status === Dropzone.CANCELED) {
-          return
-        }
-        return handleError()
-      }
-
-      const progressTarget = xhr.upload ? xhr.upload : xhr
-      progressTarget.onprogress = updateProgress
-
-      const headers = Object.assign({
-        "Accept": "application/json",
-        "Cache-Control": "no-cache",
-        "X-Requested-With": "XMLHttpRequest"
-      }, this.headers)
-
-      for (let headerName in headers) {
+      // Use null proto obj for the following 'for in' loop
+      const headers = Object.assign(Object.create(null), this.defaultHeaders, this.headers)
+      for (const headerName in headers) {
         if (headers[headerName]) {
           xhr.setRequestHeader(headerName, headers[headerName])
         }
       }
 
       const formData = new FormData()
-      for (let key in this.params) {
+      for (const key in this.params) {
         formData.append(key, this.params[key])
       }
 
-      files.forEach(file => this.$emit("sending", file, xhr, formData))
+      for (const file of files) {
+        this.$emit("sending", file, xhr, formData)
+      }
       if (this.uploadMultiple) {
         this.$emit("sending-multiple", files, xhr, formData)
       }
 
-      files.forEach((file, i) => formData.append(this.getParamName(i), file._nativeFile, this.renameFile(file.name)))
-      return xhr.send(formData)
-    },
-    updateTotalUploadProgress() {
-      let progress = this.activeFiles.reduce((memo, file) => {
-        memo.totalBytesSent += file.upload.bytesSent
-        memo.totalBytes += file.upload.total
-
-        return memo
-      }, { totalBytesSent: 0, totalBytes: 0, totalUploadProgress: 100 })
-
-      if (this.activeFiles.length) {
-        progress.totalUploadProgress = 100 * progress.totalBytesSent / progress.totalBytes
+      for (let i = 0; i < files.length; i++) {
+        formData.append(this.getParamName(i), files[i].nativeFile, this.renameFile(files[i].name))
       }
 
-      this.$emit("total-upload-progress", progress.totalUploadProgress, progress.totalBytes, progress.totalBytesSent)
+      return xhr.send(formData)
+    },
+    handleUploadError(files, xhr, response) {
+      const vm = this
+      return function onUploadErrorFn() {
+        if (files[0].status !== STATUSES.CANCELED) {
+          vm.errorProcessing(
+            files,
+            response || vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status })),
+            xhr
+          )
+        }
+      }
+    },
+    handleUploadProgress(files) {
+      const vm = this
+      return function onProgressFn(e) {
+        if (e instanceof ProgressEvent) {
+          for (const file of files) {
+            file.handleProgress(e)
+          }
+        } else {
+          let allFilesFinished = true
+          for (const file of files) {
+            if (file.upload.progress !== 100 || file.upload.bytesSent !== file.upload.total) {
+              allFilesFinished = false
+            }
+            file.upload.progress = 100
+            file.upload.bytesSent = file.upload.total
+            file.endProgress()
+          }
+          if (allFilesFinished) {
+            return
+          }
+        }
+
+        for (const file of files) {
+          vm.$emit("upload-progress", file, file.upload.progress, file.upload.bytesSent)
+        }
+      }
+    },
+    updateTotalUploadProgress() {
+      const progress = this.activeFiles.reduce((memo, file) => {
+        memo.totalBytesSent += file.upload.bytesSent
+        memo.totalBytes += file.upload.total
+        return memo
+      }, { totalBytesSent: 0, totalBytes: 0, totalProgress: 100 })
+
+      if (this.activeFiles.length) {
+        progress.totalProgress = 100 * progress.totalBytesSent / progress.totalBytes
+      }
+
+      this.$emit("total-upload-progress", progress)
     },
     getParamName(index) {
       return this.paramName + (
         this.uploadMultiple ? `[${index}]` : ''
       )
     },
-    finished(files, responseText, e) {
-      files.forEach(file => {
-        file.status = Dropzone.SUCCESS
+    uploadFinished(files, responseText, e) {
+      for (const file of files) {
+        file.status = STATUSES.SUCCESS
+        file.endProgress()
         this.$emit("success", file, responseText, e)
         this.$emit("complete", file)
-      })
+      }
 
       if (this.uploadMultiple) {
         this.$emit("success-multiple", files, responseText, e)
@@ -445,11 +453,12 @@ export default {
       }
     },
     errorProcessing(files, message, xhr) {
-      files.forEach(file => {
-        file.status = Dropzone.ERROR
+      for (const file of files) {
+        file.status = STATUSES.ERROR
+        file.endProgress()
         this.$emit("error", file, message, xhr)
         this.$emit("complete", file)
-      })
+      }
 
       if (this.uploadMultiple) {
         this.$emit("error-multiple", files, message, xhr)
@@ -460,44 +469,41 @@ export default {
         return this.processQueue()
       }
     },
-    vdzAccept(file, done) {
+    acceptFile(file, done) {
       if (file.size > this.maxFileSize * 1024 * 1024) {
         return done(
           this.dictFileTooBig
             .replace(hbsRegex, hbsReplacer({
               fileSize: Math.round(file.size / 1024 / 10.24) / 100,
-              maxFileSize: this.maxFilesize
+              maxFileSize: this.maxFileSize
             }))
         )
-      } else if (!this.isValidFile(file, this.acceptedFileTypes)) {
-
+      } else if (!this.isValidFileType(file, this.acceptedFileTypes)) {
         return done(this.dictInvalidFileType)
-
       } else if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
         done(this.dictMaxFilesExceeded.replace(hbsRegex, hbsReplacer({ maxFiles: this.maxFiles })))
-
         return this.$emit("max-files-exceeded", file)
       } else {
-
+        // Call the prop callback for the client to validate.
         return this.accept(file, done)
       }
     },
-    isValidFile(file, acceptedFiles) {
+    isValidFileType(file, acceptedFiles) {
       if (!acceptedFiles.length) {
         return true
       }
-
       const mimeType = file.type
       const baseMimeType = mimeType.replace(/\/.*$/, "")
-
+      // Return true on the first condition match,
+      // otherwise exhaust all conditions and return false.
       for (let i = 0; i < acceptedFiles.length; i++) {
         const validType = acceptedFiles[i]
-
-        if (validType.charAt(0) === ".") {
+        if (validType.charAt(0) === ".") { // Handle extension validation
+          // Ensure extension exists at the end of the filename.
           if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
             return true
           }
-        } else if (/\/\*$/.test(validType)) {
+        } else if (/\/\*$/.test(validType)) { // Handle globbed mimetype validation ("image/*")
           if (baseMimeType === validType.replace(/\/.*$/, "")) {
             return true
           }
