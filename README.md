@@ -44,7 +44,7 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |acceptedFileTypes|Array|default|
 |autoProcessQueue|Boolean|true|
 |autoQueue|Boolean|true|
-|capture|String|undefined|
+|capture|String|null|
 |renameFile|Function|identity|
 |dictFileTooBig|String|"File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MiB."|
 |dictInvalidFileType|String|"You can't upload files of this type."|

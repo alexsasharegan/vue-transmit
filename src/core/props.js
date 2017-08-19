@@ -149,7 +149,8 @@ export default {
    * be set to an appropriate mime type (e.g. "image/*", "audio/*", or "video/*").
    */
   capture: {
-    type: String
+    type: String,
+    default: null
   },
   /**
    * Before the file is appended to the formData, the function _renameFilename is performed for file.name, file
