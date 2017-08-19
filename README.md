@@ -1,6 +1,59 @@
 # Vue-Transmit
 
-A Vue.js drag & drop uploader based on Dropzone.js.
+A Vue.js drag & drop uploader based on Dropzone.js. Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original library! [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 😉
+
+## Features
+
+Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in ES6 and Vue.js. Instead of creating a Vue wrapper component that duplicates all of the methods and event logic from Dropzone, Vue-Transmit implements them directly on the component. This cuts down on library size, and since Vue already has a first-class event emitter, we get even more space savings.
+
+Also, a special File class has been written (`VTransmitFile`) to add useful information not present in the native File object (dimensions, upload stats, etc.). This is necessary for Vue to register these files reactively, since the native File object's properties are read-only.
+
+- HTML 5 file uploads
+- Completely written in Vue.js&mdash;no wrapper components
+- emits upload lifecycle events (accepted, sending, progress, success, etc.)
+- image thumbnail previews
+- support for concurrent uploads
+- scoped slots allow for fully customizable styling
+
+![upload-example](./docs/vue-transmit-10fps.gif)
+
+## Props: <code>&lt;vue-transmit&gt;</code>
+
+|Property|Type|Default|
+|---|---|---|
+|tag|String|"div"|
+|dropZoneClasses|Array, Object, String|null|
+|url|String|undefined|
+|method|String|"post"|
+|withCredentials|Boolean|false|
+|timeout|Number|0|
+|maxConcurrentUploads|Number|2|
+|uploadMultiple|Boolean|false|
+|maxFileSize|Number|256|
+|paramName|String|"file"|
+|createImageThumbnails|Boolean|true|
+|maxThumbnailFileSize|Number|10|
+|thumbnailWidth|Number|120|
+|thumbnailHeight|Number|120|
+|fileSizeBase|Number|1000|
+|maxFiles|Number|null|
+|params|Object|default|
+|headers|Object|default|
+|clickable|Boolean|true|
+|ignoreHiddenFiles|Boolean|true|
+|acceptedFileTypes|Array|default|
+|autoProcessQueue|Boolean|true|
+|autoQueue|Boolean|true|
+|capture|String|undefined|
+|renameFile|Function|identity|
+|dictFileTooBig|String|"File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MiB."|
+|dictInvalidFileType|String|"You can't upload files of this type."|
+|dictResponseError|String|"Server responded with {{ statusCode }} code."|
+|dictMaxFilesExceeded|String|"You can not upload any more files."|
+|accept|Function|default|
+|resize|Function|default|
+
+## Usage
 
 ```html
 <template>

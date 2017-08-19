@@ -31,10 +31,10 @@
   <main id="root" class="mt-5">
     <div class="container">
       <div class="row">
-        <header class="col-12 text-center">
+        <header class="col-10 push-1 text-center">
           <h1 class="mb-5"><code>&lt;vue-transmit&gt;</code></h1>
         </header>
-        <vue-transmit class="col-12"
+        <vue-transmit class="col-10 push-1"
                       tag="section"
                       v-bind="options"
                       drop-zone-classes="bg-faded"
@@ -48,7 +48,10 @@
             <div v-for="(file, i) in props.files" :key="file.id" :class="{'mt-5': i===0}">
               <div class="media">
                 <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
-                <pre class="media-body">{{ file | json }}</pre>
+                <div class="media-body">
+                  <h3>{{ file.name }}</h3>
+                  <pre>{{ file | json }} </pre>
+                </div>
               </div>
             </div>
           </template>
