@@ -10,10 +10,10 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 
 - HTML 5 file uploads
 - Completely written in Vue.js&mdash;no wrapper components
-- emits upload lifecycle events (accepted, sending, progress, success, etc.)
-- image thumbnail previews
-- support for concurrent uploads
-- scoped slots allow for fully customizable styling
+- Emits upload lifecycle events (accepted, sending, progress, success, etc.)
+- Image thumbnail previews
+- Support for concurrent uploads
+- Scoped slots allow for fully customizable styling
 
 ![upload-example](./docs/vue-transmit-10fps.gif)
 
