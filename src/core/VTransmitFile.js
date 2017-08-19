@@ -1,4 +1,4 @@
-import { assign, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "./utils"
+import { assign, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "@core/utils"
 
 export default class VTransmitFile {
   constructor(...data) {
@@ -33,9 +33,10 @@ export default class VTransmitFile {
       )
     }
     this.startProgress()
-    this.upload.progress = 100 * e.loaded / e.total
+    const total = Math.max(e.total, this.upload.total)
+    this.upload.progress = 100 * e.loaded / total
     this.upload.bytesSent = e.loaded
-    this.upload.total = e.total
+    this.upload.total = total
     this.upload.time = (Date.now() - this.upload.start) / 1000
     // Recalc the upload speed in bytes/sec
     this.upload.speed.kbps = round(toKbps(this.upload.bytesSent, this.upload.time))
@@ -97,7 +98,8 @@ export default class VTransmitFile {
       height: undefined,
       xhr: undefined,
       dataUrl: undefined,
-      errorMessage: undefined
+      errorMessage: undefined,
+      vTransmit: { version: VERSION }
     }
   }
 

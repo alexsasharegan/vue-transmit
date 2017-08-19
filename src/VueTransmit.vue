@@ -1,26 +1,39 @@
 <template>
-  <div>
+  <component :is="tag">
     <div class="v-transmit-zone"
+         :class="[{'is-dragging': dragging}, dropZoneClasses]"
          @click="handleClickUploaderAction"
          @dragstart="$emit('drag-start', $event)"
-         @dragend="$emit('drag-end', $event)"
-         @dragenter.prevent.stop="$emit('drag-enter', $event)"
+         @dragend="handleDragEnd"
+         @dragenter.prevent.stop="handleDragEnter"
          @dragover.prevent.stop="handleDragOver"
-         @dragleave="$emit('drag-leave', $event)"
+         @dragleave="handleDragLeave"
          @drop.prevent.stop="onDrop">
       <slot></slot>
     </div>
+    <slot name="files"
+          :files="files"
+          :accepted-files="acceptedFiles"
+          :rejected-files="rejectedFiles"
+          :added-files="addedFiles"
+          :queued-files="queuedFiles"
+          :uploading-files="uploadingFiles"
+          :active-files="activeFiles"></slot>
     <input type="file"
            ref="hiddenFileInput"
            :multiple="multiple"
            class="v-transmit-hidden-input"
            :class="[maxFilesReachedClass]"
            :accept="filesToAccept"
+           :capture="capture"
            @change="onFileInputChange">
-  </div>
+  </component :is="tag">
 </template>
 
 <style lang="scss" scoped>
+  $border-color:#bdbdbd;
+  $drop-color:#e1f5fe;
+  $drop-color-alt:#fafafa;
   .v-transmit-hidden-input {
     visibility: hidden;
     position: absolute;
@@ -29,15 +42,31 @@
     height: 0px;
     width: 0px;
   }
+
+  .v-transmit-zone {
+    width: 100%;
+    border-radius: 1rem;
+    border: 2px dashed $border-color;
+    min-height: 33vh;
+
+    @media (min-height: 1000px) {
+      min-height: 300px;
+    }
+  }
+
+  .is-dragging {
+    background: $drop-color linear-gradient(-45deg, $drop-color-alt 25%, transparent 25%, transparent 50%, $drop-color-alt 50%, $drop-color-alt 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+  }
 </style>
 
 <script>
 import uniqueId from 'lodash-es/uniqueId'
 import has from 'lodash-es/has'
 import noop from 'lodash-es/noop'
-import VTransmitFile from './core/VTransmitFile'
-import props from './core/props'
-import { hbsReplacer, READY_STATES } from "./core/utils"
+import VTransmitFile from '@core/VTransmitFile'
+import props from '@core/props'
+import { hbsRegex, hbsReplacer, READY_STATES } from "@core/utils"
 
 const STATUSES = {
   ADDED: "added",
@@ -54,6 +83,8 @@ export default {
   props,
   data() {
     return {
+      version: VERSION,
+      dragging: false,
       processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
       thumbnailQueue: [],
       clickableElements: [],
@@ -116,7 +147,7 @@ export default {
       return this.files.filter(f => statuses.includes(f.status))
     },
     onFileInputChange(e) {
-      const files = Array.from(this.$refs.hiddenFileInput.files).map(f => this.addFile(f))
+      const files = Array.from(this.$refs.hiddenFileInput.files).map(this.addFile)
       this.$emit('added-files', files)
     },
     addFile(file) {
@@ -196,6 +227,7 @@ export default {
       const fr = new FileReader()
       fr.addEventListener("load", () => {
         if (file.type === "image/svg+xml") {
+          file.dataUrl = fr.result
           this.$emit("thumbnail", file, fr.result)
           return callback()
         }
@@ -238,6 +270,7 @@ export default {
           resizeInfo.trgHeight
         )
         const thumbnail = canvas.toDataURL("image/png")
+        file.dataUrl = thumbnail
         this.$emit("thumbnail", file, thumbnail)
 
         if (callback) {
@@ -252,15 +285,15 @@ export default {
     },
     processQueue() {
       const processingLength = this.uploadingFiles.length
-      if (processingLength >= this.parallelUploads || this.queuedFiles.length === 0) {
+      if (processingLength >= this.maxConcurrentUploads || this.queuedFiles.length === 0) {
         return
       }
 
       const queuedFiles = [...this.queuedFiles]
       if (this.uploadMultiple) {
-        return this.processFiles(queuedFiles.slice(0, this.parallelUploads - processingLength))
+        return this.processFiles(queuedFiles.slice(0, this.maxConcurrentUploads - processingLength))
       } else {
-        for (let i = processingLength; i < this.parallelUploads; i++) {
+        for (let i = processingLength; i < this.maxConcurrentUploads; i++) {
           if (queuedFiles.length) {
             this.processFile(queuedFiles.shift())
           }
@@ -516,19 +549,38 @@ export default {
 
       return false
     },
+    handleDragOver(e) {
+      this.dragging = true
+      let effect
+      try {
+        // Handle browser bug
+        effect = e.dataTransfer.effectAllowed
+      } catch (error) { }
+      e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy'
+      this.$emit('drag-over', e)
+    },
+    handleDragEnter(e) {
+      this.dragging = true
+      this.$emit('drag-enter', e)
+    },
+    handleDragLeave(e) {
+      this.dragging = false
+      this.$emit('drag-leave', e)
+    },
+    handleDragEnd(e) {
+      this.dragging = false
+      this.$emit('drag-end', e)
+    },
     onDrop(e) {
-      console.log("Drop", e)
+      this.dragging = false
       if (!e.dataTransfer) {
         return
       }
-
       this.$emit("drop", e)
       const files = Array.from(e.dataTransfer.files)
       this.$emit("added-files", files)
-
       if (files.length) {
         const items = Array.from(e.dataTransfer.items)
-
         if (items && items.length && items[0].webkitGetAsEntry) {
           this.addFilesFromItems(items)
         } else {
@@ -540,10 +592,8 @@ export default {
       if (!has(e, ['clipboardData', 'items'])) {
         return
       }
-
       this.$emit("paste", e)
       const items = Array.from(e.clipboardData.items)
-
       if (items.length) {
         this.addFilesFromItems(items)
       }
@@ -585,18 +635,6 @@ export default {
           }
         })
       }, console.error)
-    },
-    handleDragOver(e) {
-      let effect
-
-      try {
-        // Handle browser bug
-        effect = e.dataTransfer.effectAllowed
-      } catch (error) { }
-
-      e.dataTransfer.dropEffect = 'move' === effect || 'linkMove' === effect ? 'move' : 'copy'
-
-      this.$emit('drag-over', e)
     },
   },
   mounted() {

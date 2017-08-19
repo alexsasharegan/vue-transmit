@@ -1,6 +1,6 @@
 <?php
 
-header( 'Content-Type: text/plain; charset=utf-8' );
+header( 'Content-Type: application/json; charset=utf-8' );
 
 try
 {
@@ -66,9 +66,14 @@ try
         throw new RuntimeException( 'Failed to move uploaded file.' );
     }
 
-    echo 'File is uploaded successfully.';
+    echo json_encode([
+      'message' => 'File is uploaded successfully.'
+    ]);
 }
 catch ( RuntimeException $e )
 {
-    echo $e->getMessage();
+    http_response_code(400);
+    echo json_encode([
+      'message' => $e->getMessage()
+    ]);
 }

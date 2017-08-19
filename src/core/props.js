@@ -2,6 +2,14 @@ import noop from "lodash-es/noop"
 import identity from "lodash-es/identity"
 
 export default {
+  tag: {
+    type: String,
+    default: "div"
+  },
+  dropZoneClasses: {
+    type: [Array, Object, String],
+    default: null
+  },
   url: {
     type: String,
     required: true
@@ -17,9 +25,9 @@ export default {
   // timeout in milliseconds
   timeout: {
     type: Number,
-    default: 30000
+    default: 0
   },
-  parallelUploads: {
+  maxConcurrentUploads: {
     type: Number,
     default: 2
   },
@@ -133,14 +141,6 @@ export default {
     default: true
   },
   /**
-   * If true, Dropzone will add a link to each file preview to cancel/remove the upload.
-   * See dictCancelUpload and dictRemoveFile to use different words.
-   */
-  addRemoveLinks: {
-    type: Boolean,
-    default: false
-  },
-  /**
    * If null, no capture type will be specified
    * If camera, mobile devices will skip the file selection and choose camera
    * If microphone, mobile devices will skip the file selection and choose the microphone
@@ -159,24 +159,6 @@ export default {
     type: Function,
     default: identity
   },
-  // The text used before any files are dropped
-  dictDefaultMessage: {
-    type: String,
-    default: "Drop files here to upload"
-  },
-  // The text that replaces the default message text it the browser is not supported
-  dictFallbackMessage: {
-    type: String,
-    default: "Your browser does not support drag & drop file uploads."
-  },
-  /**
-   * The text that will be added before the fallback form
-   * If null, no text will be added at all.
-   */
-  dictFallbackText: {
-    type: String,
-    default: "Please use the fallback form below to upload your files like in the olden days."
-  },
   // If the file size is too big.
   dictFileTooBig: {
     type: String,
@@ -191,25 +173,6 @@ export default {
   dictResponseError: {
     type: String,
     default: "Server responded with {{ statusCode }} code."
-  },
-  // If used, the text to be used for the cancel upload link.
-  dictCancelUpload: {
-    type: String,
-    default: "Cancel upload"
-  },
-  // If used, the text to be used for confirmation when cancelling upload.
-  dictCancelUploadConfirmation: {
-    type: String,
-    default: "Are you sure you want to cancel this upload?"
-  },
-  // If used, the text to be used to remove a file.
-  dictRemoveFile: {
-    type: String,
-    default: "Remove file"
-  },
-  // If this is not null, then the user will be prompted before removing a file.
-  dictRemoveFileConfirmation: {
-    type: String
   },
   /**
    * Displayed when the maxFiles have been exceeded

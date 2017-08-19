@@ -11,13 +11,11 @@ export function uniqueId(prefix) {
 
 export function copyOwnAndInheritedProps(obj) {
   let newData = {}
-
   for (let prop in obj) {
     if (typeof obj[prop] !== "function") {
       newData[prop] = obj[prop]
     }
   }
-
   return newData
 }
 
