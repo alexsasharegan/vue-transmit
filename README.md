@@ -22,9 +22,11 @@ A Vue.js drag & drop uploader based on Dropzone.js.
                     @click="triggerBrowse">Upload Files</button>
           </div>
           <template slot="files" scope="props">
-            <div v-for="file in props.files">
-              <pre>{{ file | json }}</pre>
-              <img :src="file.dataUrl" class="img-fluid">
+            <div v-for="(file, i) in props.files" :key="file.id" :class="{'mt-5': i === 0}">
+              <div class="media">
+                <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
+                <pre class="media-body">{{ file | json }}</pre>
+              </div>
             </div>
           </template>
         </vue-transmit>

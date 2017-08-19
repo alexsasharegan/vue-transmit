@@ -224,18 +224,18 @@ export default {
       })
     },
     createThumbnail(file, callback = noop) {
-      const fr = new FileReader()
-      fr.addEventListener("load", () => {
+      const reader = new FileReader()
+      reader.addEventListener("load", () => {
         if (file.type === "image/svg+xml") {
-          file.dataUrl = fr.result
-          this.$emit("thumbnail", file, fr.result)
+          file.dataUrl = reader.result
+          this.$emit("thumbnail", file, reader.result)
           return callback()
         }
-        return this.createThumbnailFromUrl(file, fr.result, callback)
+        return this.createThumbnailFromUrl(file, reader.result, callback)
       }, false)
 
       // FileReader requires a native File|Blob object
-      return fr.readAsDataURL(file.nativeFile)
+      return reader.readAsDataURL(file.nativeFile)
     },
     createThumbnailFromUrl(file, imageUrl, callback, crossOrigin) {
       const $img = document.createElement("img")
@@ -244,9 +244,9 @@ export default {
       }
 
       $img.addEventListener("load", () => {
-        const resizeInfo = this.resize(file)
         file.width = $img.width
         file.height = $img.height
+        const resizeInfo = this.resize.call(this, file)
         if (!resizeInfo.trgWidth) {
           resizeInfo.trgWidth = resizeInfo.optWidth
         }

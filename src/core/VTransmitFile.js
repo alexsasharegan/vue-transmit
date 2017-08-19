@@ -18,8 +18,7 @@ export default class VTransmitFile {
     this._nativeFile = file
     // Copy props to normal object for Vue reactivity.
     // Vue cannot define reactive properties on native file's readonly props.
-    this.copyOwnAndInheritedProps(file)
-    return this
+    return this.set(copyOwnAndInheritedProps(file))
   }
 
   copyOwnAndInheritedProps(...data) {

@@ -38,17 +38,18 @@
                       tag="section"
                       v-bind="options"
                       drop-zone-classes="bg-faded"
-                      ref="uploader"
-                      >
+                      ref="uploader">
           <div class="d-flex align-items-center justify-content-center w-100"
                 style="height:50vh; border-radius: 1rem;">
             <button class="btn btn-primary"
                     @click="triggerBrowse">Upload Files</button>
           </div>
           <template slot="files" scope="props">
-            <div v-for="file in props.files">
-              <pre>{{ file | json }}</pre>
-              <img :src="file.dataUrl" class="img-fluid">
+            <div v-for="(file, i) in props.files" :key="file.id" :class="{'mt-5': i===0}">
+              <div class="media">
+                <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
+                <pre class="media-body">{{ file | json }}</pre>
+              </div>
             </div>
           </template>
         </vue-transmit>
