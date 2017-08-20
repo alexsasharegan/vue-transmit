@@ -19,9 +19,11 @@
     "test": "php -S localhost:3000 -t ./test/"
   },
   "dependencies": {
-    "lodash-es": "^4.17.4"
+    "lodash-es": "^4.17.4",
+    "vue-functional-data-merge": "^1.0.6"
   },
   "devDependencies": {
+    "ajv-keywords": "^2.1.0",
     "autoprefixer": "^7.1.2",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
