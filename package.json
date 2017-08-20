@@ -1,10 +1,15 @@
 {
   "name": "vue-transmit",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Vue.js drag & drop uploader based on Dropzone.js",
   "module": "index.js",
   "main": "dist/vue-transmit.min.js",
-  "keywords": ["dragndrop", "drag and drop", "file upload", "upload"],
+  "keywords": [
+    "dragndrop",
+    "drag and drop",
+    "file upload",
+    "upload"
+  ],
   "directories": {
     "test": "test"
   },
