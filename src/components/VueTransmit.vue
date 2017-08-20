@@ -1,6 +1,7 @@
 <template>
   <component :is="tag">
     <div class="v-transmit__drop-zone"
+         draggable="true"
          :class="[{'v-transmit__drop-zone--is-dragging': dragging}, dropZoneClasses]"
          @click="handleClickUploaderAction"
          @dragstart="$emit('drag-start', $event)"
@@ -65,9 +66,9 @@
 import uniqueId from "lodash-es/uniqueId"
 import has from "lodash-es/has"
 import noop from "lodash-es/noop"
-import VTransmitFile from "@core/VTransmitFile"
 import props from "@core/props"
 import { hbsRegex, hbsReplacer, READY_STATES } from "@core/utils"
+import VTransmitFile from "@classes/VTransmitFile"
 
 const STATUSES = {
   ADDED: "added",
@@ -130,7 +131,7 @@ export default {
       return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles
     },
     maxFilesReachedClass() {
-      return this.maxFilesReached ? 'dz-max-files-reached' : null
+      return this.maxFilesReached ? 'v-transmit__max-files--reached' : null
     },
   },
   watch: {
@@ -175,10 +176,13 @@ export default {
       if (file.status === STATUSES.UPLOADING) {
         this.cancelUpload(file)
       }
-      this.files = this.files.filter(f => f.id === file.id)
-      this.$emit("removed-file", file)
-      if (this.files.length === 0) {
-        return this.$emit("reset")
+      const idxToRm = this.files.findIndex(f => f.id === file.id)
+      if (~idxToRm) {
+        this.files.splice(idxToRm, 1)
+        this.$emit("removed-file", file)
+        if (this.files.length === 0) {
+          return this.$emit("reset")
+        }
       }
     },
     removeAllFiles(cancelInProgressUploads = false) {
@@ -323,9 +327,9 @@ export default {
       if (file.status === STATUSES.UPLOADING) {
         const groupedFiles = this.getFilesWithXhr(file.xhr)
         file.xhr.abort()
-        for (const gFile of groupedFiles) {
-          gFile.status = STATUSES.CANCELED
-          this.$emit("canceled", gFile)
+        for (const _file of groupedFiles) {
+          _file.status = STATUSES.CANCELED
+          this.$emit("canceled", _file)
         }
         if (this.uploadMultiple) {
           this.$emit("canceled-multiple", groupedFiles)

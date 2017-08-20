@@ -1,24 +1,24 @@
 <template>
-    <div class="dz-preview dz-file-preview">
-        <div class="dz-image">
-            <img data-dz-thumbnail />
+    <div class="v-transmit__preview v-transmit__file-preview">
+        <div class="v-transmit__image">
+            <img data-v-transmit-thumbnail />
         </div>
-        <div class="dz-details">
-            <div class="dz-size">
-                <span data-dz-size></span>
+        <div class="v-transmit__details">
+            <div class="v-transmit__size">
+                <span data-v-transmit-size></span>
             </div>
-            <div class="dz-filename">
-                <span data-dz-name></span>
+            <div class="v-transmit__filename">
+                <span data-v-transmit-name></span>
             </div>
         </div>
-        <div class="dz-progress">
-            <span class="dz-upload"
-                  data-dz-uploadprogress></span>
+        <div class="v-transmit__progress">
+            <span class="v-transmit__upload"
+                  data-v-transmit-upload-progress></span>
         </div>
-        <div class="dz-error-message">
-            <span data-dz-errormessage></span>
+        <div class="v-transmit__error-message">
+            <span data-v-transmit-error-message></span>
         </div>
-        <div class="dz-success-mark">
+        <div class="v-transmit__success-mark">
             <svg width="54px"
                  height="54px"
                  viewBox="0 0 54 54"
@@ -45,7 +45,7 @@
                 </g>
             </svg>
         </div>
-        <div class="dz-error-mark">
+        <div class="v-transmit__error-mark">
             <svg width="54px"
                  height="54px"
                  viewBox="0 0 54 54"

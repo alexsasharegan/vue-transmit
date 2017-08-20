@@ -37,8 +37,9 @@ function config(ctx) {
       modules: ["node_modules"],
       alias: {
         "@": SRC,
-        "@components": path.join(__dirname, "src/components"),
-        "@core": path.join(__dirname, "src/core")
+        "@core": path.join(__dirname, "src/core"),
+        "@classes": path.join(__dirname, "src/classes"),
+        "@components": path.join(__dirname, "src/components")
       }
     },
     module: {

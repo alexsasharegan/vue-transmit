@@ -1,6 +1,6 @@
 # Vue-Transmit
 
-A Vue.js drag & drop uploader based on Dropzone.js. Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original library! [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 😉
+A Vue.js drag & drop uploader based on Dropzone.js (`~26kB`, `~9kB` gzipped). Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original Dropzone.js! [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 🙌
 
 ## Features
 
@@ -52,6 +52,39 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |dictMaxFilesExceeded|String|"You can not upload any more files."|
 |accept|Function|default|
 |resize|Function|default|
+
+## Events
+
+|Event|Arguments|Description|
+|---|---|---|
+|`drop`| `DragEvent` | The `drop` event is fired when an data transfer is dropped on the drop target. |
+|`drag-start`| `DragEvent` | The `drag-start` event is fired when the user starts dragging an element or text selection. |
+|`drag-end`| `DragEvent` | The `drag-end` event is fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key). |
+|`drag-enter`| `DragEvent` | The `drag-enter` event is fired when a dragged element or text selection enters a valid drop target. |
+|`drag-over`| `DragEvent` | The `drag-over` event is fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds). |
+|`drag-leave`| `DragEvent` | The `drag-leave` event is fired when a dragged element or text selection leaves a valid drop target. |
+|`added-file`| `VTransmitFile` | Fired on change from the hidden file input after the Native File has been copied to VTransmitFile and added to the component data. _(status: 'added')_ |
+|`added-files`| `VTransmitFile[]` | Fired on change from the hidden file input after the Native Files have been copied to VTransmitFiles and added to the component data. _(status: 'added')_ |
+|`removed-file`| `VTransmitFile` | Fired on the removal of a file. |
+|`thumbnail`| `VTransmitFile, Blob|URL` | Fires on creation of a thumbnail. |
+|`error`| `VTransmitFile, message: String, XmlHttpRequest` | Fired on an ajax upload error. _(status: 'error')_ |
+|`error-multiple`| `VTransmitFile[], message: String, XmlHttpRequest` | Fired on an ajax upload error. _(status: 'error')_ |
+|`processing`| `VTransmitFile` | Fired after the status is changed to `'uploading'`, right before the ajax request. |
+|`processing-multiple`| `VTransmitFile[]` | Fired after the status is changed to `'uploading'`, right before the ajax request. |
+|`upload-progress`| `VTransmitFile, progress: Number, bytesSent: Number` | Fired on progress of the XHR. |
+|`total-upload-progress`| `VTransmitFile, totalUploadProgress: Number` | Fired directly after `upload-progress`. |
+|`sending`| `VTransmitFile, XmlHttpRequest, FormData` | Fired right before the XHR is sent. |
+|`sending-multiple`| `VTransmitFile[], XmlHttpRequest, FormData` | Fired right before the XHR is sent. |
+|`success`| `VTransmitFile, response: String, LoadEvent` | Fired on load of the XHR. |
+|`success-multiple`| `VTransmitFile[], response: String, LoadEvent` | Fired on load of the XHR.|
+|`canceled`| `VTransmitFile` | Fired upon cancellation of the XHR. _(status: 'canceled')_ |
+|`canceled-multiple`| `VTransmitFile[]` | Fired upon cancellation of the XHR. _(status: 'canceled')_ |
+|`complete`| `VTransmitFile` | Fired upon completion of the XHR. _(success or failure)_ |
+|`complete-multiple`| `VTransmitFile[]` | Fired upon completion of the XHR. _(success or failure)_ |
+|`reset`| n/a | Fired when all files have been removed. |
+|`max-files-exceeded`| `VTransmitFile` | Fired if a file is added that exceeds the max files prop. |
+|`max-files-reached`| `VTransmitFile[]` | Fired when the total accepted files on the instance exceeds the max files prop. |
+|`queue-complete`| `VTransmitFile` | Fired once all added files have uploaded and the queue has been flushed.  |
 
 ## Usage
 

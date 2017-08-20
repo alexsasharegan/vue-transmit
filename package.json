@@ -4,19 +4,15 @@
   "description": "Vue.js drag & drop uploader based on Dropzone.js",
   "module": "index.js",
   "main": "dist/vue-transmit.min.js",
-  "keywords": [
-    "dragndrop",
-    "drag and drop",
-    "file upload",
-    "upload"
-  ],
+  "keywords": ["dragndrop", "drag and drop", "file upload", "upload"],
   "directories": {
     "test": "test"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules -w",
-    "test": "php -S localhost:3000 -t ./test/"
+    "test": "php -S localhost:3000 -t ./test/",
+    "lib-size": "gzip -c dist/vue-transmit.min.js | wc -c"
   },
   "dependencies": {
     "lodash-es": "^4.17.4",
