@@ -66,7 +66,7 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |`added-file`| `VTransmitFile` | Fired on change from the hidden file input after the Native File has been copied to VTransmitFile and added to the component data. _(status: 'added')_ |
 |`added-files`| `VTransmitFile[]` | Fired on change from the hidden file input after the Native Files have been copied to VTransmitFiles and added to the component data. _(status: 'added')_ |
 |`removed-file`| `VTransmitFile` | Fired on the removal of a file. |
-|`thumbnail`| `VTransmitFile, Blob|URL` | Fires on creation of a thumbnail. |
+|`thumbnail`| `VTransmitFile, Blob\|URL` | Fires on creation of a thumbnail. |
 |`error`| `VTransmitFile, message: String, XmlHttpRequest` | Fired on an ajax upload error. _(status: 'error')_ |
 |`error-multiple`| `VTransmitFile[], message: String, XmlHttpRequest` | Fired on an ajax upload error. _(status: 'error')_ |
 |`processing`| `VTransmitFile` | Fired after the status is changed to `'uploading'`, right before the ajax request. |
