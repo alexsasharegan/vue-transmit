@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "Vue.js drag & drop uploader based on Dropzone.js",
   "module": "index.js",
-  "main": "dist/vue-transmit.js",
+  "main": "dist/vue-transmit.min.js",
   "keywords": [
     "dragndrop",
     "drag and drop",
@@ -23,6 +23,7 @@
     "vue-functional-data-merge": "^1.0.6"
   },
   "devDependencies": {
+    "ajv": "^5.2.2",
     "ajv-keywords": "^2.1.0",
     "autoprefixer": "^7.1.2",
     "babel-cli": "^6.26.0",
@@ -30,6 +31,15 @@
     "babel-loader": "^7.1.2",
     "babel-minify-webpack-plugin": "^0.2.0",
     "babel-plugin-app-require": "^1.0.0",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
+    "babel-plugin-transform-es2015-classes": "^6.24.1",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-for-of": "^6.23.0",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-plugin-transform-es2015-shorthand-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-es2015-template-literals": "^6.22.0",
+    "babel-plugin-transform-es5-property-mutators": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.5.2",

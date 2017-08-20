@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
-    <div class="v-transmit-zone"
-         :class="[{'is-dragging': dragging}, dropZoneClasses]"
+    <div class="v-transmit__drop-zone"
+         :class="[{'v-transmit__drop-zone--is-dragging': dragging}, dropZoneClasses]"
          @click="handleClickUploaderAction"
          @dragstart="$emit('drag-start', $event)"
          @dragend="handleDragEnd"
@@ -22,7 +22,7 @@
     <input type="file"
            ref="hiddenFileInput"
            :multiple="multiple"
-           class="v-transmit-hidden-input"
+           class="v-transmit__input--hidden"
            :class="[maxFilesReachedClass]"
            :accept="filesToAccept"
            :capture="capture"
@@ -30,42 +30,43 @@
   </component :is="tag">
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
   $border-color:#bdbdbd;
   $drop-color:#e1f5fe;
   $drop-color-alt:#fafafa;
-  .v-transmit-hidden-input {
-    visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 0px;
-    width: 0px;
+
+  .v-transmit__input--hidden {
+    visibility: hidden !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 0px !important;
+    width: 0px !important;
   }
 
-  .v-transmit-zone {
+  .v-transmit__drop-zone {
     width: 100%;
     border-radius: 1rem;
     border: 2px dashed $border-color;
-    min-height: 33vh;
+    min-height: 30vh;
 
     @media (min-height: 1000px) {
       min-height: 300px;
     }
   }
 
-  .is-dragging {
+  .v-transmit__drop-zone--is-dragging {
     background: $drop-color linear-gradient(-45deg, $drop-color-alt 25%, transparent 25%, transparent 50%, $drop-color-alt 50%, $drop-color-alt 75%, transparent 75%, transparent);
     background-size: 40px 40px;
   }
 </style>
 
 <script>
-import uniqueId from 'lodash-es/uniqueId'
-import has from 'lodash-es/has'
-import noop from 'lodash-es/noop'
-import VTransmitFile from '@core/VTransmitFile'
-import props from '@core/props'
+import uniqueId from "lodash-es/uniqueId"
+import has from "lodash-es/has"
+import noop from "lodash-es/noop"
+import VTransmitFile from "@core/VTransmitFile"
+import props from "@core/props"
 import { hbsRegex, hbsReplacer, READY_STATES } from "@core/utils"
 
 const STATUSES = {

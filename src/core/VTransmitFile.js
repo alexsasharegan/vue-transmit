@@ -70,7 +70,7 @@ export default class VTransmitFile {
   static defaults() {
     return {
       _nativeFile: null,
-      id: this.idFactory(),
+      id: VTransmitFile.idFactory(),
       accepted: undefined, // Passed all validation.
       lastModified: undefined,
       lastModifiedDate: undefined,
@@ -98,12 +98,12 @@ export default class VTransmitFile {
       xhr: undefined,
       dataUrl: undefined,
       errorMessage: undefined,
-      vTransmit: { version: VERSION }
+      VERSION: VERSION
     }
   }
 
   static fromNativeFile(file, ...data) {
-    const instance = new this(...data)
+    const instance = new VTransmitFile(...data)
     instance.copyNativeFile(file)
     instance.upload.total = file.size
     return instance
