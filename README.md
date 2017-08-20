@@ -86,6 +86,41 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |`max-files-reached`| `VTransmitFile[]` | Fired when the total accepted files on the instance exceeds the max files prop. |
 |`queue-complete`| `VTransmitFile` | Fired once all added files have uploaded and the queue has been flushed.  |
 
+## `VTransmitFile`
+
+```json
+{
+  "_nativeFile": {},
+  "id": "v-transmit-file-1",
+  "accepted": true,
+  "lastModified": 1478117443000,
+  "lastModifiedDate": "2016-11-02T20:10:43.000Z",
+  "name": "cosmo.jpg",
+  "processing": true,
+  "size": 142776,
+  "status": "success",
+  "type": "image/jpeg",
+  "upload": {
+    "bytesSent": 142776,
+    "progress": 100,
+    "speed": {
+      "kbps": 10.06,
+      "mbps": 0.01
+    },
+    "start": 1503273157993,
+    "end": 1503273158029,
+    "time": 0.036,
+    "total": 142776
+  },
+  "webkitRelativePath": "",
+  "width": 700,
+  "height": 700,
+  "xhr": {},
+  "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAgAElEQVR4XlS9B7RmZ3UluG/...=",
+  "VERSION": "1.0.5"
+}
+```
+
 ## Usage
 
 ```html
