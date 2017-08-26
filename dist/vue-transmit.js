@@ -65,12 +65,6 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/*!*******************************!*\
-  !*** ./index.js + 68 modules ***!
-  \*******************************/
-/*! exports provided: default */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is an entry point */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2026,7 +2020,7 @@ let VTransmitFile_VTransmitFile = function () {
         xhr: undefined,
         dataUrl: undefined,
         errorMessage: undefined,
-        VERSION: "1.0.5"
+        VERSION: "1.0.6"
       };
     }
   }, {
@@ -2140,7 +2134,7 @@ const STATUSES = {
   props: core_props,
   data() {
     return {
-      version: "1.0.5",
+      version: "1.0.6",
       dragging: false,
       processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
       thumbnailQueue: [],
@@ -2755,9 +2749,9 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ var components_VueTransmit = (esExports);
 // CONCATENATED MODULE: ./src/components/VueTransmit.vue
 function injectStyle (ssrContext) {
-  __webpack_require__(/*! !../../node_modules/extract-text-webpack-plugin/dist/loader.js?{"omit":1,"remove":true}!vue-style-loader!css-loader!../../node_modules/vue-loader/lib/style-compiler/index?{"vue":true,"id":"data-v-55f49822","scoped":false,"hasInlineConfig":false}!sass-loader!postcss-loader?{"sourceMap":true}!../../node_modules/vue-loader/lib/selector?type=styles&index=0!./VueTransmit.vue */ 1)
+  __webpack_require__(1)
 }
-var normalizeComponent = __webpack_require__(/*! ../../node_modules/vue-loader/lib/component-normalizer */ 2)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 
 /* template */
@@ -2846,24 +2840,12 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
 
 /***/ }),
 /* 1 */
-/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/extract-text-webpack-plugin/dist/loader.js?{"omit":1,"remove":true}!./node_modules/vue-style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/style-compiler?{"vue":true,"id":"data-v-55f49822","scoped":false,"hasInlineConfig":false}!./node_modules/sass-loader/lib/loader.js!./node_modules/postcss-loader/lib?{"sourceMap":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./src/components/VueTransmit.vue ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 2 */
-/*!*************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/component-normalizer.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -2961,12 +2943,6 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 /* 3 */
-/*!***********************************************!*\
-  !*** ./node_modules/lodash-es/_freeGlobal.js ***!
-  \***********************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/*! ModuleConcatenation bailout: Module uses injected variables (global) */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2974,16 +2950,10 @@ module.exports = function normalizeComponent (
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(/*! ./../webpack/buildin/global.js */ 4)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 4 */
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
 /***/ (function(module, exports) {
 
 var g;
