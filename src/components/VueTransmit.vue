@@ -66,9 +66,9 @@
 import uniqueId from "lodash-es/uniqueId"
 import has from "lodash-es/has"
 import noop from "lodash-es/noop"
-import props from "@core/props"
-import { hbsRegex, hbsReplacer, READY_STATES } from "@core/utils"
-import VTransmitFile from "@classes/VTransmitFile"
+import props from "../core/props"
+import { hbsRegex, hbsReplacer, READY_STATES } from "../core/utils"
+import VTransmitFile from "../classes/VTransmitFile"
 
 const STATUSES = {
   ADDED: "added",

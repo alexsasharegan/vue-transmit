@@ -1,4 +1,4 @@
-import { assign, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "@core/utils"
+import { assign, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
 
 export default class VTransmitFile {
   constructor(...data) {

@@ -1,4 +1,4 @@
-import * as components from "@"
+import * as components from "./src"
 
 export default {
   install(Vue, options) {

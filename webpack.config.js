@@ -5,7 +5,9 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const MinifyPlugin = require("babel-minify-webpack-plugin")
+const DashboardPlugin = require("webpack-dashboard/plugin")
 const pjson = JSON.parse(fs.readFileSync(path.resolve(__dirname, "package.json")))
+const { upperFirst } = require("lodash")
 
 const ENV = {
   VERSION: JSON.stringify(pjson.version),
@@ -30,6 +32,7 @@ function config(ctx) {
   const webpackConfig = {
     entry: path.resolve(__dirname, "index.js"),
     output: {
+      ...(ctx.output || {}),
       path: path.resolve(__dirname, "dist"),
       filename: `${name}.js`
     },
@@ -62,7 +65,8 @@ function config(ctx) {
     plugins: [
       new ExtractTextPlugin({
         filename: `${pjson.name}.css`
-      })
+      }),
+      // new DashboardPlugin()
     ],
     performance: {
       hints: false
@@ -123,7 +127,7 @@ function config(ctx) {
 module.exports = [
   config({
     ext: "min",
-    showBundleAnalysis: true,
+    showBundleAnalysis: false,
     rules: [
       {
         test: /\.js$/,
@@ -137,6 +141,23 @@ module.exports = [
   }),
   config({
     noMinify: true,
+    rules: [
+      {
+        test: /\.js$/,
+        include: [SRC, LODASH],
+        loader: "babel-loader",
+        options: {
+          plugins: BABEL_PLUGINS
+        }
+      }
+    ]
+  }),
+  config({
+    ext: "browser",
+    output: {
+      library: pjson.name.split("-").map(upperFirst).join(""),
+      libraryTarget: "global"
+    },
     rules: [
       {
         test: /\.js$/,
