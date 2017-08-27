@@ -156,7 +156,7 @@ module.exports = [
     ext: "browser",
     output: {
       library: pjson.name.split("-").map(upperFirst).join(""),
-      libraryTarget: "global"
+      libraryTarget: "window"
     },
     rules: [
       {
