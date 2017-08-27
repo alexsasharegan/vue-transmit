@@ -2020,7 +2020,7 @@ let VTransmitFile_VTransmitFile = function () {
         xhr: undefined,
         dataUrl: undefined,
         errorMessage: undefined,
-        VERSION: "1.0.6"
+        VERSION: "1.0.7"
       };
     }
   }, {
@@ -2134,7 +2134,7 @@ const STATUSES = {
   props: core_props,
   data() {
     return {
-      version: "1.0.6",
+      version: "1.0.7",
       dragging: false,
       processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
       thumbnailQueue: [],
