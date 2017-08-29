@@ -78,6 +78,7 @@ const STATUSES = {
   PROCESSING: "uploading",
   CANCELED: "canceled",
   ERROR: "error",
+  TIMEOUT: "timeout",
   SUCCESS: "success",
 }
 
@@ -367,6 +368,7 @@ export default {
       const updateProgress = this.handleUploadProgress(files)
       xhr.addEventListener("error", handleError)
       xhr.addEventListener("progress", updateProgress)
+      xhr.addEventListener("timeout", this.handleTimeout(files, xhr))
       xhr.addEventListener("load", e => {
         if (files[0].status === STATUSES.CANCELED || xhr.readyState !== READY_STATES.DONE) {
           return
@@ -425,6 +427,21 @@ export default {
             response || vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status })),
             xhr
           )
+        }
+      }
+    },
+    handleTimeout(files, xhr) {
+      const vm = this
+      return function onTimeoutFn(e) {
+        for (const file of files) {
+          file.status = STATUSES.TIMEOUT
+          file.endProgress()
+          vm.$emit("timeout", file, e, xhr)
+        }
+        vm.$emit("timeout-multiple", files, e, xhr)
+
+        if (this.autoProcessQueue) {
+          return this.processQueue()
         }
       }
     },
