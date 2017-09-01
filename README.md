@@ -77,6 +77,8 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |`sending-multiple`| `VTransmitFile[], XmlHttpRequest, FormData` | Fired right before the XHR is sent. |
 |`success`| `VTransmitFile, response: String, LoadEvent` | Fired on load of the XHR. |
 |`success-multiple`| `VTransmitFile[], response: String, LoadEvent` | Fired on load of the XHR.|
+|`timeout`| `VTransmitFile, TimeoutEvent, XmlHttpRequest`| Fired on timeout of the XHR.|
+|`timeout-multiple`| `VTransmitFile[], TimeoutEvent, XmlHttpRequest`| Fired on timeout of the XHR.|
 |`canceled`| `VTransmitFile` | Fired upon cancellation of the XHR. _(status: 'canceled')_ |
 |`canceled-multiple`| `VTransmitFile[]` | Fired upon cancellation of the XHR. _(status: 'canceled')_ |
 |`complete`| `VTransmitFile` | Fired upon completion of the XHR. _(success or failure)_ |
