@@ -1,3 +1,4 @@
+module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -2020,7 +2021,7 @@ let VTransmitFile_VTransmitFile = function () {
         xhr: undefined,
         dataUrl: undefined,
         errorMessage: undefined,
-        VERSION: "1.0.9"
+        VERSION: "1.0.10"
       };
     }
   }, {
@@ -2135,7 +2136,7 @@ const STATUSES = {
   props: core_props,
   data() {
     return {
-      version: "1.0.9",
+      version: "1.0.10",
       dragging: false,
       processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
       thumbnailQueue: [],
@@ -2844,7 +2845,7 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
     }
   },
   name: "vue-transmit",
-  version: "1.0.9"
+  version: "1.0.10"
 });
 
 
