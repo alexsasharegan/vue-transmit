@@ -7,5 +7,7 @@ export default {
         Vue.component(component, components[component])
       }
     }
-  }
+  },
+  name: NAME,
+  version: VERSION
 }

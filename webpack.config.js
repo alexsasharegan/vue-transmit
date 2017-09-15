@@ -11,7 +11,8 @@ const { upperFirst } = require("lodash")
 
 const ENV = {
   VERSION: JSON.stringify(pjson.version),
-  PRODUCTION: JSON.stringify(false)
+  PRODUCTION: JSON.stringify(false),
+  NAME: JSON.stringify(pjson.name)
 }
 const SRC = path.resolve(__dirname, "src")
 const DIST = path.resolve(__dirname, "dist")
