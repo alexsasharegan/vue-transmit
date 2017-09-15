@@ -86,7 +86,6 @@ export default {
   props,
   data() {
     return {
-      version: VERSION,
       dragging: false,
       processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
       thumbnailQueue: [],
