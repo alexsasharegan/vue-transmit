@@ -366,7 +366,7 @@ export default {
       const handleError = this.handleUploadError(files, xhr, response)
       const updateProgress = this.handleUploadProgress(files)
       xhr.addEventListener("error", handleError)
-      xhr.addEventListener("progress", updateProgress)
+      xhr.upload.addEventListener("progress", updateProgress)
       xhr.addEventListener("timeout", this.handleTimeout(files, xhr))
       xhr.addEventListener("load", e => {
         if (files[0].status === STATUSES.CANCELED || xhr.readyState !== READY_STATES.DONE) {

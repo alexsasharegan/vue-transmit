@@ -15,7 +15,7 @@ export default class VTransmitFile {
       throw new TypeError("The method 'copyNativeFile' expects an instance of File (Native).")
     }
     // save reference for upload
-    this._nativeFile = file
+    this.nativeFile = file
     // Copy props to normal object for Vue reactivity.
     // Vue cannot define reactive properties on native file's readonly props.
     return this.set(copyOwnAndInheritedProps(file))
@@ -32,7 +32,7 @@ export default class VTransmitFile {
       )
     }
     this.startProgress()
-    const total = Math.max(e.total, this.upload.total)
+    const total = e.total || this.upload.total
     this.upload.progress = 100 * e.loaded / total
     this.upload.bytesSent = e.loaded
     this.upload.total = total
@@ -67,6 +67,13 @@ export default class VTransmitFile {
     return this._nativeFile
   }
 
+  set nativeFile(file) {
+    if (!(file instanceof window.File)) {
+      throw new TypeError(`[${VTransmitFile.name}] Expected an instance of File (native).`)
+    }
+    this._nativeFile = file
+  }
+
   static defaults() {
     return {
       _nativeFile: null,
@@ -84,6 +91,7 @@ export default class VTransmitFile {
       upload: {
         bytesSent: 0,
         progress: 0,
+        total: 0,
         speed: {
           kbps: undefined,
           mbps: undefined
