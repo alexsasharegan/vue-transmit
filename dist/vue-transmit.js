@@ -1928,7 +1928,7 @@ let VTransmitFile_VTransmitFile = function () {
         throw new TypeError("The method 'copyNativeFile' expects an instance of File (Native).");
       }
       // save reference for upload
-      this._nativeFile = file;
+      this.nativeFile = file;
       // Copy props to normal object for Vue reactivity.
       // Vue cannot define reactive properties on native file's readonly props.
       return this.set(utils_copyOwnAndInheritedProps(file));
@@ -1949,7 +1949,7 @@ let VTransmitFile_VTransmitFile = function () {
         throw new TypeError("'" + this.constructor.name + ".prototype.handleProgress' can only be called with the 'ProgressEvent' object.");
       }
       this.startProgress();
-      const total = Math.max(e.total, this.upload.total);
+      const total = e.total || this.upload.total;
       this.upload.progress = 100 * e.loaded / total;
       this.upload.bytesSent = e.loaded;
       this.upload.total = total;
@@ -1987,6 +1987,12 @@ let VTransmitFile_VTransmitFile = function () {
     key: "nativeFile",
     get: function () {
       return this._nativeFile;
+    },
+    set: function (file) {
+      if (!(file instanceof window.File)) {
+        throw new TypeError("[" + VTransmitFile.name + "] Expected an instance of File (native).");
+      }
+      this._nativeFile = file;
     }
   }], [{
     key: "defaults",
@@ -2007,6 +2013,7 @@ let VTransmitFile_VTransmitFile = function () {
         upload: {
           bytesSent: 0,
           progress: 0,
+          total: 0,
           speed: {
             kbps: undefined,
             mbps: undefined
@@ -2021,7 +2028,7 @@ let VTransmitFile_VTransmitFile = function () {
         xhr: undefined,
         dataUrl: undefined,
         errorMessage: undefined,
-        VERSION: "1.0.11"
+        VERSION: "1.0.12"
       };
     }
   }, {
@@ -2406,7 +2413,7 @@ const STATUSES = {
       const handleError = this.handleUploadError(files, xhr, response);
       const updateProgress = this.handleUploadProgress(files);
       xhr.addEventListener("error", handleError);
-      xhr.addEventListener("progress", updateProgress);
+      xhr.upload.addEventListener("progress", updateProgress);
       xhr.addEventListener("timeout", this.handleTimeout(files, xhr));
       xhr.addEventListener("load", e => {
         if (files[0].status === STATUSES.CANCELED || xhr.readyState !== READY_STATES.DONE) {
