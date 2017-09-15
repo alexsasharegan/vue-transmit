@@ -124,6 +124,9 @@ module.exports = [
   config({
     ext: "min",
     showBundleAnalysis: false,
+    output: {
+      libraryTarget: "commonjs2"
+    },
     rules: [
       {
         test: /\.js$/,
@@ -137,6 +140,9 @@ module.exports = [
   }),
   config({
     noMinify: true,
+    output: {
+      libraryTarget: "commonjs2"
+    },
     rules: [
       {
         test: /\.js$/,
