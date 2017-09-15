@@ -1,6 +1,6 @@
 {
   "name": "vue-transmit",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Vue.js drag & drop uploader based on Dropzone.js",
   "module": "index.js",
   "jsnext:main": "index.js",
