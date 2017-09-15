@@ -2020,7 +2020,7 @@ let VTransmitFile_VTransmitFile = function () {
         xhr: undefined,
         dataUrl: undefined,
         errorMessage: undefined,
-        VERSION: "1.0.8"
+        VERSION: "1.0.9"
       };
     }
   }, {
@@ -2135,7 +2135,7 @@ const STATUSES = {
   props: core_props,
   data() {
     return {
-      version: "1.0.8",
+      version: "1.0.9",
       dragging: false,
       processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
       thumbnailQueue: [],
@@ -2812,16 +2812,7 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
     let props = _ref.props,
         data = _ref.data;
 
-    return h("svg", lib_esm(data, {
-      attrs: {
-        "enable-background": "new 0 0 64 64",
-        version: "1.1",
-        viewBox: "0 0 64 64",
-        "xml:space": "preserve",
-        xmlns: "http://www.w3.org/2000/svg",
-        "xmlns:xlink": "http://www.w3.org/1999/xlink"
-      }
-    }), [h("circle", {
+    return h("svg", lib_esm(data, { attrs: { viewBox: "0 0 64 64" } }), [h("circle", {
       attrs: {
         cx: "32",
         cy: "32",
@@ -2851,7 +2842,9 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
         Vue.component(component, src_namespaceObject[component])
       }
     }
-  }
+  },
+  name: "vue-transmit",
+  version: "1.0.9"
 });
 
 
