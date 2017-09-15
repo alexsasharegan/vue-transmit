@@ -14,6 +14,7 @@ const ENV = {
   PRODUCTION: JSON.stringify(false)
 }
 const SRC = path.resolve(__dirname, "src")
+const DIST = path.resolve(__dirname, "dist")
 const LODASH = path.resolve(__dirname, "node_modules/lodash-es")
 const BABEL_PLUGINS = [
   "transform-es2015-for-of",
@@ -33,17 +34,11 @@ function config(ctx) {
     entry: path.resolve(__dirname, "index.js"),
     output: {
       ...(ctx.output || {}),
-      path: path.resolve(__dirname, "dist"),
+      path: DIST,
       filename: `${name}.js`
     },
     resolve: {
-      modules: ["node_modules"],
-      alias: {
-        "@": SRC,
-        "@core": path.join(__dirname, "src/core"),
-        "@classes": path.join(__dirname, "src/classes"),
-        "@components": path.join(__dirname, "src/components")
-      }
+      modules: ["node_modules"]
     },
     module: {
       rules: [
@@ -65,7 +60,7 @@ function config(ctx) {
     plugins: [
       new ExtractTextPlugin({
         filename: `${pjson.name}.css`
-      }),
+      })
       // new DashboardPlugin()
     ],
     performance: {
@@ -155,7 +150,10 @@ module.exports = [
   config({
     ext: "browser",
     output: {
-      library: pjson.name.split("-").map(upperFirst).join(""),
+      library: pjson.name
+        .split("-")
+        .map(upperFirst)
+        .join(""),
       libraryTarget: "window"
     },
     rules: [
