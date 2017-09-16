@@ -88,6 +88,28 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |`max-files-reached`| `VTransmitFile[]` | Fired when the total accepted files on the instance exceeds the max files prop. |
 |`queue-complete`| `VTransmitFile` | Fired once all added files have uploaded and the queue has been flushed.  |
 
+## Slots
+
+### Default (`$slots.default`)
+
+The default slot should contain your markup for getting an upload started. This could be a file uploader button and/or a dropzone.
+
+### Files (Scoped, `$slots.files`)
+
+This slot receives a number of props:
+
+```ts
+{
+  files: VTransmitFile[],
+  acceptedFiles: VTransmitFile[],
+  rejectedFiles: VTransmitFile[],
+  addedFiles: VTransmitFile[],
+  queuedFiles: VTransmitFile[],
+  uploadingFiles: VTransmitFile[],
+  activeFiles: VTransmitFile[]
+}
+```
+
 ## `VTransmitFile`
 
 ```json
