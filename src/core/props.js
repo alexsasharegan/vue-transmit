@@ -6,8 +6,12 @@ export default {
     type: String,
     default: "div"
   },
-  dropZoneClasses: {
+  uploadAreaClasses: {
     type: [Array, Object, String],
+    default: null
+  },
+  dragClass: {
+    type: String,
     default: null
   },
   url: {

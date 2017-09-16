@@ -105,8 +105,7 @@ export default class VTransmitFile {
       height: undefined,
       xhr: undefined,
       dataUrl: undefined,
-      errorMessage: undefined,
-      VERSION: VERSION
+      errorMessage: undefined
     }
   }
 

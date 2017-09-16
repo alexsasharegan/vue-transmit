@@ -1,8 +1,8 @@
 <template>
   <component :is="tag">
-    <div class="v-transmit__drop-zone"
+    <div class="v-transmit__upload-area"
+         :class="[dragClass, uploadAreaClasses]"
          draggable="true"
-         :class="[{'v-transmit__drop-zone--is-dragging': dragging}, dropZoneClasses]"
          @click="handleClickUploaderAction"
          @dragstart="$emit('drag-start', $event)"
          @dragend="handleDragEnd"
@@ -13,13 +13,7 @@
       <slot></slot>
     </div>
     <slot name="files"
-          :files="files"
-          :accepted-files="acceptedFiles"
-          :rejected-files="rejectedFiles"
-          :added-files="addedFiles"
-          :queued-files="queuedFiles"
-          :uploading-files="uploadingFiles"
-          :active-files="activeFiles"></slot>
+          v-bind="fileSlotBindings"></slot>
     <input type="file"
            ref="hiddenFileInput"
            :multiple="multiple"
@@ -45,7 +39,7 @@
     width: 0px !important;
   }
 
-  .v-transmit__drop-zone {
+  .v-transmit__upload-area {
     width: 100%;
     border-radius: 1rem;
     border: 2px dashed $border-color;
@@ -56,7 +50,7 @@
     }
   }
 
-  .v-transmit__drop-zone--is-dragging {
+  .v-transmit__upload-area--is-dragging {
     background: $drop-color linear-gradient(-45deg, $drop-color-alt 25%, transparent 25%, transparent 50%, $drop-color-alt 50%, $drop-color-alt 75%, transparent 75%, transparent);
     background-size: 40px 40px;
   }
@@ -103,6 +97,12 @@ export default {
     inputEl() {
       return this.$refs.hiddenFileInput
     },
+    dragClass() {
+      return {
+        "v-transmit__drop-zone--is-dragging": this.dragging,
+        [this.dragClass]: this.dragging,
+      }
+    },
     filesToAccept() {
       return this.acceptedFileTypes.join(",")
     },
@@ -135,6 +135,18 @@ export default {
     },
     isUploading() {
       return this.uploadingFiles.length > 0
+    },
+    fileSlotBindings() {
+      return {
+        files: this.files,
+        acceptedFiles: this.acceptedFiles,
+        rejectedFiles: this.rejectedFiles,
+        addedFiles: this.addedFiles,
+        queuedFiles: this.queuedFiles,
+        uploadingFiles: this.uploadingFiles,
+        activeFiles: this.activeFiles,
+        isUploading: this.isUploading,
+      }
     },
   },
   watch: {

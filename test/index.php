@@ -52,7 +52,10 @@
                 <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
                 <div class="media-body">
                   <h3>{{ file.name }}</h3>
-                  <p v-if="file.status === 'uploading'">{{ file.upload.progress }}%</p>
+                  <div class="progress" style="width: 50vw;">
+                    <div class="progress-bar bg-success"
+                        :style="{width: file.upload.progress + '%'}"></div>
+                  </div>
                   <pre>{{ file | json }} </pre>
                 </div>
               </div>

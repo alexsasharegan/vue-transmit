@@ -5,6 +5,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/alexsasharegan/vue-transmit.svg?style=flat)](https://github.com/alexsasharegan/vue-transmit/issues)
 [![GitHub stars](https://img.shields.io/github/stars/alexsasharegan/vue-transmit.svg)](https://github.com/alexsasharegan/vue-transmit/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/alexsasharegan/vue-transmit.svg)](https://github.com/alexsasharegan/vue-transmit/network)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/alexsasharegan/vue-transmit.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Falexsasharegan%2Fvue-transmit)
 
 A Vue.js drag & drop uploader based on Dropzone.js (`~26kB`, `~9kB` gzipped). Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original Dropzone.js! [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 🙌
@@ -29,7 +30,7 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |Property|Type|Default|
 |---|---|---|
 |tag|String|"div"|
-|dropZoneClasses|Array, Object, String|null|
+|uploadAreaClasses|Array, Object, String|null|
 |url|String|undefined|
 |method|String|"post"|
 |withCredentials|Boolean|false|
@@ -113,7 +114,8 @@ This slot receives a number of props:
   addedFiles: VTransmitFile[],
   queuedFiles: VTransmitFile[],
   uploadingFiles: VTransmitFile[],
-  activeFiles: VTransmitFile[]
+  activeFiles: VTransmitFile[],
+  isUploading: Boolean
 }
 ```
 
@@ -148,7 +150,6 @@ This slot receives a number of props:
   "height": 700,
   "xhr": {},
   "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAgAElEQVR4XlS9B7RmZ3UluG/...=",
-  "VERSION": "1.0.5"
 }
 ```
 
@@ -177,7 +178,14 @@ This slot receives a number of props:
             <div v-for="(file, i) in props.files" :key="file.id" :class="{'mt-5': i === 0}">
               <div class="media">
                 <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
-                <pre class="media-body">{{ file | json }}</pre>
+                <div class="media-body">
+                  <h3>{{ file.name }}</h3>
+                  <div class="progress" style="width: 50vw;">
+                    <div class="progress-bar bg-success"
+                        :style="{width: file.upload.progress + '%'}"></div>
+                  </div>
+                  <pre>{{ file | json }} </pre>
+                </div>
               </div>
             </div>
           </template>
