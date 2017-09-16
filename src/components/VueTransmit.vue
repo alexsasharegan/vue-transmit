@@ -133,6 +133,9 @@ export default {
     maxFilesReachedClass() {
       return this.maxFilesReached ? 'v-transmit__max-files--reached' : null
     },
+    isUploading() {
+      return this.uploadingFiles.length > 0
+    },
   },
   watch: {
     acceptedFiles(value) {
