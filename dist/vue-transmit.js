@@ -1586,8 +1586,12 @@ function identity(value) {
     type: String,
     default: "div"
   },
-  dropZoneClasses: {
+  uploadAreaClasses: {
     type: [Array, Object, String],
+    default: null
+  },
+  dragClass: {
+    type: String,
     default: null
   },
   url: {
@@ -2027,8 +2031,7 @@ let VTransmitFile_VTransmitFile = function () {
         height: undefined,
         xhr: undefined,
         dataUrl: undefined,
-        errorMessage: undefined,
-        VERSION: "5.0.0"
+        errorMessage: undefined
       };
     }
   }, {
@@ -2055,12 +2058,6 @@ let VTransmitFile_VTransmitFile = function () {
 
 /* harmony default export */ var classes_VTransmitFile = (VTransmitFile_VTransmitFile);
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VueTransmit.vue
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2160,6 +2157,12 @@ const STATUSES = {
     inputEl() {
       return this.$refs.hiddenFileInput;
     },
+    dragClass() {
+      return {
+        "v-transmit__drop-zone--is-dragging": this.dragging,
+        [this.dragClass]: this.dragging
+      };
+    },
     filesToAccept() {
       return this.acceptedFileTypes.join(",");
     },
@@ -2192,6 +2195,18 @@ const STATUSES = {
     },
     isUploading() {
       return this.uploadingFiles.length > 0;
+    },
+    fileSlotBindings() {
+      return {
+        files: this.files,
+        acceptedFiles: this.acceptedFiles,
+        rejectedFiles: this.rejectedFiles,
+        addedFiles: this.addedFiles,
+        queuedFiles: this.queuedFiles,
+        uploadingFiles: this.uploadingFiles,
+        activeFiles: this.activeFiles,
+        isUploading: this.isUploading
+      };
     }
   },
   watch: {
@@ -2718,10 +2733,8 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   return _c(_vm.tag, {
     tag: "component"
   }, [_c('div', {
-    staticClass: "v-transmit__drop-zone",
-    class: [{
-      'v-transmit__drop-zone--is-dragging': _vm.dragging
-    }, _vm.dropZoneClasses],
+    staticClass: "v-transmit__upload-area",
+    class: [_vm.dragClass, _vm.uploadAreaClasses],
     attrs: {
       "draggable": "true"
     },
@@ -2748,15 +2761,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         _vm.onDrop($event)
       }
     }
-  }, [_vm._t("default")], 2), _vm._v(" "), _vm._t("files", null, {
-    files: _vm.files,
-    acceptedFiles: _vm.acceptedFiles,
-    rejectedFiles: _vm.rejectedFiles,
-    addedFiles: _vm.addedFiles,
-    queuedFiles: _vm.queuedFiles,
-    uploadingFiles: _vm.uploadingFiles,
-    activeFiles: _vm.activeFiles
-  }), _vm._v(" "), _c('input', {
+  }, [_vm._t("default")], 2), _vm._v(" "), _vm._t("files", null, null, _vm.fileSlotBindings), _vm._v(" "), _c('input', {
     ref: "hiddenFileInput",
     staticClass: "v-transmit__input--hidden",
     class: [_vm.maxFilesReachedClass],

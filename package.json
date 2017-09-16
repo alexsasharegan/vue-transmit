@@ -5,12 +5,7 @@
   "module": "index.js",
   "jsnext:main": "index.js",
   "main": "dist/vue-transmit.min.js",
-  "keywords": [
-    "dragndrop",
-    "drag and drop",
-    "file upload",
-    "upload"
-  ],
+  "keywords": ["dragndrop", "drag and drop", "file upload", "upload"],
   "directories": {
     "test": "test"
   },
@@ -19,6 +14,7 @@
     "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules -w",
     "test": "php -S localhost:3000 -t ./test/",
     "lib-size": "gzip -c dist/vue-transmit.min.js | wc -c",
+    "prepublishOnly": "npm run build",
     "release": "standard-version",
     "release:publish": "git push --follow-tags origin master; npm publish"
   },
