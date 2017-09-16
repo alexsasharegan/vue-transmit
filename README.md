@@ -1,5 +1,12 @@
 # Vue-Transmit
 
+[![npm version](https://badge.fury.io/js/vue-transmit.svg)](https://badge.fury.io/js/vue-transmit)
+[![npm downloads](https://img.shields.io/npm/dt/vue-transmit.svg)](https://www.npmjs.com/package/vue-transmit)
+[![GitHub issues](https://img.shields.io/github/issues/alexsasharegan/vue-transmit.svg?style=flat)](https://github.com/alexsasharegan/vue-transmit/issues)
+[![GitHub stars](https://img.shields.io/github/stars/alexsasharegan/vue-transmit.svg)](https://github.com/alexsasharegan/vue-transmit/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/alexsasharegan/vue-transmit.svg)](https://github.com/alexsasharegan/vue-transmit/network)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/alexsasharegan/vue-transmit.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Falexsasharegan%2Fvue-transmit)
+
 A Vue.js drag & drop uploader based on Dropzone.js (`~26kB`, `~9kB` gzipped). Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original Dropzone.js! [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 🙌
 
 ## Features
