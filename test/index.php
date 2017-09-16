@@ -20,10 +20,9 @@
           integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
           crossorigin="anonymous"></script>
   <script>
-    window.VueTransmit = <?= file_get_contents(__DIR__. "/../dist/vue-transmit.js" ); ?>
-  </script>
-  <script>
-    window.VueTransmit = window.VueTransmit.default
+    <?= file_get_contents(__DIR__. "/../dist/vue-transmit.browser.js" ); ?>
+
+    ;Vue.use(VueTransmit)
   </script>
   <style>
     <?= file_get_contents(__DIR__. "/../dist/vue-transmit.css" ); ?>
@@ -53,6 +52,7 @@
                 <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
                 <div class="media-body">
                   <h3>{{ file.name }}</h3>
+                  <p v-if="file.status === 'uploading'">{{ file.upload.progress }}%</p>
                   <pre>{{ file | json }} </pre>
                 </div>
               </div>

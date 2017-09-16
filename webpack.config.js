@@ -125,7 +125,8 @@ module.exports = [
     ext: "min",
     showBundleAnalysis: false,
     output: {
-      libraryTarget: "commonjs2"
+      libraryTarget: "commonjs2",
+      libraryExport: "default"
     },
     rules: [
       {
@@ -141,7 +142,8 @@ module.exports = [
   config({
     noMinify: true,
     output: {
-      libraryTarget: "commonjs2"
+      libraryTarget: "commonjs2",
+      libraryExport: "default"
     },
     rules: [
       {
@@ -161,7 +163,8 @@ module.exports = [
         .split("-")
         .map(upperFirst)
         .join(""),
-      libraryTarget: "window"
+      libraryTarget: "window",
+      libraryExport: "default"
     },
     rules: [
       {

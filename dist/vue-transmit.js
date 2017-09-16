@@ -2028,7 +2028,7 @@ let VTransmitFile_VTransmitFile = function () {
         xhr: undefined,
         dataUrl: undefined,
         errorMessage: undefined,
-        VERSION: "1.0.12"
+        VERSION: "5.0.0"
       };
     }
   }, {
@@ -2189,6 +2189,9 @@ const STATUSES = {
     },
     maxFilesReachedClass() {
       return this.maxFilesReached ? 'v-transmit__max-files--reached' : null;
+    },
+    isUploading() {
+      return this.uploadingFiles.length > 0;
     }
   },
   watch: {
@@ -2998,5 +3001,5 @@ module.exports = g;
 
 
 /***/ })
-/******/ ]);
+/******/ ])["default"];
 //# sourceMappingURL=vue-transmit.js.map
