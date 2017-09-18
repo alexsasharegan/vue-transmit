@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.1.2"></a>
+## [5.1.2](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.1...v5.1.2) (2017-09-18)
+
+
+### Bug Fixes
+
+* duplicate class name prop and computed prop ([79a9f44](https://github.com/alexsasharegan/vue-transmit/commit/79a9f44))
+
+
+
 <a name="5.1.1"></a>
 ## [5.1.1](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.0...v5.1.1) (2017-09-16)
 
