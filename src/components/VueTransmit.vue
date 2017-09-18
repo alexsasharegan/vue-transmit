@@ -99,7 +99,7 @@ export default {
     },
     isDraggingClass() {
       return {
-        "v-transmit__drop-zone--is-dragging": this.dragging,
+        "v-transmit__upload-area--is-dragging": this.dragging,
         [this.dragClass]: this.dragging,
       }
     },
