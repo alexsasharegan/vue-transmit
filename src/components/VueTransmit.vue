@@ -1,7 +1,7 @@
 <template>
   <component :is="tag">
     <div class="v-transmit__upload-area"
-         :class="[dragClass, uploadAreaClasses]"
+         :class="[isDraggingClass, uploadAreaClasses]"
          draggable="true"
          @click="handleClickUploaderAction"
          @dragstart="$emit('drag-start', $event)"
@@ -97,7 +97,7 @@ export default {
     inputEl() {
       return this.$refs.hiddenFileInput
     },
-    dragClass() {
+    isDraggingClass() {
       return {
         "v-transmit__drop-zone--is-dragging": this.dragging,
         [this.dragClass]: this.dragging,

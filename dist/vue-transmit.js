@@ -2157,7 +2157,7 @@ const STATUSES = {
     inputEl() {
       return this.$refs.hiddenFileInput;
     },
-    dragClass() {
+    isDraggingClass() {
       return {
         "v-transmit__drop-zone--is-dragging": this.dragging,
         [this.dragClass]: this.dragging
@@ -2734,7 +2734,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     tag: "component"
   }, [_c('div', {
     staticClass: "v-transmit__upload-area",
-    class: [_vm.dragClass, _vm.uploadAreaClasses],
+    class: [_vm.isDraggingClass, _vm.uploadAreaClasses],
     attrs: {
       "draggable": "true"
     },
