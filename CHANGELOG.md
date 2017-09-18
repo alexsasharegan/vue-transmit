@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.1.3"></a>
+## [5.1.3](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.2...v5.1.3) (2017-09-18)
+
+
+### Bug Fixes
+
+* **build:** fixing esm build + commonjs build ([73a53a6](https://github.com/alexsasharegan/vue-transmit/commit/73a53a6))
+
+
+
 <a name="5.1.2"></a>
 ## [5.1.2](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.1...v5.1.2) (2017-09-18)
 
