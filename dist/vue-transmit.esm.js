@@ -3006,5 +3006,5 @@ module.exports = g;
 
 
 /***/ })
-/******/ ])["default"];
-//# sourceMappingURL=vue-transmit.js.map
+/******/ ]);
+//# sourceMappingURL=vue-transmit.esm.js.map

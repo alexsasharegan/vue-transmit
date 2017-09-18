@@ -2,21 +2,17 @@
   "name": "vue-transmit",
   "version": "5.1.2",
   "description": "Vue.js drag & drop uploader based on Dropzone.js",
-  "module": "index.js",
-  "jsnext:main": "index.js",
+  "module": "dist/vue-transmit.esm.min.js",
+  "jsnext:main": "dist/vue-transmit.esm.min.js",
   "main": "dist/vue-transmit.min.js",
-  "keywords": [
-    "dragndrop",
-    "drag and drop",
-    "file upload",
-    "upload"
-  ],
+  "keywords": ["dragndrop", "drag and drop", "file upload", "upload"],
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules -w",
+    "clean": "scripts/clean.js",
+    "build": "npm run clean && cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "dev": "npm run clean && cross-env NODE_ENV=development webpack --progress --hide-modules -w",
     "test": "php -S localhost:3000 -t ./test/",
     "lib-size": "gzip -c dist/vue-transmit.min.js | wc -c",
     "release": "standard-version",

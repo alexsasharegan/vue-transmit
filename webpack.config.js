@@ -122,11 +122,10 @@ function config(ctx) {
 
 module.exports = [
   config({
-    ext: "min",
-    showBundleAnalysis: false,
+    ext: "esm",
+    noMinify: true,
     output: {
-      libraryTarget: "commonjs2",
-      libraryExport: "default"
+      libraryTarget: "commonjs2"
     },
     rules: [
       {
@@ -140,7 +139,25 @@ module.exports = [
     ]
   }),
   config({
-    noMinify: true,
+    ext: "esm.min",
+    showBundleAnalysis: false,
+    output: {
+      libraryTarget: "commonjs2"
+    },
+    rules: [
+      {
+        test: /\.js$/,
+        include: [SRC, LODASH],
+        loader: "babel-loader",
+        options: {
+          plugins: BABEL_PLUGINS
+        }
+      }
+    ]
+  }),
+  config({
+    ext: "common.min",
+    showBundleAnalysis: false,
     output: {
       libraryTarget: "commonjs2",
       libraryExport: "default"
