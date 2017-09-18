@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.1.5"></a>
+## [5.1.5](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.4...v5.1.5) (2017-09-18)
+
+
+### Bug Fixes
+
+* **drag-class:** update drag class to apply styles on drag ([ab28130](https://github.com/alexsasharegan/vue-transmit/commit/ab28130))
+
+
+
 <a name="5.1.4"></a>
 ## [5.1.4](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.3...v5.1.4) (2017-09-18)
 
