@@ -4,7 +4,7 @@
   "description": "Vue.js drag & drop uploader based on Dropzone.js",
   "module": "dist/vue-transmit.esm.min.js",
   "jsnext:main": "dist/vue-transmit.esm.min.js",
-  "main": "dist/vue-transmit.min.js",
+  "main": "dist/vue-transmit.common.min.js",
   "keywords": [
     "dragndrop",
     "drag and drop",
