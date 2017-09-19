@@ -2261,11 +2261,11 @@ const STATUSES = {
       }
     },
     removeAllFiles(cancelInProgressUploads = false) {
-      this.files.forEach(file => {
+      for (const file of files) {
         if (file.status !== STATUSES.UPLOADING || cancelInProgressUploads) {
           this.removeFile(file);
         }
-      });
+      }
     },
     triggerBrowseFiles() {
       this.inputEl.click();
@@ -2681,7 +2681,7 @@ const STATUSES = {
       return files.map(file => this.addFile(file));
     },
     addFilesFromItems(items) {
-      items.forEach(item => {
+      for (const item of items) {
         if (item.webkitGetAsEntry) {
           const entry = item.webkitGetAsEntry();
 
@@ -2695,11 +2695,11 @@ const STATUSES = {
             this.addFile(item.getAsFile());
           }
         }
-      });
+      }
     },
     addFilesFromDirectory(directory, path) {
       directory.createReader().readEntries(entries => {
-        entries.forEach(entry => {
+        for (const entry of entries) {
           if (entry.isFile) {
             entry.file(file => {
               if (this.ignoreHiddenFiles && /^\./.test(file.name)) {
@@ -2711,7 +2711,7 @@ const STATUSES = {
           } else if (entry.isDirectory) {
             this.addFilesFromDirectory(entry, `${path}/${entry.name}`);
           }
-        });
+        }
       }, console.error);
     }
   },
