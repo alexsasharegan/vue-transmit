@@ -1590,6 +1590,18 @@ function identity(value) {
     type: [Array, Object, String],
     default: null
   },
+  uploadAreaAttrs: {
+    type: Object,
+    default: function () {
+      return {};
+    }
+  },
+  uploadAreaListeners: {
+    type: Object,
+    default: function () {
+      return {};
+    }
+  },
   dragClass: {
     type: String,
     default: null
@@ -2116,6 +2128,8 @@ let VTransmitFile_VTransmitFile = function () {
 //
 //
 //
+//
+//
 
 
 
@@ -2157,12 +2171,6 @@ const STATUSES = {
     inputEl() {
       return this.$refs.hiddenFileInput;
     },
-    isDraggingClass() {
-      return {
-        "v-transmit__upload-area--is-dragging": this.dragging,
-        [this.dragClass]: this.dragging
-      };
-    },
     filesToAccept() {
       return this.acceptedFileTypes.join(",");
     },
@@ -2188,10 +2196,17 @@ const STATUSES = {
       return this.getFilesWithStatus(STATUSES.UPLOADING, STATUSES.QUEUED);
     },
     maxFilesReached() {
+      // Loose equality checks null && undefined
       return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles;
     },
     maxFilesReachedClass() {
-      return this.maxFilesReached ? 'v-transmit__max-files--reached' : null;
+      return this.maxFilesReached ? "v-transmit__max-files--reached" : null;
+    },
+    isDraggingClass() {
+      return {
+        "v-transmit__upload-area--is-dragging": this.dragging,
+        [this.dragClass]: this.dragging
+      };
     },
     isUploading() {
       return this.uploadingFiles.length > 0;
@@ -2224,8 +2239,7 @@ const STATUSES = {
       return this.files.filter(f => statuses.includes(f.status));
     },
     onFileInputChange(e) {
-      const files = Array.from(this.$refs.hiddenFileInput.files).map(this.addFile);
-      this.$emit('added-files', files);
+      this.$emit('added-files', Array.from(this.$refs.hiddenFileInput.files).map(this.addFile));
     },
     addFile(file) {
       const vTransmitFile = classes_VTransmitFile.fromNativeFile(file);
@@ -2628,6 +2642,15 @@ const STATUSES = {
 
       return false;
     },
+    /**
+     * @param {DragEvent} e
+     */
+    handleDragStart(e) {
+      this.$emit('drag-start', e);
+    },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragOver(e) {
       this.dragging = true;
       let effect;
@@ -2638,18 +2661,30 @@ const STATUSES = {
       e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy';
       this.$emit('drag-over', e);
     },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragEnter(e) {
       this.dragging = true;
       this.$emit('drag-enter', e);
     },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragLeave(e) {
       this.dragging = false;
       this.$emit('drag-leave', e);
     },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragEnd(e) {
       this.dragging = false;
       this.$emit('drag-end', e);
     },
+    /**
+     * @param {DragEvent} e
+     */
     onDrop(e) {
       this.dragging = false;
       if (!e.dataTransfer) {
@@ -2732,7 +2767,7 @@ const STATUSES = {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c(_vm.tag, {
     tag: "component"
-  }, [_c('div', {
+  }, [_c('div', _vm._g(_vm._b({
     staticClass: "v-transmit__upload-area",
     class: [_vm.isDraggingClass, _vm.uploadAreaClasses],
     attrs: {
@@ -2740,9 +2775,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     },
     on: {
       "click": _vm.handleClickUploaderAction,
-      "dragstart": function($event) {
-        _vm.$emit('drag-start', $event)
-      },
+      "dragstart": _vm.handleDragStart,
       "dragend": _vm.handleDragEnd,
       "dragenter": function($event) {
         $event.preventDefault();
@@ -2761,7 +2794,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
         _vm.onDrop($event)
       }
     }
-  }, [_vm._t("default")], 2), _vm._v(" "), _vm._t("files", null, null, _vm.fileSlotBindings), _vm._v(" "), _c('input', {
+  }, 'div', _vm.uploadAreaAttrs, false), _vm.uploadAreaListeners), [_vm._t("default")], 2), _vm._v(" "), _vm._t("files", null, null, _vm.fileSlotBindings), _vm._v(" "), _c('input', {
     ref: "hiddenFileInput",
     staticClass: "v-transmit__input--hidden",
     class: [_vm.maxFilesReachedClass],
