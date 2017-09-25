@@ -70,7 +70,7 @@
     "vue-template-compiler": "^2.4.2",
     "webpack": "^3.5.5",
     "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-dashboard": "^1.0.0-4",
+    "webpack-dashboard": "^1.0.0-5",
     "webpack-dev-server": "^2.7.1"
   },
   "repository": {
