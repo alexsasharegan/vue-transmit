@@ -10,6 +10,14 @@ export default {
     type: [Array, Object, String],
     default: null
   },
+  uploadAreaAttrs: {
+    type: Object,
+    default: () => ({})
+  },
+  uploadAreaListeners: {
+    type: Object,
+    default: () => ({})
+  },
   dragClass: {
     type: String,
     default: null

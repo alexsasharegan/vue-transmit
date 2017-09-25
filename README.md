@@ -12,16 +12,21 @@ A Vue.js drag & drop uploader based on Dropzone.js (`~26kB`, `~9kB` gzipped). Ma
 
 ## Features
 
-Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in ES6 and Vue.js. Instead of creating a Vue wrapper component that duplicates all of the methods and event logic from Dropzone, Vue-Transmit implements them directly on the component. This cuts down on library size, and since Vue already has a first-class event emitter, we get even more space savings.
+Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in ES6 for Vue.js. Instead of creating a Vue wrapper component that duplicates and proxies all of the methods and event logic between Dropzone and the component, Vue-Transmit implements them directly from the component. This cuts down on library size and offers a much tighter integration.
 
-Also, a special File class has been written (`VTransmitFile`) to add useful information not present in the native File object (dimensions, upload stats, etc.). This is necessary for Vue to register these files reactively, since the native File object's properties are read-only.
+Vue-Transmit takes an event-based approach to the upload cycle. Instead of passing callbacks to the component via an options object, use the template event binding syntax (`<vue-transmit @event="callback" />`). All events strictly conform to kebab-casing, including events proxied off native events (e.g. `dragover => @drag-over`). This is for uniformity and so events can be easily distinguished.
+
+In order to comply with Vue.js reactivity, an object's properties must be defined up front and be configurable. A special File class has been written (`VTransmitFile`) to register file objects from uploads reactively, since the native File object's properties are read-only. This class also adds useful information not present in the native File object (dimensions, upload stats, etc.).
 
 - HTML 5 file uploads
-- Completely written in Vue.js&mdash;no wrapper components
 - Emits upload lifecycle events (accepted, sending, progress, success, etc.)
 - Image thumbnail previews
 - Support for concurrent uploads
+- Completely written in Vue.js&mdash;no wrapper components
 - Scoped slots allow for fully customizable styling
+- Written in modern ES6 with modules
+
+_\* Note: this library uses some built-ins like `Array.from` & `Array.prototype.includes` that require a polyfill. All other ESNext language features (arrow fns, for of, etc.) are transpiled with babel._
 
 ![upload-example](./docs/vue-transmit-10fps.gif)
 
@@ -31,6 +36,8 @@ Also, a special File class has been written (`VTransmitFile`) to add useful info
 |---|---|---|
 |tag|String|"div"|
 |uploadAreaClasses|Array, Object, String|null|
+|uploadAreaAttrs|Object|{}|
+|uploadAreaListeners|Object|{}|
 |url|String|undefined|
 |method|String|"post"|
 |withCredentials|Boolean|false|
@@ -167,13 +174,13 @@ This slot receives a number of props:
                       tag="section"
                       v-bind="options"
                       drop-zone-classes="bg-faded"
-                      ref="uploader"
-                      >
+                      ref="uploader">
           <div class="d-flex align-items-center justify-content-center w-100"
                 style="height:50vh; border-radius: 1rem;">
             <button class="btn btn-primary"
                     @click="triggerBrowse">Upload Files</button>
           </div>
+          <!-- Scoped slot -->
           <template slot="files" scope="props">
             <div v-for="(file, i) in props.files" :key="file.id" :class="{'mt-5': i === 0}">
               <div class="media">

@@ -3,8 +3,10 @@
     <div class="v-transmit__upload-area"
          :class="[isDraggingClass, uploadAreaClasses]"
          draggable="true"
+         v-bind="uploadAreaAttrs"
+         v-on="uploadAreaListeners"
          @click="handleClickUploaderAction"
-         @dragstart="$emit('drag-start', $event)"
+         @dragstart="handleDragStart"
          @dragend="handleDragEnd"
          @dragenter.prevent.stop="handleDragEnter"
          @dragover.prevent.stop="handleDragOver"
@@ -97,12 +99,6 @@ export default {
     inputEl() {
       return this.$refs.hiddenFileInput
     },
-    isDraggingClass() {
-      return {
-        "v-transmit__upload-area--is-dragging": this.dragging,
-        [this.dragClass]: this.dragging,
-      }
-    },
     filesToAccept() {
       return this.acceptedFileTypes.join(",")
     },
@@ -128,10 +124,17 @@ export default {
       return this.getFilesWithStatus(STATUSES.UPLOADING, STATUSES.QUEUED)
     },
     maxFilesReached() {
+      // Loose equality checks null && undefined
       return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles
     },
     maxFilesReachedClass() {
-      return this.maxFilesReached ? 'v-transmit__max-files--reached' : null
+      return this.maxFilesReached ? "v-transmit__max-files--reached" : null
+    },
+    isDraggingClass() {
+      return {
+        "v-transmit__upload-area--is-dragging": this.dragging,
+        [this.dragClass]: this.dragging,
+      }
     },
     isUploading() {
       return this.uploadingFiles.length > 0
@@ -164,8 +167,7 @@ export default {
       return this.files.filter(f => statuses.includes(f.status))
     },
     onFileInputChange(e) {
-      const files = Array.from(this.$refs.hiddenFileInput.files).map(this.addFile)
-      this.$emit('added-files', files)
+      this.$emit('added-files', Array.from(this.$refs.hiddenFileInput.files).map(this.addFile))
     },
     addFile(file) {
       const vTransmitFile = VTransmitFile.fromNativeFile(file)
@@ -585,6 +587,15 @@ export default {
 
       return false
     },
+    /**
+     * @param {DragEvent} e
+     */
+    handleDragStart(e) {
+      this.$emit('drag-start', e)
+    },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragOver(e) {
       this.dragging = true
       let effect
@@ -595,18 +606,30 @@ export default {
       e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy'
       this.$emit('drag-over', e)
     },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragEnter(e) {
       this.dragging = true
       this.$emit('drag-enter', e)
     },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragLeave(e) {
       this.dragging = false
       this.$emit('drag-leave', e)
     },
+    /**
+     * @param {DragEvent} e
+     */
     handleDragEnd(e) {
       this.dragging = false
       this.$emit('drag-end', e)
     },
+    /**
+     * @param {DragEvent} e
+     */
     onDrop(e) {
       this.dragging = false
       if (!e.dataTransfer) {
