@@ -1,6 +1,10 @@
 import noop from "lodash-es/noop"
 import identity from "lodash-es/identity"
 
+function objFactory() {
+  return {}
+}
+
 export default {
   tag: {
     type: String,
@@ -12,11 +16,11 @@ export default {
   },
   uploadAreaAttrs: {
     type: Object,
-    default: () => ({})
+    default: objFactory
   },
   uploadAreaListeners: {
     type: Object,
-    default: () => ({})
+    default: objFactory
   },
   dragClass: {
     type: String,
@@ -100,11 +104,11 @@ export default {
    */
   params: {
     type: Object,
-    default: () => new Object()
+    default: objFactory
   },
   headers: {
     type: Object,
-    default: () => new Object()
+    default: objFactory
   },
   // If true, the dropzone will present a file selector when clicked.
   clickable: {
