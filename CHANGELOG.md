@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.2.0"></a>
+# [5.2.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.5...v5.2.0) (2017-09-25)
+
+
+### Features
+
+* added upload-area attribute/listener bindings ([58432c6](https://github.com/alexsasharegan/vue-transmit/commit/58432c6))
+
+
+
 <a name="5.1.5"></a>
 ## [5.1.5](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.4...v5.1.5) (2017-09-18)
 
