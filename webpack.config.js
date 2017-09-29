@@ -15,26 +15,28 @@ const ENV = {
   NAME: JSON.stringify(pjson.name)
 }
 const SRC = path.resolve(__dirname, "src")
+const INDEX = path.resolve(__dirname, "index.js")
 const DIST = path.resolve(__dirname, "dist")
 const LODASH = path.resolve(__dirname, "node_modules/lodash-es")
 const BABEL_PLUGINS = [
-  "transform-es2015-for-of",
-  "transform-es2015-spread",
-  "transform-es2015-arrow-functions",
-  "transform-es2015-classes",
-  "transform-es2015-destructuring",
-  "transform-es2015-parameters",
-  "transform-es2015-shorthand-properties",
-  "transform-es2015-template-literals",
-  "transform-es5-property-mutators"
-]
+  "babel-plugin-transform-es2015-for-of",
+  "babel-plugin-transform-es2015-spread",
+  "babel-plugin-transform-es2015-arrow-functions",
+  "babel-plugin-transform-es2015-classes",
+  "babel-plugin-transform-es2015-destructuring",
+  "babel-plugin-transform-es2015-parameters",
+  "babel-plugin-transform-es2015-shorthand-properties",
+  "babel-plugin-transform-es2015-template-literals",
+  "babel-plugin-transform-es5-property-mutators"
+].map(require)
 
 const BABEL = {
   ES5: {
     test: /\.js$/,
-    include: [SRC, LODASH],
+    include: [SRC, INDEX, LODASH],
     loader: "babel-loader",
     options: {
+      babelrc: false,
       presets: [
         [
           "env",
@@ -48,9 +50,10 @@ const BABEL = {
   },
   ES6: {
     test: /\.js$/,
-    include: [SRC, LODASH],
+    include: [SRC, INDEX, LODASH],
     loader: "babel-loader",
     options: {
+      babelrc: false,
       plugins: BABEL_PLUGINS
     }
   }
@@ -70,7 +73,6 @@ function config(ctx) {
     },
     module: {
       rules: [
-        ...(ctx.rules || []),
         {
           test: /\.vue$/,
           loader: "vue-loader",
@@ -82,7 +84,8 @@ function config(ctx) {
               })
             }
           }
-        }
+        },
+        ...(ctx.rules || [])
       ]
     },
     plugins: [
