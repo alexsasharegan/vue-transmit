@@ -1,4 +1,4 @@
-window["VueTransmit"] =
+module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -4099,4 +4099,4 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
 
 /***/ })
 /******/ ])["default"];
-//# sourceMappingURL=vue-transmit.browser.js.map
+//# sourceMappingURL=vue-transmit.common.js.map

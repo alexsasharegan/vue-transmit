@@ -2880,18 +2880,18 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
 
 
 /* harmony default export */ var index_0 = __webpack_exports__["default"] = ({
-  install(Vue, options) {
+  install: function (Vue, options) {
     for (const component in src_namespaceObject) {
       if (Object.prototype.hasOwnProperty.call(src_namespaceObject, component)) {
-        Vue.component(component, src_namespaceObject[component])
+        Vue.component(component, src_namespaceObject[component]);
       }
     }
   },
-  name: "vue-transmit",
+
+  name: "vue-transmit"
   // name: NAME,
   // version: VERSION
 });
-
 
 /***/ }),
 /* 1 */
