@@ -19,16 +19,18 @@ const INDEX = path.resolve(__dirname, "index.js")
 const DIST = path.resolve(__dirname, "dist")
 const LODASH = path.resolve(__dirname, "node_modules/lodash-es")
 const BABEL_PLUGINS = [
-  "babel-plugin-transform-es2015-for-of",
-  "babel-plugin-transform-es2015-spread",
-  "babel-plugin-transform-es2015-arrow-functions",
-  "babel-plugin-transform-es2015-classes",
-  "babel-plugin-transform-es2015-destructuring",
-  "babel-plugin-transform-es2015-parameters",
-  "babel-plugin-transform-es2015-shorthand-properties",
-  "babel-plugin-transform-es2015-template-literals",
-  "babel-plugin-transform-es5-property-mutators"
-].map(require)
+  "transform-es2015-for-of",
+  "transform-es2015-spread",
+  "transform-es2015-arrow-functions",
+  "transform-es2015-classes",
+  "transform-es2015-destructuring",
+  "transform-es2015-parameters",
+  "transform-es2015-shorthand-properties",
+  "transform-es2015-template-literals",
+  "transform-es5-property-mutators"
+]
+  .map(s => "babel-plugin-" + s)
+  .map(require)
 
 const BABEL = {
   ES5: {
@@ -37,15 +39,8 @@ const BABEL = {
     loader: "babel-loader",
     options: {
       babelrc: false,
-      presets: [
-        [
-          "env",
-          {
-            forceAllTransforms: true
-          }
-        ]
-      ],
-      plugins: BABEL_PLUGINS
+      presets: ["es2015"],
+      plugins: BABEL_PLUGINS.concat(require("babel-plugin-transform-es2015-constants"))
     }
   },
   ES6: {
