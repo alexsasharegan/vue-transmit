@@ -168,6 +168,16 @@ module.exports = [
     rules: [BABEL.ES6]
   }),
   config({
+    ext: "common",
+    noMinify: true,
+    showBundleAnalysis: false,
+    output: {
+      libraryTarget: "commonjs2",
+      libraryExport: "default"
+    },
+    rules: [BABEL.ES5]
+  }),
+  config({
     ext: "common.min",
     showBundleAnalysis: false,
     output: {
@@ -177,7 +187,20 @@ module.exports = [
     rules: [BABEL.ES5]
   }),
   config({
+    ext: "browser.min",
+    output: {
+      library: pjson.name
+        .split("-")
+        .map(upperFirst)
+        .join(""),
+      libraryTarget: "window",
+      libraryExport: "default"
+    },
+    rules: [BABEL.ES5]
+  }),
+  config({
     ext: "browser",
+    noMinify: true,
     output: {
       library: pjson.name
         .split("-")
