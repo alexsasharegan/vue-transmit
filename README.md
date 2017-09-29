@@ -30,6 +30,33 @@ _\* Note: this library uses some built-ins like `Array.from` & `Array.prototype.
 
 ![upload-example](./docs/vue-transmit-10fps.gif)
 
+## Builds
+
+The default build for ESM loaders (webpack) is indicated in the `module` and/or `jsnext:main` fields of the package. This build is a more modern build with slightly less transpilation. For the commonjs and browser build, a full ES5 transpilation is performed.
+
+For most setups, importing the lib would like the following:
+
+```js
+// ESM
+import VueTransmit from "vue-transmit";
+// Common.js
+const VueTransmit = require("vue-transmit");
+// Browser
+window.VueTransmit
+
+// Installation
+Vue.use(VueTransmit)
+```
+
+|Target|Path|Minified|
+|--|--|--|
+|ESM|`vue-transmit/dist/vue-transmit.esm.js`|false|
+|ESM|`vue-transmit/dist/vue-transmit.esm.min.js`|true|
+|Common.js|`vue-transmit/dist/vue-transmit.common.js`|false|
+|Common.js|`vue-transmit/dist/vue-transmit.common.min.js`|true|
+|Browser|`vue-transmit/dist/vue-transmit.browser.js`|false|
+|Browser|`vue-transmit/dist/vue-transmit.browser.min.js`|true|
+
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
 |Property|Type|Default|
