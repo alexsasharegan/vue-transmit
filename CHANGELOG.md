@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.3.1"></a>
+## [5.3.1](https://github.com/alexsasharegan/vue-transmit/compare/v5.3.0...v5.3.1) (2017-09-29)
+
+
+### Bug Fixes
+
+* **webpack:** correct config to ignore .babelrc ([d7506dc](https://github.com/alexsasharegan/vue-transmit/commit/d7506dc))
+
+
+
 <a name="5.3.0"></a>
 # [5.3.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.2.0...v5.3.0) (2017-09-29)
 
