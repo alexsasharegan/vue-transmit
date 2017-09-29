@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.3.0"></a>
+# [5.3.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.2.0...v5.3.0) (2017-09-29)
+
+
+### Features
+
+* **build:** commonjs is now ES5 build ([1cab5c2](https://github.com/alexsasharegan/vue-transmit/commit/1cab5c2))
+
+
+
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.1.5...v5.2.0) (2017-09-25)
 
