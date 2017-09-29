@@ -29,6 +29,33 @@ const BABEL_PLUGINS = [
   "transform-es5-property-mutators"
 ]
 
+const BABEL = {
+  ES5: {
+    test: /\.js$/,
+    include: [SRC, LODASH],
+    loader: "babel-loader",
+    options: {
+      presets: [
+        [
+          "env",
+          {
+            forceAllTransforms: true
+          }
+        ]
+      ],
+      plugins: BABEL_PLUGINS
+    }
+  },
+  ES6: {
+    test: /\.js$/,
+    include: [SRC, LODASH],
+    loader: "babel-loader",
+    options: {
+      plugins: BABEL_PLUGINS
+    }
+  }
+}
+
 function config(ctx) {
   const name = pjson.name + (ctx.ext ? `.${ctx.ext}` : "")
   const webpackConfig = {
@@ -127,16 +154,7 @@ module.exports = [
     output: {
       libraryTarget: "commonjs2"
     },
-    rules: [
-      {
-        test: /\.js$/,
-        include: [SRC, LODASH],
-        loader: "babel-loader",
-        options: {
-          plugins: BABEL_PLUGINS
-        }
-      }
-    ]
+    rules: [BABEL.ES6]
   }),
   config({
     ext: "esm.min",
@@ -144,16 +162,7 @@ module.exports = [
     output: {
       libraryTarget: "commonjs2"
     },
-    rules: [
-      {
-        test: /\.js$/,
-        include: [SRC, LODASH],
-        loader: "babel-loader",
-        options: {
-          plugins: BABEL_PLUGINS
-        }
-      }
-    ]
+    rules: [BABEL.ES6]
   }),
   config({
     ext: "common.min",
@@ -162,16 +171,7 @@ module.exports = [
       libraryTarget: "commonjs2",
       libraryExport: "default"
     },
-    rules: [
-      {
-        test: /\.js$/,
-        include: [SRC, LODASH],
-        loader: "babel-loader",
-        options: {
-          plugins: BABEL_PLUGINS
-        }
-      }
-    ]
+    rules: [BABEL.ES5]
   }),
   config({
     ext: "browser",
@@ -183,15 +183,6 @@ module.exports = [
       libraryTarget: "window",
       libraryExport: "default"
     },
-    rules: [
-      {
-        test: /\.js$/,
-        include: [SRC, LODASH],
-        loader: "babel-loader",
-        options: {
-          plugins: BABEL_PLUGINS
-        }
-      }
-    ]
+    rules: [BABEL.ES5]
   })
 ]

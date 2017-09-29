@@ -90,8 +90,8 @@ _\* Note: this library uses some built-ins like `Array.from` & `Array.prototype.
 |`total-upload-progress`| `VTransmitFile, totalUploadProgress: Number` | Fired directly after `upload-progress`. |
 |`sending`| `VTransmitFile, XmlHttpRequest, FormData` | Fired right before the XHR is sent. |
 |`sending-multiple`| `VTransmitFile[], XmlHttpRequest, FormData` | Fired right before the XHR is sent. |
-|`success`| `VTransmitFile, response: String, LoadEvent` | Fired on load of the XHR. |
-|`success-multiple`| `VTransmitFile[], response: String, LoadEvent` | Fired on load of the XHR.|
+|`success`| `VTransmitFile, response: String, ProgressEvent` | Fired on load of the XHR. |
+|`success-multiple`| `VTransmitFile[], response: String, ProgressEvent` | Fired on load of the XHR.|
 |`timeout`| `VTransmitFile, TimeoutEvent, XmlHttpRequest`| Fired on timeout of the XHR.|
 |`timeout-multiple`| `VTransmitFile[], TimeoutEvent, XmlHttpRequest`| Fired on timeout of the XHR.|
 |`canceled`| `VTransmitFile` | Fired upon cancellation of the XHR. _(status: 'canceled')_ |

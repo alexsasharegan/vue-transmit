@@ -1581,6 +1581,10 @@ function identity(value) {
 
 
 
+function objFactory() {
+  return {};
+}
+
 /* harmony default export */ var core_props = ({
   tag: {
     type: String,
@@ -1592,15 +1596,11 @@ function identity(value) {
   },
   uploadAreaAttrs: {
     type: Object,
-    default: function () {
-      return {};
-    }
+    default: objFactory
   },
   uploadAreaListeners: {
     type: Object,
-    default: function () {
-      return {};
-    }
+    default: objFactory
   },
   dragClass: {
     type: String,
@@ -1684,15 +1684,11 @@ function identity(value) {
    */
   params: {
     type: Object,
-    default: function () {
-      return new Object();
-    }
+    default: objFactory
   },
   headers: {
     type: Object,
-    default: function () {
-      return new Object();
-    }
+    default: objFactory
   },
   // If true, the dropzone will present a file selector when clicked.
   clickable: {
@@ -1966,7 +1962,7 @@ let VTransmitFile_VTransmitFile = function () {
       }
       this.startProgress();
       const total = e.total || this.upload.total;
-      this.upload.progress = 100 * e.loaded / total;
+      this.upload.progress = Math.min(100, 100 * e.loaded / total);
       this.upload.bytesSent = e.loaded;
       this.upload.total = total;
       this.upload.time = (Date.now() - this.upload.start) / 1000;

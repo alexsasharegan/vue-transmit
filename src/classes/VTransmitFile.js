@@ -33,7 +33,7 @@ export default class VTransmitFile {
     }
     this.startProgress()
     const total = e.total || this.upload.total
-    this.upload.progress = 100 * e.loaded / total
+    this.upload.progress = Math.min(100, 100 * e.loaded / total)
     this.upload.bytesSent = e.loaded
     this.upload.total = total
     this.upload.time = (Date.now() - this.upload.start) / 1000
