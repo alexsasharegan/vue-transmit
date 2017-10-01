@@ -175,19 +175,22 @@ export default {
       this.files.push(vTransmitFile)
       this.$emit("added-file", vTransmitFile)
       this.enqueueThumbnail(vTransmitFile)
-
-      return this.acceptFile(vTransmitFile, error => {
+      this.acceptFile(vTransmitFile, error => {
         if (error) {
           vTransmitFile.accepted = false
           this.errorProcessing([vTransmitFile], error)
+          this.$emit("rejected-file", vTransmitFile)
         } else {
           vTransmitFile.accepted = true
+          this.$emit("accepted-file", vTransmitFile)
           if (this.autoQueue) {
             this.enqueueFile(vTransmitFile)
           }
         }
-        return vTransmitFile
+        this.$emit("accept-complete", vTransmitFile)
       })
+
+      return vTransmitFile
     },
     removeFile(file) {
       if (file.status === STATUSES.UPLOADING) {
@@ -195,8 +198,7 @@ export default {
       }
       const idxToRm = this.files.findIndex(f => f.id === file.id)
       if (~idxToRm) {
-        this.files.splice(idxToRm, 1)
-        this.$emit("removed-file", file)
+        this.$emit("removed-file", this.files.splice(idxToRm, 1)[0])
         if (this.files.length === 0) {
           return this.$emit("reset")
         }
