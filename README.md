@@ -107,6 +107,9 @@ Vue.use(VueTransmit)
 |`drag-leave`| `DragEvent` | The `drag-leave` event is fired when a dragged element or text selection leaves a valid drop target. |
 |`added-file`| `VTransmitFile` | Fired on change from the hidden file input after the Native File has been copied to VTransmitFile and added to the component data. _(status: 'added')_ |
 |`added-files`| `VTransmitFile[]` | Fired on change from the hidden file input after the Native Files have been copied to VTransmitFiles and added to the component data. _(status: 'added')_ |
+|`accepted-file`| `VTransmitFile` | Fired if the user-supplied accept function returns without error. _(status: 'added', accepted: true)_ |
+|`rejected-file`| `VTransmitFile` | Fired if the user-supplied accept function returns an error. Fired AFTER the `error` event to ensure correct file status. _(status: 'error', accepted: false)_ |
+|`accept-complete`| `VTransmitFile` | Fired after the user-supplied accept function has returned regardless of success/failure. Fired after `accepted-file` & `rejected-file`. _(status: ?, accepted: ?)_ |
 |`removed-file`| `VTransmitFile` | Fired on the removal of a file. |
 |`thumbnail`| `VTransmitFile, Blob\|URL` | Fires on creation of a thumbnail. |
 |`error`| `VTransmitFile, message: String, XmlHttpRequest` | Fired on an ajax upload error. _(status: 'error')_ |

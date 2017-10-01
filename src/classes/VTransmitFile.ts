@@ -1,19 +1,60 @@
 import { assign, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
 
+export interface IUploadStats {
+  bytesSent: number
+  progress: number
+  total: number
+  speed: ISpeedStats
+  start: number
+  end: number
+  time: number
+}
+
+export interface ISpeedStats {
+  kbps: number
+  mbps: number
+}
+
 export default class VTransmitFile {
-  constructor(...data) {
-    assign(this, this.constructor.defaults(), ...data)
+  private _nativeFile: File = null
+  id: string = VTransmitFile.idFactory()
+  accepted: boolean = undefined // Passed all validation.
+  lastModified: number = undefined
+  lastModifiedDate: Date = undefined
+  name: string = undefined
+  processing: boolean = undefined
+  size: number = undefined
+  status: string = undefined
+  type: string = undefined
+  upload: IUploadStats = {
+    bytesSent: 0,
+    progress: 0,
+    total: 0,
+    speed: {
+      kbps: undefined,
+      mbps: undefined
+    },
+    start: undefined,
+    end: undefined,
+    time: undefined
+  }
+  webkitRelativePath: USVString = undefined
+  width: number = undefined
+  height: number = undefined
+  xhr: XMLHttpRequest = undefined
+  dataUrl: string = undefined
+  errorMessage: string = undefined
+
+  constructor(...data: object[]) {
+    assign(this, ...data)
   }
 
-  set(...data) {
+  set(...data: object[]): VTransmitFile {
     assign(this, ...data)
     return this
   }
 
-  copyNativeFile(file) {
-    if (!(file instanceof window.File)) {
-      throw new TypeError("The method 'copyNativeFile' expects an instance of File (Native).")
-    }
+  copyNativeFile(file: File): VTransmitFile {
     // save reference for upload
     this.nativeFile = file
     // Copy props to normal object for Vue reactivity.
@@ -21,16 +62,11 @@ export default class VTransmitFile {
     return this.set(copyOwnAndInheritedProps(file))
   }
 
-  copyOwnAndInheritedProps(...data) {
+  copyOwnAndInheritedProps(...data: object[]): VTransmitFile {
     return this.set(...data.map(copyOwnAndInheritedProps))
   }
 
-  handleProgress(e) {
-    if (!(e instanceof ProgressEvent)) {
-      throw new TypeError(
-        `'${this.constructor.name}.prototype.handleProgress' can only be called with the 'ProgressEvent' object.`
-      )
-    }
+  handleProgress(e: ProgressEvent): void {
     this.startProgress()
     const total = e.total || this.upload.total
     this.upload.progress = Math.min(100, 100 * e.loaded / total)
@@ -45,74 +81,38 @@ export default class VTransmitFile {
     }
   }
 
-  startProgress() {
+  startProgress(): VTransmitFile {
     // Avoid starting twice
     if (typeof this.upload.start !== "number") {
       this.upload.start = Date.now()
     }
+    return this
   }
 
-  endProgress() {
+  endProgress(): VTransmitFile {
     // Avoid ending twice
     if (typeof this.upload.end !== "number") {
       this.upload.end = Date.now()
       this.upload.time = (Date.now() - this.upload.start) / 1000
     }
+    return this
   }
 
-  /**
-   * @return {File|null}
-   */
   get nativeFile() {
     return this._nativeFile
   }
 
-  set nativeFile(file) {
-    if (!(file instanceof window.File)) {
+  set nativeFile(file: File) {
+    if (!(file instanceof File)) {
       throw new TypeError(`[${VTransmitFile.name}] Expected an instance of File (native).`)
     }
     this._nativeFile = file
+    this.upload.total = file.size
   }
 
-  static defaults() {
-    return {
-      _nativeFile: null,
-      id: VTransmitFile.idFactory(),
-      accepted: undefined, // Passed all validation.
-      lastModified: undefined,
-      lastModifiedDate: undefined,
-      name: undefined,
-      previewElement: undefined,
-      previewTemplate: undefined,
-      processing: undefined,
-      size: undefined,
-      status: undefined,
-      type: undefined,
-      upload: {
-        bytesSent: 0,
-        progress: 0,
-        total: 0,
-        speed: {
-          kbps: undefined,
-          mbps: undefined
-        },
-        start: undefined,
-        end: undefined,
-        time: undefined
-      },
-      webkitRelativePath: undefined,
-      width: undefined,
-      height: undefined,
-      xhr: undefined,
-      dataUrl: undefined,
-      errorMessage: undefined
-    }
-  }
-
-  static fromNativeFile(file, ...data) {
+  static fromNativeFile(file: File, ...data) {
     const instance = new VTransmitFile(...data)
     instance.copyNativeFile(file)
-    instance.upload.total = file.size
     return instance
   }
 
