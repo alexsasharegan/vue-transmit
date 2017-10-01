@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.4.0"></a>
+# [5.4.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.3.2...v5.4.0) (2017-10-01)
+
+
+### Features
+
+* **css:** css now optional ([395f212](https://github.com/alexsasharegan/vue-transmit/commit/395f212))
+* **events:** adds file acceptance hooks & typescript integration ([#2](https://github.com/alexsasharegan/vue-transmit/issues/2)) ([3dad7ec](https://github.com/alexsasharegan/vue-transmit/commit/3dad7ec))
+
+
+
 <a name="5.3.2"></a>
 ## [5.3.2](https://github.com/alexsasharegan/vue-transmit/compare/v5.3.1...v5.3.2) (2017-09-29)
 
