@@ -21,8 +21,6 @@
           crossorigin="anonymous"></script>
   <script>
     <?= file_get_contents(__DIR__. "/../dist/vue-transmit.browser.js" ); ?>
-
-    ;Vue.use(VueTransmit)
   </script>
   <style>
     <?= file_get_contents(__DIR__. "/../dist/vue-transmit.css" ); ?>

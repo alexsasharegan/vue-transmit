@@ -19,7 +19,7 @@
     <input type="file"
            ref="hiddenFileInput"
            :multiple="multiple"
-           class="v-transmit__input--hidden"
+           :style="fileInputStyles"
            :class="[maxFilesReachedClass]"
            :accept="filesToAccept"
            :capture="capture"
@@ -31,15 +31,6 @@
   $border-color:#bdbdbd;
   $drop-color:#e1f5fe;
   $drop-color-alt:#fafafa;
-
-  .v-transmit__input--hidden {
-    visibility: hidden !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    height: 0px !important;
-    width: 0px !important;
-  }
 
   .v-transmit__upload-area {
     width: 100%;
@@ -92,6 +83,14 @@ export default {
         "Accept": "application/json",
         "Cache-Control": "no-cache",
         "X-Requested-With": "XMLHttpRequest"
+      },
+      fileInputStyles: {
+        visibility: "hidden !important",
+        position: "absolute !important",
+        top: "0 !important",
+        left: "0 !important",
+        height: "0px !important",
+        width: "0px !important",
       }
     }
   },

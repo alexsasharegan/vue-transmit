@@ -8,7 +8,7 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/alexsasharegan/vue-transmit.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Falexsasharegan%2Fvue-transmit)
 
-A Vue.js drag & drop uploader based on Dropzone.js (`~26kB`, `~9kB` gzipped). Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original Dropzone.js! [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 🙌
+A Vue.js drag & drop uploader based on Dropzone.js (`~30kB`, `~10kB` gzipped). Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original Dropzone.js! [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 🙌
 
 ## Features
 

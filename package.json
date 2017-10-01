@@ -19,7 +19,7 @@
     "build": "npm run clean && cross-env NODE_ENV=production webpack --progress --hide-modules",
     "dev": "npm run clean && cross-env NODE_ENV=development webpack --progress --hide-modules -w",
     "test": "php -S localhost:3000 -t ./test/",
-    "lib-size": "gzip -c dist/vue-transmit.min.js | wc -c",
+    "lib-size": "gzip -c dist/vue-transmit.esm.min.js | wc -c",
     "release": "standard-version",
     "release:publish": "git push --follow-tags origin master; npm publish"
   },
