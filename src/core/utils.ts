@@ -16,7 +16,7 @@ export function copyOwnAndInheritedProps(obj: object): object {
   return newData
 }
 
-type Rounding = "round" | "ceil" | "floor" | "trunc"
+export type Rounding = "round" | "ceil" | "floor" | "trunc"
 
 export function round(number: number, decimals: number = 2, roundStyle: Rounding = "round") {
   const roundingFactor = Math.pow(10, decimals)

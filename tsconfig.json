@@ -7,7 +7,7 @@
     "target": "esnext",
     "module": "es2015",
     "moduleResolution": "node",
-    "allowJs": true,
+    "allowJs": false,
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -15,7 +15,8 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "baseUrl": "./src/"
+    "baseUrl": "./src/",
+    "declaration": true
   },
   "include": ["./src"],
   "exclude": ["node_modules", "vendor"]

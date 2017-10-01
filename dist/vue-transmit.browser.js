@@ -542,7 +542,7 @@ exports.default = noop;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.uniqueId = uniqueId;
 exports.copyOwnAndInheritedProps = copyOwnAndInheritedProps;
@@ -553,66 +553,55 @@ exports.toKbps = toKbps;
 exports.toMbps = toMbps;
 exports.hbsReplacer = hbsReplacer;
 var assign = exports.assign = Object.assign;
-
 var idCounter = 0;
-/**
- * @param {string} prefix
- */
 function uniqueId(prefix) {
-  var id = ++idCounter;
-  return String(prefix) + id;
+    var id = ++idCounter;
+    return prefix + id;
 }
-
 function copyOwnAndInheritedProps(obj) {
-  var newData = {};
-  for (var prop in obj) {
-    if (typeof obj[prop] !== "function") {
-      newData[prop] = obj[prop];
+    var newData = {};
+    for (var prop in obj) {
+        if (typeof obj[prop] !== "function") {
+            newData[prop] = obj[prop];
+        }
     }
-  }
-  return newData;
+    return newData;
 }
-
 function round(number) {
-  var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-  var roundStyle = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "round";
+    var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+    var roundStyle = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "round";
 
-  var roundingFactor = Math.pow(10, decimals);
-  return Math[roundStyle](number * roundingFactor) / roundingFactor;
+    var roundingFactor = Math.pow(10, decimals);
+    return Math[roundStyle](number * roundingFactor) / roundingFactor;
 }
-
 function fromBytesToKbit(bytes) {
-  return bytes / 125;
+    return bytes / 125;
 }
-
 function fromBytesToMbit(bytes) {
-  return bytes / 125000;
+    return bytes / 125000;
 }
-
 function toKbps(bytes, seconds) {
-  return fromBytesToKbit(bytes) / seconds;
+    return fromBytesToKbit(bytes) / seconds;
 }
-
 function toMbps(bytes, seconds) {
-  return fromBytesToMbit(bytes) / seconds;
+    return fromBytesToMbit(bytes) / seconds;
 }
-
 var hbsRegex = exports.hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g;
 function hbsReplacer() {
-  var context = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var context = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  return function hbsReplacerFn(match, capture) {
-    return context[capture] !== undefined ? context[capture] : match;
-  };
+    return function hbsReplacerFn(match, capture) {
+        return context[capture] !== undefined ? context[capture] : match;
+    };
 }
-
-var READY_STATES = exports.READY_STATES = {
-  UNSENT: 0,
-  OPENED: 1,
-  HEADERS_RECEIVED: 2,
-  LOADING: 3,
-  DONE: 4
-};
+var READY_STATES = exports.READY_STATES = undefined;
+(function (READY_STATES) {
+    READY_STATES[READY_STATES["UNSENT"] = 0] = "UNSENT";
+    READY_STATES[READY_STATES["OPENED"] = 1] = "OPENED";
+    READY_STATES[READY_STATES["HEADERS_RECEIVED"] = 2] = "HEADERS_RECEIVED";
+    READY_STATES[READY_STATES["LOADING"] = 3] = "LOADING";
+    READY_STATES[READY_STATES["DONE"] = 4] = "DONE";
+})(READY_STATES || (exports.READY_STATES = READY_STATES = {}));
 
 /***/ }),
 /* 14 */
@@ -1034,19 +1023,22 @@ exports.default = {
       this.files.push(vTransmitFile);
       this.$emit("added-file", vTransmitFile);
       this.enqueueThumbnail(vTransmitFile);
-
-      return this.acceptFile(vTransmitFile, function (error) {
+      this.acceptFile(vTransmitFile, function (error) {
         if (error) {
           vTransmitFile.accepted = false;
           _this.errorProcessing([vTransmitFile], error);
+          _this.$emit("rejected-file", vTransmitFile);
         } else {
           vTransmitFile.accepted = true;
+          _this.$emit("accepted-file", vTransmitFile);
           if (_this.autoQueue) {
             _this.enqueueFile(vTransmitFile);
           }
         }
-        return vTransmitFile;
+        _this.$emit("accept-complete", vTransmitFile);
       });
+
+      return vTransmitFile;
     },
     removeFile: function removeFile(file) {
       if (file.status === STATUSES.UPLOADING) {
@@ -1056,8 +1048,7 @@ exports.default = {
         return f.id === file.id;
       });
       if (~idxToRm) {
-        this.files.splice(idxToRm, 1);
-        this.$emit("removed-file", file);
+        this.$emit("removed-file", this.files.splice(idxToRm, 1)[0]);
         if (this.files.length === 0) {
           return this.$emit("reset");
         }
@@ -4164,7 +4155,7 @@ exports.default = identity;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -4176,155 +4167,139 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var VTransmitFile = function () {
-  function VTransmitFile() {
-    _classCallCheck(this, VTransmitFile);
+    function VTransmitFile() {
+        _classCallCheck(this, VTransmitFile);
 
-    for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
-      data[_key] = arguments[_key];
-    }
+        this._nativeFile = null;
+        this.id = VTransmitFile.idFactory();
+        this.accepted = undefined; // Passed all validation.
+        this.lastModified = undefined;
+        this.lastModifiedDate = undefined;
+        this.name = undefined;
+        this.processing = undefined;
+        this.size = undefined;
+        this.status = undefined;
+        this.type = undefined;
+        this.upload = {
+            bytesSent: 0,
+            progress: 0,
+            total: 0,
+            speed: {
+                kbps: undefined,
+                mbps: undefined
+            },
+            start: undefined,
+            end: undefined,
+            time: undefined
+        };
+        this.webkitRelativePath = undefined;
+        this.width = undefined;
+        this.height = undefined;
+        this.xhr = undefined;
+        this.dataUrl = undefined;
+        this.errorMessage = undefined;
 
-    _utils.assign.apply(undefined, [this, this.constructor.defaults()].concat(data));
-  }
+        for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
+            data[_key] = arguments[_key];
+        }
 
-  _createClass(VTransmitFile, [{
-    key: "set",
-    value: function set() {
-      for (var _len2 = arguments.length, data = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        data[_key2] = arguments[_key2];
-      }
-
-      _utils.assign.apply(undefined, [this].concat(data));
-      return this;
-    }
-  }, {
-    key: "copyNativeFile",
-    value: function copyNativeFile(file) {
-      if (!(file instanceof window.File)) {
-        throw new TypeError("The method 'copyNativeFile' expects an instance of File (Native).");
-      }
-      // save reference for upload
-      this.nativeFile = file;
-      // Copy props to normal object for Vue reactivity.
-      // Vue cannot define reactive properties on native file's readonly props.
-      return this.set((0, _utils.copyOwnAndInheritedProps)(file));
-    }
-  }, {
-    key: "copyOwnAndInheritedProps",
-    value: function copyOwnAndInheritedProps() {
-      for (var _len3 = arguments.length, data = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        data[_key3] = arguments[_key3];
-      }
-
-      return this.set.apply(this, _toConsumableArray(data.map(_utils.copyOwnAndInheritedProps)));
-    }
-  }, {
-    key: "handleProgress",
-    value: function handleProgress(e) {
-      if (!(e instanceof ProgressEvent)) {
-        throw new TypeError("'" + this.constructor.name + ".prototype.handleProgress' can only be called with the 'ProgressEvent' object.");
-      }
-      this.startProgress();
-      var total = e.total || this.upload.total;
-      this.upload.progress = Math.min(100, 100 * e.loaded / total);
-      this.upload.bytesSent = e.loaded;
-      this.upload.total = total;
-      this.upload.time = (Date.now() - this.upload.start) / 1000;
-      // Recalc the upload speed in bytes/sec
-      this.upload.speed.kbps = (0, _utils.round)((0, _utils.toKbps)(this.upload.bytesSent, this.upload.time));
-      this.upload.speed.mbps = (0, _utils.round)((0, _utils.toMbps)(this.upload.bytesSent, this.upload.time));
-      if (this.upload.progress === 100) {
-        this.endProgress();
-      }
-    }
-  }, {
-    key: "startProgress",
-    value: function startProgress() {
-      // Avoid starting twice
-      if (typeof this.upload.start !== "number") {
-        this.upload.start = Date.now();
-      }
-    }
-  }, {
-    key: "endProgress",
-    value: function endProgress() {
-      // Avoid ending twice
-      if (typeof this.upload.end !== "number") {
-        this.upload.end = Date.now();
-        this.upload.time = (Date.now() - this.upload.start) / 1000;
-      }
+        _utils.assign.apply(undefined, [this].concat(data));
     }
 
-    /**
-     * @return {File|null}
-     */
+    _createClass(VTransmitFile, [{
+        key: "set",
+        value: function set() {
+            for (var _len2 = arguments.length, data = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                data[_key2] = arguments[_key2];
+            }
 
-  }, {
-    key: "nativeFile",
-    get: function get() {
-      return this._nativeFile;
-    },
-    set: function set(file) {
-      if (!(file instanceof window.File)) {
-        throw new TypeError("[" + VTransmitFile.name + "] Expected an instance of File (native).");
-      }
-      this._nativeFile = file;
-    }
-  }], [{
-    key: "defaults",
-    value: function defaults() {
-      return {
-        _nativeFile: null,
-        id: VTransmitFile.idFactory(),
-        accepted: undefined, // Passed all validation.
-        lastModified: undefined,
-        lastModifiedDate: undefined,
-        name: undefined,
-        previewElement: undefined,
-        previewTemplate: undefined,
-        processing: undefined,
-        size: undefined,
-        status: undefined,
-        type: undefined,
-        upload: {
-          bytesSent: 0,
-          progress: 0,
-          total: 0,
-          speed: {
-            kbps: undefined,
-            mbps: undefined
-          },
-          start: undefined,
-          end: undefined,
-          time: undefined
+            _utils.assign.apply(undefined, [this].concat(data));
+            return this;
+        }
+    }, {
+        key: "copyNativeFile",
+        value: function copyNativeFile(file) {
+            // save reference for upload
+            this.nativeFile = file;
+            // Copy props to normal object for Vue reactivity.
+            // Vue cannot define reactive properties on native file's readonly props.
+            return this.set((0, _utils.copyOwnAndInheritedProps)(file));
+        }
+    }, {
+        key: "copyOwnAndInheritedProps",
+        value: function copyOwnAndInheritedProps() {
+            for (var _len3 = arguments.length, data = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                data[_key3] = arguments[_key3];
+            }
+
+            return this.set.apply(this, _toConsumableArray(data.map(_utils.copyOwnAndInheritedProps)));
+        }
+    }, {
+        key: "handleProgress",
+        value: function handleProgress(e) {
+            this.startProgress();
+            var total = e.total || this.upload.total;
+            this.upload.progress = Math.min(100, 100 * e.loaded / total);
+            this.upload.bytesSent = e.loaded;
+            this.upload.total = total;
+            this.upload.time = (Date.now() - this.upload.start) / 1000;
+            // Recalc the upload speed in bytes/sec
+            this.upload.speed.kbps = (0, _utils.round)((0, _utils.toKbps)(this.upload.bytesSent, this.upload.time));
+            this.upload.speed.mbps = (0, _utils.round)((0, _utils.toMbps)(this.upload.bytesSent, this.upload.time));
+            if (this.upload.progress === 100) {
+                this.endProgress();
+            }
+        }
+    }, {
+        key: "startProgress",
+        value: function startProgress() {
+            // Avoid starting twice
+            if (typeof this.upload.start !== "number") {
+                this.upload.start = Date.now();
+            }
+            return this;
+        }
+    }, {
+        key: "endProgress",
+        value: function endProgress() {
+            // Avoid ending twice
+            if (typeof this.upload.end !== "number") {
+                this.upload.end = Date.now();
+                this.upload.time = (Date.now() - this.upload.start) / 1000;
+            }
+            return this;
+        }
+    }, {
+        key: "nativeFile",
+        get: function get() {
+            return this._nativeFile;
         },
-        webkitRelativePath: undefined,
-        width: undefined,
-        height: undefined,
-        xhr: undefined,
-        dataUrl: undefined,
-        errorMessage: undefined
-      };
-    }
-  }, {
-    key: "fromNativeFile",
-    value: function fromNativeFile(file) {
-      for (var _len4 = arguments.length, data = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        data[_key4 - 1] = arguments[_key4];
-      }
+        set: function set(file) {
+            if (!(file instanceof File)) {
+                throw new TypeError("[" + VTransmitFile.name + "] Expected an instance of File (native).");
+            }
+            this._nativeFile = file;
+            this.upload.total = file.size;
+        }
+    }], [{
+        key: "fromNativeFile",
+        value: function fromNativeFile(file) {
+            for (var _len4 = arguments.length, data = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+                data[_key4 - 1] = arguments[_key4];
+            }
 
-      var instance = new (Function.prototype.bind.apply(VTransmitFile, [null].concat(data)))();
-      instance.copyNativeFile(file);
-      instance.upload.total = file.size;
-      return instance;
-    }
-  }, {
-    key: "idFactory",
-    value: function idFactory() {
-      return (0, _utils.uniqueId)("v-transmit-file-");
-    }
-  }]);
+            var instance = new (Function.prototype.bind.apply(VTransmitFile, [null].concat(data)))();
+            instance.copyNativeFile(file);
+            return instance;
+        }
+    }, {
+        key: "idFactory",
+        value: function idFactory() {
+            return (0, _utils.uniqueId)("v-transmit-file-");
+        }
+    }]);
 
-  return VTransmitFile;
+    return VTransmitFile;
 }();
 
 exports.default = VTransmitFile;

@@ -1,6 +1,6 @@
 import { assign, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
 
-interface IUploadStats {
+export interface IUploadStats {
   bytesSent: number
   progress: number
   total: number
@@ -10,7 +10,7 @@ interface IUploadStats {
   time: number
 }
 
-interface ISpeedStats {
+export interface ISpeedStats {
   kbps: number
   mbps: number
 }
