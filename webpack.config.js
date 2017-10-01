@@ -64,7 +64,8 @@ function config(ctx) {
       filename: `${name}.js`
     },
     resolve: {
-      modules: ["node_modules"]
+      modules: ["node_modules"],
+      extensions: [".ts", ".tsx", ".js"]
     },
     module: {
       rules: [
@@ -79,6 +80,11 @@ function config(ctx) {
               })
             }
           }
+        },
+        {
+          test: /\.ts(x?)$/,
+          include: path.resolve(__dirname, "src"),
+          use: [{ loader: "babel-loader" }, { loader: "ts-loader" }]
         },
         ...(ctx.rules || [])
       ]
