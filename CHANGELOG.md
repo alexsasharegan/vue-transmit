@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.1"></a>
+## [6.0.1](https://github.com/alexsasharegan/vue-transmit/compare/v6.0.0...v6.0.1) (2017-10-02)
+
+
+### Bug Fixes
+
+* **deps:** fix external Vue dep resolution ([ae90cbe](https://github.com/alexsasharegan/vue-transmit/commit/ae90cbe))
+
+
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.4.0...v6.0.0) (2017-10-02)
 
