@@ -97,9 +97,7 @@ function config(ctx) {
       })
       // new DashboardPlugin()
     ],
-    externals: {
-      vue: "Vue"
-    },
+    externals: "vue",
     performance: {
       hints: false
     },

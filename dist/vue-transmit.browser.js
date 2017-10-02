@@ -68,7 +68,7 @@ window["VueTransmit"] =
 /* 0 */
 /***/ (function(module, exports) {
 
-(function() { module.exports = window["Vue"]; }());
+(function() { module.exports = window["vue"]; }());
 
 /***/ }),
 /* 1 */
