@@ -76,7 +76,7 @@ export interface IDimensions {
   height: number
 }
 
-export function resizeImg(file: VTransmitFile, dims: IDimensions) {
+export function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArgs {
   // Extract the object's primitive values so we don't mutate the input
   let { width: oWidth, height: oHeight } = dims
   const sRatio = file.width / file.height
