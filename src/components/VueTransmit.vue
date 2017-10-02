@@ -250,18 +250,17 @@ export default class VueTransmit extends Vue {
   @Prop({ type: Function, default: resizeImg })
   resize: (file: VTransmitFile, dims: IDimensions) => IDrawImageArgs
 
-  dragging: boolean = false
-  processingThumbnail: boolean = false // Used to keep the createThumbnail calls processing async one-at-a-time
-  thumbnailQueue: any[] = []
-  clickableElements: any[] = []
-  listeners: any[] = []
-  files: any[] = []
-  defaultHeaders: object = {
+  public dragging: boolean = false
+  // Used to keep the createThumbnail calls processing async one-at-a-time
+  private processingThumbnail: boolean = false
+  public thumbnailQueue: any[] = []
+  public files: any[] = []
+  public defaultHeaders: object = {
     "Accept": "application/json",
     "Cache-Control": "no-cache",
     "X-Requested-With": "XMLHttpRequest"
   }
-  fileInputStyles: object = {
+  public fileInputStyles: object = {
     visibility: "hidden !important",
     position: "absolute !important",
     top: "0 !important",
