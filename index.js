@@ -8,7 +8,5 @@ export default {
       }
     }
   },
-  name: "vue-transmit",
-  // name: NAME,
-  // version: VERSION
+  name: "vue-transmit"
 }

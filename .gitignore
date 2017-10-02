@@ -1,4 +1,8 @@
-node_modules
+node_modules/
 .*
+!.gitignore
+!.eslintrc.json
+!.editorconfig
+!.babelrc
 /test/uploads/*
 /tmp/

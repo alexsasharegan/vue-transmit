@@ -61,379 +61,17 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-/* harmony default export */ __webpack_exports__["a"] = (isArray);
+module.exports = require("Vue");
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(2);
-
-
-/** Built-in value references. */
-var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
-
-/* harmony default export */ __webpack_exports__["a"] = (Symbol);
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(14);
-
-
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-/** Used as a reference to the global object. */
-var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || freeSelf || Function('return this')();
-
-/* harmony default export */ __webpack_exports__["a"] = (root);
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(5);
-
-
-
-/** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' || Object(__WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__["a" /* default */])(value) && Object(__WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__["a" /* default */])(value) == symbolTag;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (isSymbol);
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXTERNAL MODULE: ./node_modules/lodash-es/_Symbol.js
-var _Symbol = __webpack_require__(1);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_getRawTag.js
-
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var _getRawTag_hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var nativeObjectToString = objectProto.toString;
-
-/** Built-in value references. */
-var symToStringTag = _Symbol["a" /* default */] ? _Symbol["a" /* default */].toStringTag : undefined;
-
-/**
- * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the raw `toStringTag`.
- */
-function getRawTag(value) {
-  var isOwn = _getRawTag_hasOwnProperty.call(value, symToStringTag),
-      tag = value[symToStringTag];
-
-  try {
-    value[symToStringTag] = undefined;
-    var unmasked = true;
-  } catch (e) {}
-
-  var result = nativeObjectToString.call(value);
-  if (unmasked) {
-    if (isOwn) {
-      value[symToStringTag] = tag;
-    } else {
-      delete value[symToStringTag];
-    }
-  }
-  return result;
-}
-
-/* harmony default export */ var _getRawTag = (getRawTag);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_objectToString.js
-/** Used for built-in method references. */
-var _objectToString_objectProto = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var _objectToString_nativeObjectToString = _objectToString_objectProto.toString;
-
-/**
- * Converts `value` to a string using `Object.prototype.toString`.
- *
- * @private
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- */
-function objectToString(value) {
-  return _objectToString_nativeObjectToString.call(value);
-}
-
-/* harmony default export */ var _objectToString = (objectToString);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_baseGetTag.js
-
-
-
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var _baseGetTag_symToStringTag = _Symbol["a" /* default */] ? _Symbol["a" /* default */].toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return _baseGetTag_symToStringTag && _baseGetTag_symToStringTag in Object(value) ? _getRawTag(value) : _objectToString(value);
-}
-
-/* harmony default export */ var _baseGetTag = __webpack_exports__["a"] = (baseGetTag);
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return value != null && typeof value == 'object';
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (isObjectLike);
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXTERNAL MODULE: ./node_modules/lodash-es/_Symbol.js
-var _Symbol = __webpack_require__(1);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_arrayMap.js
-/**
- * A specialized version of `_.map` for arrays without support for iteratee
- * shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function arrayMap(array, iteratee) {
-  var index = -1,
-      length = array == null ? 0 : array.length,
-      result = Array(length);
-
-  while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
-  }
-  return result;
-}
-
-/* harmony default export */ var _arrayMap = (arrayMap);
-// EXTERNAL MODULE: ./node_modules/lodash-es/isArray.js
-var isArray = __webpack_require__(0);
-
-// EXTERNAL MODULE: ./node_modules/lodash-es/isSymbol.js
-var isSymbol = __webpack_require__(3);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_baseToString.js
-
-
-
-
-
-/** Used as references for various `Number` constants. */
-var INFINITY = 1 / 0;
-
-/** Used to convert symbols to primitives and strings. */
-var symbolProto = _Symbol["a" /* default */] ? _Symbol["a" /* default */].prototype : undefined,
-    symbolToString = symbolProto ? symbolProto.toString : undefined;
-
-/**
- * The base implementation of `_.toString` which doesn't convert nullish
- * values to empty strings.
- *
- * @private
- * @param {*} value The value to process.
- * @returns {string} Returns the string.
- */
-function baseToString(value) {
-  // Exit early for strings to avoid a performance hit in some environments.
-  if (typeof value == 'string') {
-    return value;
-  }
-  if (Object(isArray["a" /* default */])(value)) {
-    // Recursively convert values (susceptible to call stack limits).
-    return _arrayMap(value, baseToString) + '';
-  }
-  if (Object(isSymbol["a" /* default */])(value)) {
-    return symbolToString ? symbolToString.call(value) : '';
-  }
-  var result = value + '';
-  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
-}
-
-/* harmony default export */ var _baseToString = (baseToString);
-// CONCATENATED MODULE: ./node_modules/lodash-es/toString.js
-
-
-/**
- * Converts `value` to a string. An empty string is returned for `null`
- * and `undefined` values. The sign of `-0` is preserved.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- * @example
- *
- * _.toString(null);
- * // => ''
- *
- * _.toString(-0);
- * // => '-0'
- *
- * _.toString([1, 2, 3]);
- * // => '1,2,3'
- */
-function toString_toString(value) {
-  return value == null ? '' : _baseToString(value);
-}
-
-/* harmony default export */ var lodash_es_toString = __webpack_exports__["a"] = (toString_toString);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/**
- * This method returns `undefined`.
- *
- * @static
- * @memberOf _
- * @since 2.3.0
- * @category Util
- * @example
- *
- * _.times(2, _.noop);
- * // => [undefined, undefined]
- */
-function noop() {
-  // No operation performed.
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (noop);
-
-/***/ }),
-/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -450,6 +88,8 @@ exports.fromBytesToMbit = fromBytesToMbit;
 exports.toKbps = toKbps;
 exports.toMbps = toMbps;
 exports.hbsReplacer = hbsReplacer;
+exports.objFactory = objFactory;
+exports.resizeImg = resizeImg;
 var assign = exports.assign = Object.assign;
 var idCounter = 0;
 function uniqueId(prefix) {
@@ -492,6 +132,9 @@ function hbsReplacer() {
         return context[capture] !== undefined ? context[capture] : match;
     };
 }
+function objFactory() {
+    return {};
+}
 var READY_STATES = exports.READY_STATES = undefined;
 (function (READY_STATES) {
     READY_STATES[READY_STATES["UNSENT"] = 0] = "UNSENT";
@@ -500,19 +143,59 @@ var READY_STATES = exports.READY_STATES = undefined;
     READY_STATES[READY_STATES["LOADING"] = 3] = "LOADING";
     READY_STATES[READY_STATES["DONE"] = 4] = "DONE";
 })(READY_STATES || (exports.READY_STATES = READY_STATES = {}));
+function resizeImg(file, dims) {
+    // Extract the object's primitive values so we don't mutate the input
+    var oWidth = dims.width,
+        oHeight = dims.height;
+
+    var sRatio = file.width / file.height;
+    var imgCoords = {
+        sx: 0,
+        sy: 0,
+        sWidth: file.width,
+        sHeight: file.height,
+        dx: 0,
+        dy: 0,
+        dWidth: 0,
+        dHeight: 0
+    };
+    if (oWidth == null && oHeight == null) {
+        oWidth = imgCoords.sWidth;
+        oHeight = imgCoords.sHeight;
+    } else if (oWidth == null) {
+        oWidth = sRatio * oHeight;
+    } else if (oHeight == null) {
+        oHeight = 1 / sRatio * oWidth;
+    }
+    var dRatio = oWidth / oHeight;
+    if (file.height < oHeight || file.width < oWidth) {
+        imgCoords.dHeight = imgCoords.sHeight;
+        imgCoords.dWidth = imgCoords.sWidth;
+    } else {
+        if (sRatio > dRatio) {
+            imgCoords.sHeight = file.height;
+            imgCoords.sWidth = imgCoords.sHeight * dRatio;
+        } else {
+            imgCoords.sWidth = file.width;
+            imgCoords.sHeight = imgCoords.sWidth / dRatio;
+        }
+    }
+    imgCoords.sx = (file.width - imgCoords.sWidth) / 2;
+    imgCoords.sy = (file.height - imgCoords.sHeight) / 2;
+    return imgCoords;
+}
 
 /***/ }),
-/* 9 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var src_namespaceObject = {};
 __webpack_require__.d(src_namespaceObject, "VueTransmit", function() { return src_components_VueTransmit; });
-__webpack_require__.d(src_namespaceObject, "CheckMark", function() { return CheckMark; });
 
-// EXTERNAL MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VueTransmit.vue
-var VueTransmit = __webpack_require__(12);
+// EXTERNAL MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-ts-loader!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VueTransmit.vue
+var VueTransmit = __webpack_require__(5);
 var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-55f49822","hasScoped":false}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
@@ -522,9 +205,9 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ var components_VueTransmit = (esExports);
 // CONCATENATED MODULE: ./src/components/VueTransmit.vue
 function injectStyle (ssrContext) {
-  __webpack_require__(10)
+  __webpack_require__(3)
 }
-var normalizeComponent = __webpack_require__(11)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 /* template */
@@ -545,46 +228,7 @@ var Component = normalizeComponent(
 
 /* harmony default export */ var src_components_VueTransmit = (Component.exports);
 
-// CONCATENATED MODULE: ./node_modules/vue-functional-data-merge/dist/lib.esm.js
-function concat(){return Array.prototype.concat.apply([],arguments)}function mergeData(){for(var e=__assign({},arguments[0]),a=1;a<arguments.length;a++)for(var s=0,t=keys(arguments[a]);s<t.length;s++){var c=t[s];if(void 0!==e[c])switch(c){case"class":case"style":case"directives":e[c]=concat(e[c],arguments[a][c]);break;case"staticClass":e[c]&&(e[c]=e[c].trim()+" "),e[c]+=arguments[a][c].trim();break;case"on":case"nativeOn":for(var r=0,o=keys(arguments[a][c]);r<o.length;r++){var n=o[r];e[c][n]?e[c][n]=concat(arguments[a][c][n],e[c][n]):e[c][n]=arguments[a][c][n]}break;case"attrs":case"props":case"domProps":case"scopedSlots":case"staticStyle":case"hook":case"transition":e[c]=__assign({},e[c],arguments[a][c]);break;case"slot":case"key":case"ref":case"tag":case"show":case"keepAlive":default:e[c]=arguments[a][c]}else e[c]=arguments[a][c]}return e}var __assign=Object.assign||function(e){for(var a,s=1,t=arguments.length;s<t;s++){a=arguments[s];for(var c in a)Object.prototype.hasOwnProperty.call(a,c)&&(e[c]=a[c])}return e},keys=Object.keys;/* harmony default export */ var lib_esm = (mergeData);
-//# sourceMappingURL=lib.esm.js.map
-
-// CONCATENATED MODULE: ./src/components/CheckMark.js
-
-
-/* harmony default export */ var CheckMark = ({
-  functional: true,
-  props: {
-    color: {
-      type: String,
-      default: "#14C18B"
-    },
-    fill: {
-      type: String,
-      default: "#FFFFFF"
-    }
-  },
-  render: function (h, _ref) {
-    let props = _ref.props,
-        data = _ref.data;
-
-    return h("svg", lib_esm(data, { attrs: { viewBox: "0 0 64 64" } }), [h("circle", {
-      attrs: {
-        cx: "32",
-        cy: "32",
-        r: "32",
-        fill: props.color
-      }
-    }), h("polygon", {
-      attrs: {
-        fill: props.fill,
-        points: "43.266,18.345 27.915,37 21.465,30.725 17.211,35.34 28.413,46.236 47.989,22.449"
-      }
-    })]);
-  }
-});
 // CONCATENATED MODULE: ./src/index.js
-
 
 
 
@@ -601,18 +245,16 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
   },
 
   name: "vue-transmit"
-  // name: NAME,
-  // version: VERSION
 });
 
 /***/ }),
-/* 10 */
+/* 3 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 11 */
+/* 4 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -709,1104 +351,2688 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 12 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
-var _uniqueId = __webpack_require__(13);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _uniqueId2 = _interopRequireDefault(_uniqueId);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _has = __webpack_require__(16);
+var _vue = __webpack_require__(0);
 
-var _has2 = _interopRequireDefault(_has);
+var _vue2 = _interopRequireDefault(_vue);
 
-var _noop = __webpack_require__(7);
+var _vuePropertyDecorator = __webpack_require__(6);
+
+var _noop = __webpack_require__(11);
 
 var _noop2 = _interopRequireDefault(_noop);
 
-var _props = __webpack_require__(17);
+var _identity = __webpack_require__(12);
 
-var _props2 = _interopRequireDefault(_props);
+var _identity2 = _interopRequireDefault(_identity);
 
-var _utils = __webpack_require__(8);
+var _utils = __webpack_require__(1);
 
-var _VTransmitFile = __webpack_require__(18);
+var _VTransmitFile = __webpack_require__(13);
 
 var _VTransmitFile2 = _interopRequireDefault(_VTransmitFile);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
+    var c = arguments.length,
+        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+        d;
+    if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) {
+        if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    }return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 
 var STATUSES = {
-  ADDED: "added",
-  QUEUED: "queued",
-  ACCEPTED: "queued",
-  UPLOADING: "uploading",
-  PROCESSING: "uploading",
-  CANCELED: "canceled",
-  ERROR: "error",
-  TIMEOUT: "timeout",
-  SUCCESS: "success"
+    ADDED: "added",
+    QUEUED: "queued",
+    ACCEPTED: "queued",
+    UPLOADING: "uploading",
+    PROCESSING: "uploading",
+    CANCELED: "canceled",
+    ERROR: "error",
+    TIMEOUT: "timeout",
+    SUCCESS: "success"
 };
+var VueTransmit = function (_Vue) {
+    _inherits(VueTransmit, _Vue);
 
-exports.default = {
-  props: _props2.default,
-  data: function data() {
-    return {
-      dragging: false,
-      processingThumbnail: false, // Used to keep the createThumbnail calls processing async one-at-a-time
-      thumbnailQueue: [],
-      clickableElements: [],
-      listeners: [],
-      files: [],
-      defaultHeaders: {
-        "Accept": "application/json",
-        "Cache-Control": "no-cache",
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      fileInputStyles: {
-        visibility: "hidden !important",
-        position: "absolute !important",
-        top: "0 !important",
-        left: "0 !important",
-        height: "0px !important",
-        width: "0px !important"
-      }
-    };
-  },
+    function VueTransmit() {
+        _classCallCheck(this, VueTransmit);
 
-  computed: {
-    inputEl: function inputEl() {
-      return this.$refs.hiddenFileInput;
-    },
-    filesToAccept: function filesToAccept() {
-      return this.acceptedFileTypes.join(",");
-    },
-    multiple: function multiple() {
-      return this.maxFiles === null || this.maxFiles > 1;
-    },
-    acceptedFiles: function acceptedFiles() {
-      return this.files.filter(function (f) {
-        return f.accepted;
-      });
-    },
-    rejectedFiles: function rejectedFiles() {
-      return this.files.filter(function (f) {
-        return !f.accepted;
-      });
-    },
-    addedFiles: function addedFiles() {
-      return this.getFilesWithStatus(STATUSES.ADDED);
-    },
-    queuedFiles: function queuedFiles() {
-      return this.getFilesWithStatus(STATUSES.QUEUED);
-    },
-    uploadingFiles: function uploadingFiles() {
-      return this.getFilesWithStatus(STATUSES.UPLOADING);
-    },
-    activeFiles: function activeFiles() {
-      return this.getFilesWithStatus(STATUSES.UPLOADING, STATUSES.QUEUED);
-    },
-    maxFilesReached: function maxFilesReached() {
-      // Loose equality checks null && undefined
-      return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles;
-    },
-    maxFilesReachedClass: function maxFilesReachedClass() {
-      return this.maxFilesReached ? "v-transmit__max-files--reached" : null;
-    },
-    isDraggingClass: function isDraggingClass() {
-      return _defineProperty({
-        "v-transmit__upload-area--is-dragging": this.dragging
-      }, this.dragClass, this.dragging);
-    },
-    isUploading: function isUploading() {
-      return this.uploadingFiles.length > 0;
-    },
-    fileSlotBindings: function fileSlotBindings() {
-      return {
-        files: this.files,
-        acceptedFiles: this.acceptedFiles,
-        rejectedFiles: this.rejectedFiles,
-        addedFiles: this.addedFiles,
-        queuedFiles: this.queuedFiles,
-        uploadingFiles: this.uploadingFiles,
-        activeFiles: this.activeFiles,
-        isUploading: this.isUploading
-      };
+        var _this = _possibleConstructorReturn(this, (VueTransmit.__proto__ || Object.getPrototypeOf(VueTransmit)).apply(this, arguments));
+
+        _this.dragging = false;
+        // Used to keep the createThumbnail calls processing async one-at-a-time
+        _this.processingThumbnail = false;
+        _this.thumbnailQueue = [];
+        _this.files = [];
+        _this.defaultHeaders = {
+            "Accept": "application/json",
+            "Cache-Control": "no-cache",
+            "X-Requested-With": "XMLHttpRequest"
+        };
+        _this.fileInputStyles = {
+            visibility: "hidden !important",
+            position: "absolute !important",
+            top: "0 !important",
+            left: "0 !important",
+            height: "0px !important",
+            width: "0px !important"
+        };
+        return _this;
     }
-  },
-  watch: {
-    acceptedFiles: function acceptedFiles(value) {
-      if (this.maxFiles == null) {
-        return;
-      }
-      if (value.length >= this.maxFiles) {
-        this.$emit('max-files-reached', this.files);
-      }
-    }
-  },
-  methods: {
-    getFilesWithStatus: function getFilesWithStatus() {
-      for (var _len = arguments.length, statuses = Array(_len), _key = 0; _key < _len; _key++) {
-        statuses[_key] = arguments[_key];
-      }
 
-      return this.files.filter(function (f) {
-        return statuses.includes(f.status);
-      });
-    },
-    onFileInputChange: function onFileInputChange(e) {
-      this.$emit('added-files', Array.from(this.$refs.hiddenFileInput.files).map(this.addFile));
-    },
-    addFile: function addFile(file) {
-      var _this = this;
-
-      var vTransmitFile = _VTransmitFile2.default.fromNativeFile(file);
-      vTransmitFile.status = STATUSES.ADDED;
-      this.files.push(vTransmitFile);
-      this.$emit("added-file", vTransmitFile);
-      this.enqueueThumbnail(vTransmitFile);
-      this.acceptFile(vTransmitFile, function (error) {
-        if (error) {
-          vTransmitFile.accepted = false;
-          _this.errorProcessing([vTransmitFile], error);
-          _this.$emit("rejected-file", vTransmitFile);
-        } else {
-          vTransmitFile.accepted = true;
-          _this.$emit("accepted-file", vTransmitFile);
-          if (_this.autoQueue) {
-            _this.enqueueFile(vTransmitFile);
-          }
-        }
-        _this.$emit("accept-complete", vTransmitFile);
-      });
-
-      return vTransmitFile;
-    },
-    removeFile: function removeFile(file) {
-      if (file.status === STATUSES.UPLOADING) {
-        this.cancelUpload(file);
-      }
-      var idxToRm = this.files.findIndex(function (f) {
-        return f.id === file.id;
-      });
-      if (~idxToRm) {
-        this.$emit("removed-file", this.files.splice(idxToRm, 1)[0]);
-        if (this.files.length === 0) {
-          return this.$emit("reset");
-        }
-      }
-    },
-    removeAllFiles: function removeAllFiles() {
-      var cancelInProgressUploads = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = files[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var file = _step.value;
-
-          if (file.status !== STATUSES.UPLOADING || cancelInProgressUploads) {
-            this.removeFile(file);
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    },
-    triggerBrowseFiles: function triggerBrowseFiles() {
-      this.inputEl.click();
-    },
-    handleClickUploaderAction: function handleClickUploaderAction(e) {
-      if (this.clickable) {
-        this.triggerBrowseFiles();
-      }
-    },
-    enqueueFile: function enqueueFile(file) {
-      if (file.status === STATUSES.ADDED && file.accepted === true) {
-        file.status = STATUSES.QUEUED;
-        if (this.autoProcessQueue) {
-          setTimeout(this.processQueue, 0);
-        }
-      } else {
-        throw new Error("This file can't be queued because it has already been processed or was rejected.");
-      }
-    },
-    enqueueThumbnail: function enqueueThumbnail(file) {
-      if (this.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.maxThumbnailFileSize * 1024 * 1024) {
-        this.thumbnailQueue.push(file);
-        setTimeout(this.processThumbnailQueue, 0);
-      }
-    },
-    processThumbnailQueue: function processThumbnailQueue() {
-      var _this2 = this;
-
-      // Employ a chain of self-calling, self-queuing createThumbnail calls
-      // so execution can stay as non-blocking as possible.
-      if (this.processingThumbnail || this.thumbnailQueue.length === 0) {
-        return;
-      }
-      this.processingThumbnail = true;
-      return this.createThumbnail(this.thumbnailQueue.shift(), function () {
-        _this2.processingThumbnail = false;
-        return _this2.processThumbnailQueue();
-      });
-    },
-    createThumbnail: function createThumbnail(file) {
-      var _this3 = this;
-
-      var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _noop2.default;
-
-      var reader = new FileReader();
-      reader.addEventListener("load", function () {
-        if (file.type === "image/svg+xml") {
-          file.dataUrl = reader.result;
-          _this3.$emit("thumbnail", file, reader.result);
-          return callback();
-        }
-        return _this3.createThumbnailFromUrl(file, reader.result, callback);
-      }, false);
-
-      // FileReader requires a native File|Blob object
-      return reader.readAsDataURL(file.nativeFile);
-    },
-    createThumbnailFromUrl: function createThumbnailFromUrl(file, imageUrl, callback, crossOrigin) {
-      var _this4 = this;
-
-      var $img = document.createElement("img");
-      if (crossOrigin) {
-        $img.crossOrigin = crossOrigin;
-      }
-
-      $img.addEventListener("load", function () {
-        file.width = $img.width;
-        file.height = $img.height;
-        var resizeInfo = _this4.resize.call(_this4, file);
-        if (!resizeInfo.trgWidth) {
-          resizeInfo.trgWidth = resizeInfo.optWidth;
-        }
-        if (!resizeInfo.trgHeight) {
-          resizeInfo.trgHeight = resizeInfo.optHeight;
-        }
-
-        var canvas = document.createElement("canvas");
-        var ctx = canvas.getContext("2d");
-        canvas.width = resizeInfo.trgWidth;
-        canvas.height = resizeInfo.trgHeight;
-        ctx.drawImage($img, resizeInfo.srcX || 0, resizeInfo.srcY || 0, resizeInfo.srcWidth, resizeInfo.srcHeight, resizeInfo.trgX || 0, resizeInfo.trgY || 0, resizeInfo.trgWidth, resizeInfo.trgHeight);
-        var thumbnail = canvas.toDataURL("image/png");
-        file.dataUrl = thumbnail;
-        _this4.$emit("thumbnail", file, thumbnail);
-
-        if (callback) {
-          return callback();
-        }
-      }, false);
-      if (callback) {
-        $img.addEventListener("error", callback, false);
-      }
-
-      return $img.src = imageUrl;
-    },
-    processQueue: function processQueue() {
-      var processingLength = this.uploadingFiles.length;
-      if (processingLength >= this.maxConcurrentUploads || this.queuedFiles.length === 0) {
-        return;
-      }
-
-      var queuedFiles = [].concat(_toConsumableArray(this.queuedFiles));
-      if (this.uploadMultiple) {
-        return this.processFiles(queuedFiles.slice(0, this.maxConcurrentUploads - processingLength));
-      } else {
-        for (var i = processingLength; i < this.maxConcurrentUploads; i++) {
-          if (queuedFiles.length) {
-            this.processFile(queuedFiles.shift());
-          }
-        }
-      }
-    },
-    processFile: function processFile(file) {
-      return this.processFiles([file]);
-    },
-    processFiles: function processFiles(files) {
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = files[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var file = _step2.value;
-
-          file.processing = true;
-          file.status = STATUSES.UPLOADING;
-          this.$emit("processing", file);
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      if (this.uploadMultiple) {
-        this.$emit("processing-multiple", files);
-      }
-
-      return this.uploadFiles(files);
-    },
-    getFilesWithXhr: function getFilesWithXhr(xhr) {
-      return this.files.filter(function (file) {
-        return file.xhr === xhr;
-      });
-    },
-    cancelUpload: function cancelUpload(file) {
-      if (file.status === STATUSES.UPLOADING) {
-        var groupedFiles = this.getFilesWithXhr(file.xhr);
-        file.xhr.abort();
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-          for (var _iterator3 = groupedFiles[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var _file = _step3.value;
-
-            _file.status = STATUSES.CANCELED;
-            this.$emit("canceled", _file);
-          }
-        } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-              _iterator3.return();
+    _createClass(VueTransmit, [{
+        key: "onAcceptedFilesChange",
+        value: function onAcceptedFilesChange(acceptedFiles) {
+            if (this.maxFiles == null) {
+                return;
             }
-          } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
+            if (acceptedFiles.length >= this.maxFiles) {
+                this.$emit('max-files-reached', this.files);
             }
-          }
         }
-
-        if (this.uploadMultiple) {
-          this.$emit("canceled-multiple", groupedFiles);
-        }
-      } else if (file.status === STATUSES.ADDED || file.status === STATUSES.QUEUED) {
-        file.status = STATUSES.CANCELED;
-        this.$emit("canceled", file);
-        if (this.uploadMultiple) {
-          this.$emit("canceled-multiple", [file]);
-        }
-      }
-
-      if (this.autoProcessQueue) {
-        return this.processQueue();
-      }
-    },
-    uploadFile: function uploadFile(file) {
-      return this.uploadFiles([file]);
-    },
-
-    /**
-     * @param {VTransmitFile[]}
-     */
-    uploadFiles: function uploadFiles(files) {
-      var _this5 = this;
-
-      var response = null;
-      var xhr = new XMLHttpRequest();
-      xhr.timeout = this.timeout;
-      var _iteratorNormalCompletion4 = true;
-      var _didIteratorError4 = false;
-      var _iteratorError4 = undefined;
-
-      try {
-        for (var _iterator4 = files[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var file = _step4.value;
-
-          file.xhr = xhr;
-          file.startProgress();
-        }
-      } catch (err) {
-        _didIteratorError4 = true;
-        _iteratorError4 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion4 && _iterator4.return) {
-            _iterator4.return();
-          }
-        } finally {
-          if (_didIteratorError4) {
-            throw _iteratorError4;
-          }
-        }
-      }
-
-      xhr.open(this.method, this.url, true);
-      xhr.withCredentials = Boolean(this.withCredentials);
-
-      var handleError = this.handleUploadError(files, xhr, response);
-      var updateProgress = this.handleUploadProgress(files);
-      xhr.addEventListener("error", handleError);
-      xhr.upload.addEventListener("progress", updateProgress);
-      xhr.addEventListener("timeout", this.handleTimeout(files, xhr));
-      xhr.addEventListener("load", function (e) {
-        if (files[0].status === STATUSES.CANCELED || xhr.readyState !== _utils.READY_STATES.DONE) {
-          return;
-        }
-        response = xhr.responseText;
-        if (xhr.responseType !== "arraybuffer" && xhr.responseType !== "blob") {
-          if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
-            try {
-              response = JSON.parse(response);
-            } catch (err) {
-              response = "Invalid JSON response from server.";
+    }, {
+        key: "getFilesWithStatus",
+        value: function getFilesWithStatus() {
+            for (var _len = arguments.length, statuses = Array(_len), _key = 0; _key < _len; _key++) {
+                statuses[_key] = arguments[_key];
             }
-          }
+
+            return this.files.filter(function (f) {
+                return statuses.includes(f.status);
+            });
         }
-        // Called at load (when complete) will enable all the progress done logic.
-        updateProgress();
-        if (xhr.status < 200 || xhr.status >= 300) {
-          return handleError();
-        } else {
-          return _this5.uploadFinished(files, response, e);
+    }, {
+        key: "onFileInputChange",
+        value: function onFileInputChange() {
+            this.$emit('added-files', Array.from(this.inputEl.files).map(this.addFile));
         }
-      });
+    }, {
+        key: "addFile",
+        value: function addFile(file) {
+            var _this2 = this;
 
-      // Use null proto obj for the following 'for in' loop
-      var headers = Object.assign(Object.create(null), this.defaultHeaders, this.headers);
-      for (var headerName in headers) {
-        if (headers[headerName]) {
-          xhr.setRequestHeader(headerName, headers[headerName]);
-        }
-      }
-
-      var formData = new FormData();
-      for (var key in this.params) {
-        formData.append(key, this.params[key]);
-      }
-
-      var _iteratorNormalCompletion5 = true;
-      var _didIteratorError5 = false;
-      var _iteratorError5 = undefined;
-
-      try {
-        for (var _iterator5 = files[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-          var _file2 = _step5.value;
-
-          this.$emit("sending", _file2, xhr, formData);
-        }
-      } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion5 && _iterator5.return) {
-            _iterator5.return();
-          }
-        } finally {
-          if (_didIteratorError5) {
-            throw _iteratorError5;
-          }
-        }
-      }
-
-      if (this.uploadMultiple) {
-        this.$emit("sending-multiple", files, xhr, formData);
-      }
-
-      for (var i = 0; i < files.length; i++) {
-        formData.append(this.getParamName(i), files[i].nativeFile, this.renameFile(files[i].name));
-      }
-
-      return xhr.send(formData);
-    },
-    handleUploadError: function handleUploadError(files, xhr, response) {
-      var vm = this;
-      return function onUploadErrorFn() {
-        if (files[0].status !== STATUSES.CANCELED) {
-          vm.errorProcessing(files, response || vm.dictResponseError.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ statusCode: xhr.status })), xhr);
-        }
-      };
-    },
-    handleTimeout: function handleTimeout(files, xhr) {
-      var vm = this;
-      return function onTimeoutFn(e) {
-        var _iteratorNormalCompletion6 = true;
-        var _didIteratorError6 = false;
-        var _iteratorError6 = undefined;
-
-        try {
-          for (var _iterator6 = files[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-            var file = _step6.value;
-
-            file.status = STATUSES.TIMEOUT;
-            file.endProgress();
-            vm.$emit("timeout", file, e, xhr);
-          }
-        } catch (err) {
-          _didIteratorError6 = true;
-          _iteratorError6 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion6 && _iterator6.return) {
-              _iterator6.return();
-            }
-          } finally {
-            if (_didIteratorError6) {
-              throw _iteratorError6;
-            }
-          }
-        }
-
-        vm.$emit("timeout-multiple", files, e, xhr);
-
-        if (this.autoProcessQueue) {
-          return this.processQueue();
-        }
-      };
-    },
-    handleUploadProgress: function handleUploadProgress(files) {
-      var vm = this;
-      return function onProgressFn(e) {
-        if (e instanceof ProgressEvent) {
-          var _iteratorNormalCompletion7 = true;
-          var _didIteratorError7 = false;
-          var _iteratorError7 = undefined;
-
-          try {
-            for (var _iterator7 = files[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-              var file = _step7.value;
-
-              file.handleProgress(e);
-            }
-          } catch (err) {
-            _didIteratorError7 = true;
-            _iteratorError7 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion7 && _iterator7.return) {
-                _iterator7.return();
-              }
-            } finally {
-              if (_didIteratorError7) {
-                throw _iteratorError7;
-              }
-            }
-          }
-        } else {
-          var allFilesFinished = true;
-          var _iteratorNormalCompletion8 = true;
-          var _didIteratorError8 = false;
-          var _iteratorError8 = undefined;
-
-          try {
-            for (var _iterator8 = files[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-              var _file3 = _step8.value;
-
-              if (_file3.upload.progress !== 100 || _file3.upload.bytesSent !== _file3.upload.total) {
-                allFilesFinished = false;
-              }
-              _file3.upload.progress = 100;
-              _file3.upload.bytesSent = _file3.upload.total;
-              _file3.endProgress();
-            }
-          } catch (err) {
-            _didIteratorError8 = true;
-            _iteratorError8 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion8 && _iterator8.return) {
-                _iterator8.return();
-              }
-            } finally {
-              if (_didIteratorError8) {
-                throw _iteratorError8;
-              }
-            }
-          }
-
-          if (allFilesFinished) {
-            return;
-          }
-        }
-
-        var _iteratorNormalCompletion9 = true;
-        var _didIteratorError9 = false;
-        var _iteratorError9 = undefined;
-
-        try {
-          for (var _iterator9 = files[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-            var _file4 = _step9.value;
-
-            vm.$emit("upload-progress", _file4, _file4.upload.progress, _file4.upload.bytesSent);
-          }
-        } catch (err) {
-          _didIteratorError9 = true;
-          _iteratorError9 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion9 && _iterator9.return) {
-              _iterator9.return();
-            }
-          } finally {
-            if (_didIteratorError9) {
-              throw _iteratorError9;
-            }
-          }
-        }
-      };
-    },
-    updateTotalUploadProgress: function updateTotalUploadProgress() {
-      var progress = this.activeFiles.reduce(function (memo, file) {
-        memo.totalBytesSent += file.upload.bytesSent;
-        memo.totalBytes += file.upload.total;
-        return memo;
-      }, { totalBytesSent: 0, totalBytes: 0, totalProgress: 100 });
-
-      if (this.activeFiles.length) {
-        progress.totalProgress = 100 * progress.totalBytesSent / progress.totalBytes;
-      }
-
-      this.$emit("total-upload-progress", progress);
-    },
-    getParamName: function getParamName(index) {
-      return this.paramName + (this.uploadMultiple ? "[" + index + "]" : '');
-    },
-    uploadFinished: function uploadFinished(files, responseText, e) {
-      var _iteratorNormalCompletion10 = true;
-      var _didIteratorError10 = false;
-      var _iteratorError10 = undefined;
-
-      try {
-        for (var _iterator10 = files[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-          var file = _step10.value;
-
-          file.status = STATUSES.SUCCESS;
-          file.endProgress();
-          this.$emit("success", file, responseText, e);
-          this.$emit("complete", file);
-        }
-      } catch (err) {
-        _didIteratorError10 = true;
-        _iteratorError10 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion10 && _iterator10.return) {
-            _iterator10.return();
-          }
-        } finally {
-          if (_didIteratorError10) {
-            throw _iteratorError10;
-          }
-        }
-      }
-
-      if (this.uploadMultiple) {
-        this.$emit("success-multiple", files, responseText, e);
-        this.$emit("complete-multiple", files);
-      }
-
-      if (this.autoProcessQueue) {
-        return this.processQueue();
-      }
-    },
-    errorProcessing: function errorProcessing(files, message, xhr) {
-      var _iteratorNormalCompletion11 = true;
-      var _didIteratorError11 = false;
-      var _iteratorError11 = undefined;
-
-      try {
-        for (var _iterator11 = files[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
-          var file = _step11.value;
-
-          file.status = STATUSES.ERROR;
-          file.endProgress();
-          this.$emit("error", file, message, xhr);
-          this.$emit("complete", file);
-        }
-      } catch (err) {
-        _didIteratorError11 = true;
-        _iteratorError11 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion11 && _iterator11.return) {
-            _iterator11.return();
-          }
-        } finally {
-          if (_didIteratorError11) {
-            throw _iteratorError11;
-          }
-        }
-      }
-
-      if (this.uploadMultiple) {
-        this.$emit("error-multiple", files, message, xhr);
-        this.$emit("complete-multiple", files);
-      }
-
-      if (this.autoProcessQueue) {
-        return this.processQueue();
-      }
-    },
-    acceptFile: function acceptFile(file, done) {
-      if (file.size > this.maxFileSize * 1024 * 1024) {
-        return done(this.dictFileTooBig.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({
-          fileSize: Math.round(file.size / 1024 / 10.24) / 100,
-          maxFileSize: this.maxFileSize
-        })));
-      } else if (!this.isValidFileType(file, this.acceptedFileTypes)) {
-        return done(this.dictInvalidFileType);
-      } else if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
-        done(this.dictMaxFilesExceeded.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ maxFiles: this.maxFiles })));
-        return this.$emit("max-files-exceeded", file);
-      } else {
-        // Call the prop callback for the client to validate.
-        return this.accept(file, done);
-      }
-    },
-    isValidFileType: function isValidFileType(file, acceptedFiles) {
-      if (!acceptedFiles.length) {
-        return true;
-      }
-      var mimeType = file.type;
-      var baseMimeType = mimeType.replace(/\/.*$/, "");
-      // Return true on the first condition match,
-      // otherwise exhaust all conditions and return false.
-      for (var i = 0; i < acceptedFiles.length; i++) {
-        var validType = acceptedFiles[i];
-        if (validType.charAt(0) === ".") {
-          // Handle extension validation
-          // Ensure extension exists at the end of the filename.
-          if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
-            return true;
-          }
-        } else if (/\/\*$/.test(validType)) {
-          // Handle globbed mimetype validation ("image/*")
-          if (baseMimeType === validType.replace(/\/.*$/, "")) {
-            return true;
-          }
-        } else {
-          if (mimeType === validType) {
-            return true;
-          }
-        }
-      }
-
-      return false;
-    },
-
-    /**
-     * @param {DragEvent} e
-     */
-    handleDragStart: function handleDragStart(e) {
-      this.$emit('drag-start', e);
-    },
-
-    /**
-     * @param {DragEvent} e
-     */
-    handleDragOver: function handleDragOver(e) {
-      this.dragging = true;
-      var effect = void 0;
-      try {
-        // Handle browser bug
-        effect = e.dataTransfer.effectAllowed;
-      } catch (error) {}
-      e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy';
-      this.$emit('drag-over', e);
-    },
-
-    /**
-     * @param {DragEvent} e
-     */
-    handleDragEnter: function handleDragEnter(e) {
-      this.dragging = true;
-      this.$emit('drag-enter', e);
-    },
-
-    /**
-     * @param {DragEvent} e
-     */
-    handleDragLeave: function handleDragLeave(e) {
-      this.dragging = false;
-      this.$emit('drag-leave', e);
-    },
-
-    /**
-     * @param {DragEvent} e
-     */
-    handleDragEnd: function handleDragEnd(e) {
-      this.dragging = false;
-      this.$emit('drag-end', e);
-    },
-
-    /**
-     * @param {DragEvent} e
-     */
-    onDrop: function onDrop(e) {
-      this.dragging = false;
-      if (!e.dataTransfer) {
-        return;
-      }
-      this.$emit("drop", e);
-      var files = Array.from(e.dataTransfer.files);
-      this.$emit("added-files", files);
-      if (files.length) {
-        var items = Array.from(e.dataTransfer.items);
-        if (items && items.length && items[0].webkitGetAsEntry) {
-          this.addFilesFromItems(items);
-        } else {
-          this.handleFiles(files);
-        }
-      }
-    },
-    paste: function paste(e) {
-      if (!(0, _has2.default)(e, ['clipboardData', 'items'])) {
-        return;
-      }
-      this.$emit("paste", e);
-      var items = Array.from(e.clipboardData.items);
-      if (items.length) {
-        this.addFilesFromItems(items);
-      }
-    },
-    handleFiles: function handleFiles(files) {
-      var _this6 = this;
-
-      return files.map(function (file) {
-        return _this6.addFile(file);
-      });
-    },
-    addFilesFromItems: function addFilesFromItems(items) {
-      var _iteratorNormalCompletion12 = true;
-      var _didIteratorError12 = false;
-      var _iteratorError12 = undefined;
-
-      try {
-        for (var _iterator12 = items[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
-          var item = _step12.value;
-
-          if (item.webkitGetAsEntry) {
-            var entry = item.webkitGetAsEntry();
-
-            if (entry.isFile) {
-              entry.file(this.addFile);
-            } else if (entry.isDirectory) {
-              this.addFilesFromDirectory(entry, entry.name);
-            }
-          } else if (item.getAsFile) {
-            if (item.kind === "file") {
-              this.addFile(item.getAsFile());
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError12 = true;
-        _iteratorError12 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion12 && _iterator12.return) {
-            _iterator12.return();
-          }
-        } finally {
-          if (_didIteratorError12) {
-            throw _iteratorError12;
-          }
-        }
-      }
-    },
-    addFilesFromDirectory: function addFilesFromDirectory(directory, path) {
-      var _this7 = this;
-
-      directory.createReader().readEntries(function (entries) {
-        var _iteratorNormalCompletion13 = true;
-        var _didIteratorError13 = false;
-        var _iteratorError13 = undefined;
-
-        try {
-          for (var _iterator13 = entries[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
-            var entry = _step13.value;
-
-            if (entry.isFile) {
-              entry.file(function (file) {
-                if (_this7.ignoreHiddenFiles && /^\./.test(file.name)) {
-                  return;
+            var vTransmitFile = _VTransmitFile2.default.fromNativeFile(file);
+            vTransmitFile.status = STATUSES.ADDED;
+            this.files.push(vTransmitFile);
+            this.$emit("added-file", vTransmitFile);
+            this.enqueueThumbnail(vTransmitFile);
+            this.acceptFile(vTransmitFile, function (error) {
+                if (error) {
+                    vTransmitFile.accepted = false;
+                    _this2.errorProcessing([vTransmitFile], error);
+                    _this2.$emit("rejected-file", vTransmitFile);
+                } else {
+                    vTransmitFile.accepted = true;
+                    _this2.$emit("accepted-file", vTransmitFile);
+                    if (_this2.autoQueue) {
+                        _this2.enqueueFile(vTransmitFile);
+                    }
                 }
-                file.fullPath = path + "/" + file.name;
-                _this7.addFile(file);
-              }, console.error);
-            } else if (entry.isDirectory) {
-              _this7.addFilesFromDirectory(entry, path + "/" + entry.name);
-            }
-          }
-        } catch (err) {
-          _didIteratorError13 = true;
-          _iteratorError13 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion13 && _iterator13.return) {
-              _iterator13.return();
-            }
-          } finally {
-            if (_didIteratorError13) {
-              throw _iteratorError13;
-            }
-          }
+                _this2.$emit("accept-complete", vTransmitFile);
+            });
+            return vTransmitFile;
         }
-      }, console.error);
-    }
-  },
-  mounted: function mounted() {
-    var _this8 = this;
+    }, {
+        key: "removeFile",
+        value: function removeFile(file) {
+            if (file.status === STATUSES.UPLOADING) {
+                this.cancelUpload(file);
+            }
+            var idxToRm = this.files.findIndex(function (f) {
+                return f.id === file.id;
+            });
+            if (~idxToRm) {
+                this.$emit("removed-file", this.files.splice(idxToRm, 1)[0]);
+                if (this.files.length === 0) {
+                    return this.$emit("reset");
+                }
+            }
+        }
+    }, {
+        key: "removeAllFiles",
+        value: function removeAllFiles() {
+            var cancelInProgressUploads = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-    this.$on("upload-progress", this.updateTotalUploadProgress);
-    this.$on("removed-file", this.updateTotalUploadProgress);
-    this.$on("canceled", function (file) {
-      return _this8.$emit("complete", file);
-    });
-    this.$on("complete", function (file) {
-      if (_this8.addedFiles.length === 0 && _this8.uploadingFiles.length === 0 && _this8.queuedFiles.length === 0) {
-        setTimeout(function () {
-          return _this8.$emit("queue-complete", file);
-        }, 0);
-      }
-    });
+            try {
+                for (var _iterator = this.files[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var file = _step.value;
 
-    this.$emit('initialize', this);
-  }
-};
+                    if (file.status !== STATUSES.UPLOADING || cancelInProgressUploads) {
+                        this.removeFile(file);
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+    }, {
+        key: "triggerBrowseFiles",
+        value: function triggerBrowseFiles() {
+            this.inputEl.click();
+        }
+    }, {
+        key: "handleClickUploaderAction",
+        value: function handleClickUploaderAction() {
+            if (this.clickable) {
+                this.triggerBrowseFiles();
+            }
+        }
+    }, {
+        key: "enqueueFile",
+        value: function enqueueFile(file) {
+            if (file.status === STATUSES.ADDED && file.accepted === true) {
+                file.status = STATUSES.QUEUED;
+                if (this.autoProcessQueue) {
+                    setTimeout(this.processQueue, 0);
+                }
+            } else {
+                throw new Error("This file can't be queued because it has already been processed or was rejected.");
+            }
+        }
+    }, {
+        key: "enqueueThumbnail",
+        value: function enqueueThumbnail(file) {
+            if (this.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.maxThumbnailFileSize * 1024 * 1024) {
+                this.thumbnailQueue.push(file);
+                setTimeout(this.processThumbnailQueue, 0);
+            }
+        }
+    }, {
+        key: "processThumbnailQueue",
+        value: function processThumbnailQueue() {
+            var _this3 = this;
+
+            // Employ a chain of self-calling, self-queuing createThumbnail calls
+            // so execution can stay as non-blocking as possible.
+            if (this.processingThumbnail || this.thumbnailQueue.length === 0) {
+                return;
+            }
+            this.processingThumbnail = true;
+            return this.createThumbnail(this.thumbnailQueue.shift(), function () {
+                _this3.processingThumbnail = false;
+                return _this3.processThumbnailQueue();
+            });
+        }
+    }, {
+        key: "createThumbnail",
+        value: function createThumbnail(file) {
+            var _this4 = this;
+
+            var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _noop2.default;
+
+            var reader = new FileReader();
+            reader.addEventListener("load", function () {
+                if (file.type === "image/svg+xml") {
+                    file.dataUrl = reader.result;
+                    _this4.$emit("thumbnail", file, reader.result);
+                    return callback();
+                }
+                return _this4.createThumbnailFromUrl(file, reader.result, callback);
+            }, false);
+            // FileReader requires a native File|Blob object
+            return reader.readAsDataURL(file.nativeFile);
+        }
+    }, {
+        key: "createThumbnailFromUrl",
+        value: function createThumbnailFromUrl(file, imageUrl, callback) {
+            var _this5 = this;
+
+            var imgEl = document.createElement("img");
+            imgEl.addEventListener("load", function () {
+                file.width = imgEl.width;
+                file.height = imgEl.height;
+                var resizeInfo = _this5.resize(file, {
+                    width: _this5.thumbnailWidth,
+                    height: _this5.thumbnailHeight
+                });
+                var canvas = document.createElement("canvas");
+                var ctx = canvas.getContext("2d");
+                canvas.width = resizeInfo.dWidth;
+                canvas.height = resizeInfo.dHeight;
+                ctx.drawImage(imgEl, resizeInfo.sx, resizeInfo.sy, resizeInfo.sWidth, resizeInfo.sHeight, resizeInfo.dx, resizeInfo.dy, resizeInfo.dWidth, resizeInfo.dHeight);
+                var thumbnail = canvas.toDataURL("image/png");
+                file.dataUrl = thumbnail;
+                _this5.$emit("thumbnail", file, thumbnail);
+                if (callback) {
+                    return callback();
+                }
+            }, false);
+            if (callback) {
+                imgEl.addEventListener("error", callback, false);
+            }
+            return imgEl.src = imageUrl;
+        }
+    }, {
+        key: "processQueue",
+        value: function processQueue() {
+            var processingLength = this.uploadingFiles.length;
+            if (processingLength >= this.maxConcurrentUploads || this.queuedFiles.length === 0) {
+                return;
+            }
+            var queuedFiles = [].concat(_toConsumableArray(this.queuedFiles));
+            if (this.uploadMultiple) {
+                return this.processFiles(queuedFiles.slice(0, this.maxConcurrentUploads - processingLength));
+            } else {
+                for (var i = processingLength; i < this.maxConcurrentUploads; i++) {
+                    if (queuedFiles.length) {
+                        this.processFile(queuedFiles.shift());
+                    }
+                }
+            }
+        }
+    }, {
+        key: "processFile",
+        value: function processFile(file) {
+            return this.processFiles([file]);
+        }
+    }, {
+        key: "processFiles",
+        value: function processFiles(files) {
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = files[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var file = _step2.value;
+
+                    file.processing = true;
+                    file.status = STATUSES.UPLOADING;
+                    this.$emit("processing", file);
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+
+            if (this.uploadMultiple) {
+                this.$emit("processing-multiple", files);
+            }
+            return this.uploadFiles(files);
+        }
+    }, {
+        key: "getFilesWithXhr",
+        value: function getFilesWithXhr(xhr) {
+            return this.files.filter(function (file) {
+                return file.xhr === xhr;
+            });
+        }
+    }, {
+        key: "cancelUpload",
+        value: function cancelUpload(file) {
+            if (file.status === STATUSES.UPLOADING) {
+                var groupedFiles = this.getFilesWithXhr(file.xhr);
+                file.xhr.abort();
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                    for (var _iterator3 = groupedFiles[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var _file = _step3.value;
+
+                        _file.status = STATUSES.CANCELED;
+                        this.$emit("canceled", _file);
+                    }
+                } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+                    } finally {
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
+                        }
+                    }
+                }
+
+                if (this.uploadMultiple) {
+                    this.$emit("canceled-multiple", groupedFiles);
+                }
+            } else if (file.status === STATUSES.ADDED || file.status === STATUSES.QUEUED) {
+                file.status = STATUSES.CANCELED;
+                this.$emit("canceled", file);
+                if (this.uploadMultiple) {
+                    this.$emit("canceled-multiple", [file]);
+                }
+            }
+            if (this.autoProcessQueue) {
+                return this.processQueue();
+            }
+        }
+    }, {
+        key: "uploadFile",
+        value: function uploadFile(file) {
+            return this.uploadFiles([file]);
+        }
+    }, {
+        key: "uploadFiles",
+        value: function uploadFiles(files) {
+            var _this6 = this;
+
+            var response = null;
+            var xhr = new XMLHttpRequest();
+            xhr.timeout = this.timeout;
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
+
+            try {
+                for (var _iterator4 = files[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                    var file = _step4.value;
+
+                    file.xhr = xhr;
+                    file.startProgress();
+                }
+            } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                        _iterator4.return();
+                    }
+                } finally {
+                    if (_didIteratorError4) {
+                        throw _iteratorError4;
+                    }
+                }
+            }
+
+            xhr.open(this.method, this.url, true);
+            xhr.withCredentials = Boolean(this.withCredentials);
+            var handleError = this.handleUploadError(files, xhr, response);
+            var updateProgress = this.handleUploadProgress(files);
+            xhr.addEventListener("error", handleError);
+            xhr.upload.addEventListener("progress", updateProgress);
+            xhr.addEventListener("timeout", this.handleTimeout(files, xhr));
+            xhr.addEventListener("load", function (e) {
+                if (files[0].status === STATUSES.CANCELED || xhr.readyState !== _utils.READY_STATES.DONE) {
+                    return;
+                }
+                response = xhr.responseText;
+                if (xhr.responseType !== "arraybuffer" && xhr.responseType !== "blob") {
+                    if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
+                        try {
+                            response = JSON.parse(response);
+                        } catch (err) {
+                            response = "Invalid JSON response from server.";
+                        }
+                    }
+                }
+                // Called at load (when complete) will enable all the progress done logic.
+                updateProgress();
+                if (xhr.status < 200 || xhr.status >= 300) {
+                    return handleError();
+                } else {
+                    return _this6.uploadFinished(files, response, e);
+                }
+            });
+            // Use null proto obj for the following 'for in' loop
+            var headers = Object.assign(Object.create(null), this.defaultHeaders, this.headers);
+            for (var headerName in headers) {
+                if (headers[headerName]) {
+                    xhr.setRequestHeader(headerName, headers[headerName]);
+                }
+            }
+            var formData = new FormData();
+            for (var key in this.params) {
+                formData.append(key, this.params[key]);
+            }
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
+
+            try {
+                for (var _iterator5 = files[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var _file2 = _step5.value;
+
+                    this.$emit("sending", _file2, xhr, formData);
+                }
+            } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
+                    }
+                } finally {
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
+                    }
+                }
+            }
+
+            if (this.uploadMultiple) {
+                this.$emit("sending-multiple", files, xhr, formData);
+            }
+            for (var i = 0; i < files.length; i++) {
+                formData.append(this.getParamName(i), files[i].nativeFile, this.renameFile(files[i].name));
+            }
+            return xhr.send(formData);
+        }
+    }, {
+        key: "handleUploadError",
+        value: function handleUploadError(files, xhr, response) {
+            var vm = this;
+            return function onUploadErrorFn() {
+                if (files[0].status !== STATUSES.CANCELED) {
+                    vm.errorProcessing(files, response || vm.dictResponseError.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ statusCode: xhr.status })), xhr);
+                }
+            };
+        }
+    }, {
+        key: "handleTimeout",
+        value: function handleTimeout(files, xhr) {
+            var vm = this;
+            return function onTimeoutFn(e) {
+                var _iteratorNormalCompletion6 = true;
+                var _didIteratorError6 = false;
+                var _iteratorError6 = undefined;
+
+                try {
+                    for (var _iterator6 = files[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                        var file = _step6.value;
+
+                        file.status = STATUSES.TIMEOUT;
+                        file.endProgress();
+                        vm.$emit("timeout", file, e, xhr);
+                    }
+                } catch (err) {
+                    _didIteratorError6 = true;
+                    _iteratorError6 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                            _iterator6.return();
+                        }
+                    } finally {
+                        if (_didIteratorError6) {
+                            throw _iteratorError6;
+                        }
+                    }
+                }
+
+                vm.$emit("timeout-multiple", files, e, xhr);
+                if (this.autoProcessQueue) {
+                    return this.processQueue();
+                }
+            };
+        }
+    }, {
+        key: "handleUploadProgress",
+        value: function handleUploadProgress(files) {
+            var vm = this;
+            return function onProgressFn(e) {
+                if (e instanceof ProgressEvent) {
+                    var _iteratorNormalCompletion7 = true;
+                    var _didIteratorError7 = false;
+                    var _iteratorError7 = undefined;
+
+                    try {
+                        for (var _iterator7 = files[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+                            var file = _step7.value;
+
+                            file.handleProgress(e);
+                        }
+                    } catch (err) {
+                        _didIteratorError7 = true;
+                        _iteratorError7 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion7 && _iterator7.return) {
+                                _iterator7.return();
+                            }
+                        } finally {
+                            if (_didIteratorError7) {
+                                throw _iteratorError7;
+                            }
+                        }
+                    }
+                } else {
+                    var allFilesFinished = true;
+                    var _iteratorNormalCompletion8 = true;
+                    var _didIteratorError8 = false;
+                    var _iteratorError8 = undefined;
+
+                    try {
+                        for (var _iterator8 = files[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+                            var _file3 = _step8.value;
+
+                            if (_file3.upload.progress !== 100 || _file3.upload.bytesSent !== _file3.upload.total) {
+                                allFilesFinished = false;
+                            }
+                            _file3.upload.progress = 100;
+                            _file3.upload.bytesSent = _file3.upload.total;
+                            _file3.endProgress();
+                        }
+                    } catch (err) {
+                        _didIteratorError8 = true;
+                        _iteratorError8 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion8 && _iterator8.return) {
+                                _iterator8.return();
+                            }
+                        } finally {
+                            if (_didIteratorError8) {
+                                throw _iteratorError8;
+                            }
+                        }
+                    }
+
+                    if (allFilesFinished) {
+                        return;
+                    }
+                }
+                var _iteratorNormalCompletion9 = true;
+                var _didIteratorError9 = false;
+                var _iteratorError9 = undefined;
+
+                try {
+                    for (var _iterator9 = files[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+                        var _file4 = _step9.value;
+
+                        vm.$emit("upload-progress", _file4, _file4.upload.progress, _file4.upload.bytesSent);
+                    }
+                } catch (err) {
+                    _didIteratorError9 = true;
+                    _iteratorError9 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion9 && _iterator9.return) {
+                            _iterator9.return();
+                        }
+                    } finally {
+                        if (_didIteratorError9) {
+                            throw _iteratorError9;
+                        }
+                    }
+                }
+            };
+        }
+    }, {
+        key: "updateTotalUploadProgress",
+        value: function updateTotalUploadProgress() {
+            var progress = this.activeFiles.reduce(function (memo, file) {
+                memo.totalBytesSent += file.upload.bytesSent;
+                memo.totalBytes += file.upload.total;
+                return memo;
+            }, { totalBytesSent: 0, totalBytes: 0, totalProgress: 100 });
+            if (this.activeFiles.length) {
+                progress.totalProgress = 100 * progress.totalBytesSent / progress.totalBytes;
+            }
+            this.$emit("total-upload-progress", progress);
+        }
+    }, {
+        key: "getParamName",
+        value: function getParamName(index) {
+            return this.paramName + (this.uploadMultiple ? "[" + index + "]" : '');
+        }
+    }, {
+        key: "uploadFinished",
+        value: function uploadFinished(files, responseText, e) {
+            var _iteratorNormalCompletion10 = true;
+            var _didIteratorError10 = false;
+            var _iteratorError10 = undefined;
+
+            try {
+                for (var _iterator10 = files[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+                    var file = _step10.value;
+
+                    file.status = STATUSES.SUCCESS;
+                    file.endProgress();
+                    this.$emit("success", file, responseText, e);
+                    this.$emit("complete", file);
+                }
+            } catch (err) {
+                _didIteratorError10 = true;
+                _iteratorError10 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion10 && _iterator10.return) {
+                        _iterator10.return();
+                    }
+                } finally {
+                    if (_didIteratorError10) {
+                        throw _iteratorError10;
+                    }
+                }
+            }
+
+            if (this.uploadMultiple) {
+                this.$emit("success-multiple", files, responseText, e);
+                this.$emit("complete-multiple", files);
+            }
+            if (this.autoProcessQueue) {
+                return this.processQueue();
+            }
+        }
+    }, {
+        key: "errorProcessing",
+        value: function errorProcessing(files, message, xhr) {
+            var _iteratorNormalCompletion11 = true;
+            var _didIteratorError11 = false;
+            var _iteratorError11 = undefined;
+
+            try {
+                for (var _iterator11 = files[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+                    var file = _step11.value;
+
+                    file.status = STATUSES.ERROR;
+                    file.endProgress();
+                    this.$emit("error", file, message, xhr);
+                    this.$emit("complete", file);
+                }
+            } catch (err) {
+                _didIteratorError11 = true;
+                _iteratorError11 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion11 && _iterator11.return) {
+                        _iterator11.return();
+                    }
+                } finally {
+                    if (_didIteratorError11) {
+                        throw _iteratorError11;
+                    }
+                }
+            }
+
+            if (this.uploadMultiple) {
+                this.$emit("error-multiple", files, message, xhr);
+                this.$emit("complete-multiple", files);
+            }
+            if (this.autoProcessQueue) {
+                return this.processQueue();
+            }
+        }
+    }, {
+        key: "acceptFile",
+        value: function acceptFile(file, done) {
+            if (file.size > this.maxFileSize * 1024 * 1024) {
+                return done(this.dictFileTooBig.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({
+                    fileSize: Math.round(file.size / 1024 / 10.24) / 100,
+                    maxFileSize: this.maxFileSize
+                })));
+            } else if (!this.isValidFileType(file, this.acceptedFileTypes)) {
+                return done(this.dictInvalidFileType);
+            } else if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
+                done(this.dictMaxFilesExceeded.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ maxFiles: this.maxFiles })));
+                return this.$emit("max-files-exceeded", file);
+            } else {
+                // Call the prop callback for the client to validate.
+                return this.accept(file, done);
+            }
+        }
+    }, {
+        key: "isValidFileType",
+        value: function isValidFileType(file, acceptedFiles) {
+            if (!acceptedFiles.length) {
+                return true;
+            }
+            var mimeType = file.type;
+            var baseMimeType = mimeType.replace(/\/.*$/, "");
+            // Return true on the first condition match,
+            // otherwise exhaust all conditions and return false.
+            for (var i = 0; i < acceptedFiles.length; i++) {
+                var validType = acceptedFiles[i];
+                if (validType.charAt(0) === ".") {
+                    // Ensure extension exists at the end of the filename.
+                    if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
+                        return true;
+                    }
+                } else if (/\/\*$/.test(validType)) {
+                    if (baseMimeType === validType.replace(/\/.*$/, "")) {
+                        return true;
+                    }
+                } else {
+                    if (mimeType === validType) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }, {
+        key: "handleDragStart",
+        value: function handleDragStart(e) {
+            this.$emit('drag-start', e);
+        }
+    }, {
+        key: "handleDragOver",
+        value: function handleDragOver(e) {
+            this.dragging = true;
+            var effect = void 0;
+            try {
+                // Handle browser bug
+                effect = e.dataTransfer.effectAllowed;
+            } catch (error) {}
+            e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy';
+            this.$emit('drag-over', e);
+        }
+    }, {
+        key: "handleDragEnter",
+        value: function handleDragEnter(e) {
+            this.dragging = true;
+            this.$emit('drag-enter', e);
+        }
+    }, {
+        key: "handleDragLeave",
+        value: function handleDragLeave(e) {
+            this.dragging = false;
+            this.$emit('drag-leave', e);
+        }
+    }, {
+        key: "handleDragEnd",
+        value: function handleDragEnd(e) {
+            this.dragging = false;
+            this.$emit('drag-end', e);
+        }
+    }, {
+        key: "onDrop",
+        value: function onDrop(e) {
+            this.dragging = false;
+            if (!e.dataTransfer) {
+                return;
+            }
+            this.$emit("drop", e);
+            var files = Array.from(e.dataTransfer.files);
+            this.$emit("added-files", files);
+            if (files.length) {
+                var items = Array.from(e.dataTransfer.items);
+                if (items && items.length && items[0].webkitGetAsEntry) {
+                    this.addFilesFromItems(items);
+                } else {
+                    this.handleFiles(files);
+                }
+            }
+        }
+    }, {
+        key: "paste",
+        value: function paste(e) {
+            if (!e || !e.clipboardData || !e.clipboardData.items) {
+                return;
+            }
+            this.$emit("paste", e);
+            var items = Array.from(e.clipboardData.items);
+            if (items.length) {
+                this.addFilesFromItems(items);
+            }
+        }
+    }, {
+        key: "handleFiles",
+        value: function handleFiles(files) {
+            var _this7 = this;
+
+            return files.map(function (file) {
+                return _this7.addFile(file);
+            });
+        }
+    }, {
+        key: "addFilesFromItems",
+        value: function addFilesFromItems(items) {
+            var _iteratorNormalCompletion12 = true;
+            var _didIteratorError12 = false;
+            var _iteratorError12 = undefined;
+
+            try {
+                for (var _iterator12 = items[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+                    var item = _step12.value;
+
+                    if (item.webkitGetAsEntry) {
+                        var entry = item.webkitGetAsEntry();
+                        if (entry.isFile) {
+                            entry.file(this.addFile);
+                        } else if (entry.isDirectory) {
+                            this.addFilesFromDirectory(entry, entry.name);
+                        }
+                    } else if (item.getAsFile) {
+                        if (item.kind === "file") {
+                            this.addFile(item.getAsFile());
+                        }
+                    }
+                }
+            } catch (err) {
+                _didIteratorError12 = true;
+                _iteratorError12 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion12 && _iterator12.return) {
+                        _iterator12.return();
+                    }
+                } finally {
+                    if (_didIteratorError12) {
+                        throw _iteratorError12;
+                    }
+                }
+            }
+        }
+    }, {
+        key: "addFilesFromDirectory",
+        value: function addFilesFromDirectory(directory, path) {
+            var _this8 = this;
+
+            directory.createReader().readEntries(function (entries) {
+                var _iteratorNormalCompletion13 = true;
+                var _didIteratorError13 = false;
+                var _iteratorError13 = undefined;
+
+                try {
+                    for (var _iterator13 = entries[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+                        var entry = _step13.value;
+
+                        if (entry.isFile) {
+                            entry.file(function (file) {
+                                if (_this8.ignoreHiddenFiles && /^\./.test(file.name)) {
+                                    return;
+                                }
+                                file.fullPath = path + "/" + file.name;
+                                _this8.addFile(file);
+                            }, console.error);
+                        } else if (entry.isDirectory) {
+                            _this8.addFilesFromDirectory(entry, path + "/" + entry.name);
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError13 = true;
+                    _iteratorError13 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion13 && _iterator13.return) {
+                            _iterator13.return();
+                        }
+                    } finally {
+                        if (_didIteratorError13) {
+                            throw _iteratorError13;
+                        }
+                    }
+                }
+            }, console.error);
+        }
+    }, {
+        key: "mounted",
+        value: function mounted() {
+            var _this9 = this;
+
+            this.$on("upload-progress", this.updateTotalUploadProgress);
+            this.$on("removed-file", this.updateTotalUploadProgress);
+            this.$on("canceled", function (file) {
+                return _this9.$emit("complete", file);
+            });
+            this.$on("complete", function (file) {
+                if (_this9.addedFiles.length === 0 && _this9.uploadingFiles.length === 0 && _this9.queuedFiles.length === 0) {
+                    setTimeout(function () {
+                        return _this9.$emit("queue-complete", file);
+                    }, 0);
+                }
+            });
+            this.$emit('initialize', this);
+        }
+    }, {
+        key: "inputEl",
+        get: function get() {
+            var el = null;
+            if (this.$refs.hiddenFileInput instanceof HTMLInputElement) {
+                el = this.$refs.hiddenFileInput;
+            }
+            return el;
+        }
+    }, {
+        key: "filesToAccept",
+        get: function get() {
+            return this.acceptedFileTypes.join(",");
+        }
+    }, {
+        key: "multiple",
+        get: function get() {
+            return this.maxFiles === null || this.maxFiles > 1;
+        }
+    }, {
+        key: "acceptedFiles",
+        get: function get() {
+            return this.files.filter(function (f) {
+                return f.accepted;
+            });
+        }
+    }, {
+        key: "rejectedFiles",
+        get: function get() {
+            return this.files.filter(function (f) {
+                return !f.accepted;
+            });
+        }
+    }, {
+        key: "addedFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.ADDED);
+        }
+    }, {
+        key: "queuedFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.QUEUED);
+        }
+    }, {
+        key: "uploadingFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.UPLOADING);
+        }
+    }, {
+        key: "activeFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.UPLOADING, STATUSES.QUEUED);
+        }
+    }, {
+        key: "maxFilesReached",
+        get: function get() {
+            // Loose equality checks null && undefined
+            return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles;
+        }
+    }, {
+        key: "maxFilesReachedClass",
+        get: function get() {
+            return this.maxFilesReached ? "v-transmit__max-files--reached" : null;
+        }
+    }, {
+        key: "isDraggingClass",
+        get: function get() {
+            return _defineProperty({
+                "v-transmit__upload-area--is-dragging": this.dragging
+            }, this.dragClass, this.dragging);
+        }
+    }, {
+        key: "isUploading",
+        get: function get() {
+            return this.uploadingFiles.length > 0;
+        }
+    }, {
+        key: "fileSlotBindings",
+        get: function get() {
+            return {
+                files: this.files,
+                acceptedFiles: this.acceptedFiles,
+                rejectedFiles: this.rejectedFiles,
+                addedFiles: this.addedFiles,
+                queuedFiles: this.queuedFiles,
+                uploadingFiles: this.uploadingFiles,
+                activeFiles: this.activeFiles,
+                isUploading: this.isUploading
+            };
+        }
+    }]);
+
+    return VueTransmit;
+}(_vue2.default);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "div" })], VueTransmit.prototype, "tag", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: [Array, Object, String], default: null })], VueTransmit.prototype, "uploadAreaClasses", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Object, default: _utils.objFactory })], VueTransmit.prototype, "uploadAreaAttrs", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Object, default: _utils.objFactory })], VueTransmit.prototype, "uploadAreaListeners", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: null })], VueTransmit.prototype, "dragClass", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, required: true })], VueTransmit.prototype, "url", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "post" })], VueTransmit.prototype, "method", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: false })], VueTransmit.prototype, "withCredentials", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 0 })], VueTransmit.prototype, "timeout", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 2 })], VueTransmit.prototype, "maxConcurrentUploads", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: false })], VueTransmit.prototype, "uploadMultiple", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 256 })], VueTransmit.prototype, "maxFileSize", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "file" })], VueTransmit.prototype, "paramName", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "createImageThumbnails", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 10 })], VueTransmit.prototype, "maxThumbnailFileSize", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 120 })], VueTransmit.prototype, "thumbnailWidth", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 120 })], VueTransmit.prototype, "thumbnailHeight", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 1000 })], VueTransmit.prototype, "fileSizeBase", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: null })], VueTransmit.prototype, "maxFiles", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Object, default: _utils.objFactory })], VueTransmit.prototype, "params", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Object, default: _utils.objFactory })], VueTransmit.prototype, "headers", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "clickable", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "ignoreHiddenFiles", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Array, default: function _default() {
+        return [];
+    } })], VueTransmit.prototype, "acceptedFileTypes", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "autoProcessQueue", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "autoQueue", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: null })], VueTransmit.prototype, "capture", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: _identity2.default })], VueTransmit.prototype, "renameFile", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MB." })], VueTransmit.prototype, "dictFileTooBig", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "You can't upload files of this type." })], VueTransmit.prototype, "dictInvalidFileType", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "Server responded with {{ statusCode }} code." })], VueTransmit.prototype, "dictResponseError", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "You can not upload any more files." })], VueTransmit.prototype, "dictMaxFilesExceeded", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: function _default(_, done) {
+        return done();
+    } })], VueTransmit.prototype, "accept", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: _utils.resizeImg })], VueTransmit.prototype, "resize", void 0);
+__decorate([(0, _vuePropertyDecorator.Watch)("acceptedFiles")], VueTransmit.prototype, "onAcceptedFilesChange", null);
+VueTransmit = __decorate([_vuePropertyDecorator.Component], VueTransmit);
+exports.default = VueTransmit;
 
 /***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__toString_js__ = __webpack_require__(6);
+(function (global, factory) {
+	 true ? factory(exports, __webpack_require__(0), __webpack_require__(7), __webpack_require__(8)) :
+	typeof define === 'function' && define.amd ? define(['exports', 'vue', 'vue-class-component', 'reflect-metadata'], factory) :
+	(factory((global.VuePropertyDecorator = {}),global.Vue,global.VueClassComponent));
+}(this, (function (exports,vue,vueClassComponent) { 'use strict';
 
+vue = vue && vue.hasOwnProperty('default') ? vue['default'] : vue;
+var vueClassComponent__default = 'default' in vueClassComponent ? vueClassComponent['default'] : vueClassComponent;
 
-/** Used to generate unique IDs. */
-var idCounter = 0;
-
+/** vue-property-decorator verson 5.3.0 MIT LICENSE copyright 2017 kaorun343 */
 /**
- * Generates a unique ID. If `prefix` is given, the ID is appended to it.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Util
- * @param {string} [prefix=''] The value to prefix the ID with.
- * @returns {string} Returns the unique ID.
- * @example
- *
- * _.uniqueId('contact_');
- * // => 'contact_104'
- *
- * _.uniqueId();
- * // => '105'
+ * decorator of an inject
+ * @param key key
+ * @return PropertyDecorator
  */
-function uniqueId(prefix) {
-  var id = ++idCounter;
-  return Object(__WEBPACK_IMPORTED_MODULE_0__toString_js__["a" /* default */])(prefix) + id;
+function Inject(key) {
+    return vueClassComponent.createDecorator(function (componentOptions, k) {
+        if (typeof componentOptions.inject === 'undefined') {
+            componentOptions.inject = {};
+        }
+        if (!Array.isArray(componentOptions.inject)) {
+            componentOptions.inject[k] = key || k;
+        }
+    });
+}
+/**
+ * decorator of a provide
+ * @param key key
+ * @return PropertyDecorator | void
+ */
+function Provide(key) {
+    return vueClassComponent.createDecorator(function (componentOptions, k) {
+        var provide = componentOptions.provide;
+        if (typeof provide !== 'function' || !provide.managed) {
+            var original_1 = componentOptions.provide;
+            provide = componentOptions.provide = function () {
+                var rv = Object.create((typeof original_1 === 'function' ? original_1.call(this) : original_1) || null);
+                for (var i in provide.managed)
+                    rv[provide.managed[i]] = this[i];
+                return rv;
+            };
+            provide.managed = {};
+        }
+        provide.managed[k] = key || k;
+    });
+}
+/**
+ * decorator of model
+ * @param  event event name
+ * @return PropertyDecorator
+ */
+function Model(event) {
+    return vueClassComponent.createDecorator(function (componentOptions, prop) {
+        componentOptions.model = { prop: prop, event: event || prop };
+    });
+}
+/**
+ * decorator of a prop
+ * @param  options the options for the prop
+ * @return PropertyDecorator | void
+ */
+function Prop(options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        if (!Array.isArray(options) && typeof options.type === 'undefined') {
+            options.type = Reflect.getMetadata('design:type', target, key);
+        }
+        vueClassComponent.createDecorator(function (componentOptions, k) {
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+        })(target, key);
+    };
+}
+/**
+ * decorator of a watch function
+ * @param  path the path or the expression to observe
+ * @param  WatchOption
+ * @return MethodDecorator
+ */
+function Watch(path, options) {
+    if (options === void 0) { options = {}; }
+    var _a = options.deep, deep = _a === void 0 ? false : _a, _b = options.immediate, immediate = _b === void 0 ? false : _b;
+    return vueClassComponent.createDecorator(function (componentOptions, handler) {
+        if (typeof componentOptions.watch !== 'object') {
+            componentOptions.watch = Object.create(null);
+        }
+        componentOptions.watch[path] = { handler: handler, deep: deep, immediate: immediate };
+    });
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (uniqueId);
+exports.Inject = Inject;
+exports.Provide = Provide;
+exports.Model = Model;
+exports.Prop = Prop;
+exports.Watch = Watch;
+exports.Component = vueClassComponent__default;
+exports.Vue = vue;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
 
 /***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
-var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+/**
+  * vue-class-component v5.0.2
+  * (c) 2015-2017 Evan You
+  * @license MIT
+  */
 
-/* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(15)))
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var Vue = _interopDefault(__webpack_require__(0));
+
+function createDecorator(factory) {
+    return function (target, key, index) {
+        var Ctor = target.constructor;
+        if (!Ctor.__decorators__) {
+            Ctor.__decorators__ = [];
+        }
+        if (typeof index !== 'number') {
+            index = undefined;
+        }
+        Ctor.__decorators__.push(function (options) { return factory(options, key, index); });
+    };
+}
+function warn(message) {
+    if (typeof console !== 'undefined') {
+        console.warn('[vue-class-component] ' + message);
+    }
+}
+
+function collectDataFromConstructor(vm, Component) {
+    Component.prototype._init = function () {
+        var _this = this;
+        var keys = Object.getOwnPropertyNames(vm);
+        if (vm.$options.props) {
+            for (var key in vm.$options.props) {
+                if (!vm.hasOwnProperty(key)) {
+                    keys.push(key);
+                }
+            }
+        }
+        keys.forEach(function (key) {
+            if (key.charAt(0) !== '_') {
+                Object.defineProperty(_this, key, {
+                    get: function () { return vm[key]; },
+                    set: function (value) { return vm[key] = value; }
+                });
+            }
+        });
+    };
+    var data = new Component();
+    var plainData = {};
+    Object.keys(data).forEach(function (key) {
+        if (data[key] !== undefined) {
+            plainData[key] = data[key];
+        }
+    });
+    if (false) {
+        if (!(Component.prototype instanceof Vue) && Object.keys(plainData).length > 0) {
+            warn('Component class must inherit Vue or its descendant class ' +
+                'when class property is used.');
+        }
+    }
+    return plainData;
+}
+
+var $internalHooks = [
+    'data',
+    'beforeCreate',
+    'created',
+    'beforeMount',
+    'mounted',
+    'beforeDestroy',
+    'destroyed',
+    'beforeUpdate',
+    'updated',
+    'activated',
+    'deactivated',
+    'render'
+];
+function componentFactory(Component, options) {
+    if (options === void 0) { options = {}; }
+    options.name = options.name || Component._componentTag || Component.name;
+    var proto = Component.prototype;
+    Object.getOwnPropertyNames(proto).forEach(function (key) {
+        if (key === 'constructor') {
+            return;
+        }
+        if ($internalHooks.indexOf(key) > -1) {
+            options[key] = proto[key];
+            return;
+        }
+        var descriptor = Object.getOwnPropertyDescriptor(proto, key);
+        if (typeof descriptor.value === 'function') {
+            (options.methods || (options.methods = {}))[key] = descriptor.value;
+        }
+        else if (descriptor.get || descriptor.set) {
+            (options.computed || (options.computed = {}))[key] = {
+                get: descriptor.get,
+                set: descriptor.set
+            };
+        }
+    });
+    (options.mixins || (options.mixins = [])).push({
+        data: function () {
+            return collectDataFromConstructor(this, Component);
+        }
+    });
+    var decorators = Component.__decorators__;
+    if (decorators) {
+        decorators.forEach(function (fn) { return fn(options); });
+    }
+    var superProto = Object.getPrototypeOf(Component.prototype);
+    var Super = superProto instanceof Vue
+        ? superProto.constructor
+        : Vue;
+    return Super.extend(options);
+}
+
+function Component(options) {
+    if (typeof options === 'function') {
+        return componentFactory(options);
+    }
+    return function (Component) {
+        return componentFactory(Component, options);
+    };
+}
+(function (Component) {
+    function registerHooks(keys) {
+        $internalHooks.push.apply($internalHooks, keys);
+    }
+    Component.registerHooks = registerHooks;
+})(Component || (Component = {}));
+var Component$1 = Component;
+
+exports['default'] = Component$1;
+exports.createDecorator = createDecorator;
+
 
 /***/ }),
-/* 15 */
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process, global) {/*! *****************************************************************************
+Copyright (C) Microsoft. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+var Reflect;
+(function (Reflect) {
+    "use strict";
+    var hasOwn = Object.prototype.hasOwnProperty;
+    // feature test for Symbol support
+    var supportsSymbol = typeof Symbol === "function";
+    var toPrimitiveSymbol = supportsSymbol && typeof Symbol.toPrimitive !== "undefined" ? Symbol.toPrimitive : "@@toPrimitive";
+    var iteratorSymbol = supportsSymbol && typeof Symbol.iterator !== "undefined" ? Symbol.iterator : "@@iterator";
+    var HashMap;
+    (function (HashMap) {
+        var supportsCreate = typeof Object.create === "function"; // feature test for Object.create support
+        var supportsProto = { __proto__: [] } instanceof Array; // feature test for __proto__ support
+        var downLevel = !supportsCreate && !supportsProto;
+        // create an object in dictionary mode (a.k.a. "slow" mode in v8)
+        HashMap.create = supportsCreate
+            ? function () { return MakeDictionary(Object.create(null)); }
+            : supportsProto
+                ? function () { return MakeDictionary({ __proto__: null }); }
+                : function () { return MakeDictionary({}); };
+        HashMap.has = downLevel
+            ? function (map, key) { return hasOwn.call(map, key); }
+            : function (map, key) { return key in map; };
+        HashMap.get = downLevel
+            ? function (map, key) { return hasOwn.call(map, key) ? map[key] : undefined; }
+            : function (map, key) { return map[key]; };
+    })(HashMap || (HashMap = {}));
+    // Load global or shim versions of Map, Set, and WeakMap
+    var functionPrototype = Object.getPrototypeOf(Function);
+    var usePolyfill = typeof process === "object" && Object({"NODE_ENV":"production"}) && Object({"NODE_ENV":"production"})["REFLECT_METADATA_USE_MAP_POLYFILL"] === "true";
+    var _Map = !usePolyfill && typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
+    var _Set = !usePolyfill && typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
+    var _WeakMap = !usePolyfill && typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
+    // [[Metadata]] internal slot
+    // https://rbuckton.github.io/reflect-metadata/#ordinary-object-internal-methods-and-internal-slots
+    var Metadata = new _WeakMap();
+    /**
+      * Applies a set of decorators to a property of a target object.
+      * @param decorators An array of decorators.
+      * @param target The target object.
+      * @param propertyKey (Optional) The property key to decorate.
+      * @param attributes (Optional) The property descriptor for the target key.
+      * @remarks Decorators are applied in reverse order.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     Example = Reflect.decorate(decoratorsArray, Example);
+      *
+      *     // property (on constructor)
+      *     Reflect.decorate(decoratorsArray, Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     Reflect.decorate(decoratorsArray, Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     Object.defineProperty(Example, "staticMethod",
+      *         Reflect.decorate(decoratorsArray, Example, "staticMethod",
+      *             Object.getOwnPropertyDescriptor(Example, "staticMethod")));
+      *
+      *     // method (on prototype)
+      *     Object.defineProperty(Example.prototype, "method",
+      *         Reflect.decorate(decoratorsArray, Example.prototype, "method",
+      *             Object.getOwnPropertyDescriptor(Example.prototype, "method")));
+      *
+      */
+    function decorate(decorators, target, propertyKey, attributes) {
+        if (!IsUndefined(propertyKey)) {
+            if (!IsArray(decorators))
+                throw new TypeError();
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes))
+                throw new TypeError();
+            if (IsNull(attributes))
+                attributes = undefined;
+            propertyKey = ToPropertyKey(propertyKey);
+            return DecorateProperty(decorators, target, propertyKey, attributes);
+        }
+        else {
+            if (!IsArray(decorators))
+                throw new TypeError();
+            if (!IsConstructor(target))
+                throw new TypeError();
+            return DecorateConstructor(decorators, target);
+        }
+    }
+    Reflect.decorate = decorate;
+    // 4.1.2 Reflect.metadata(metadataKey, metadataValue)
+    // https://rbuckton.github.io/reflect-metadata/#reflect.metadata
+    /**
+      * A default metadata decorator factory that can be used on a class, class member, or parameter.
+      * @param metadataKey The key for the metadata entry.
+      * @param metadataValue The value for the metadata entry.
+      * @returns A decorator function.
+      * @remarks
+      * If `metadataKey` is already defined for the target and target key, the
+      * metadataValue for that key will be overwritten.
+      * @example
+      *
+      *     // constructor
+      *     @Reflect.metadata(key, value)
+      *     class Example {
+      *     }
+      *
+      *     // property (on constructor, TypeScript only)
+      *     class Example {
+      *         @Reflect.metadata(key, value)
+      *         static staticProperty;
+      *     }
+      *
+      *     // property (on prototype, TypeScript only)
+      *     class Example {
+      *         @Reflect.metadata(key, value)
+      *         property;
+      *     }
+      *
+      *     // method (on constructor)
+      *     class Example {
+      *         @Reflect.metadata(key, value)
+      *         static staticMethod() { }
+      *     }
+      *
+      *     // method (on prototype)
+      *     class Example {
+      *         @Reflect.metadata(key, value)
+      *         method() { }
+      *     }
+      *
+      */
+    function metadata(metadataKey, metadataValue) {
+        function decorator(target, propertyKey) {
+            if (!IsObject(target))
+                throw new TypeError();
+            if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey))
+                throw new TypeError();
+            OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+        }
+        return decorator;
+    }
+    Reflect.metadata = metadata;
+    /**
+      * Define a unique metadata entry on the target.
+      * @param metadataKey A key used to store and retrieve metadata.
+      * @param metadataValue A value that contains attached metadata.
+      * @param target The target object on which to define metadata.
+      * @param propertyKey (Optional) The property key for the target.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     Reflect.defineMetadata("custom:annotation", options, Example);
+      *
+      *     // property (on constructor)
+      *     Reflect.defineMetadata("custom:annotation", options, Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     Reflect.defineMetadata("custom:annotation", options, Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     Reflect.defineMetadata("custom:annotation", options, Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     Reflect.defineMetadata("custom:annotation", options, Example.prototype, "method");
+      *
+      *     // decorator factory as metadata-producing annotation.
+      *     function MyAnnotation(options): Decorator {
+      *         return (target, key?) => Reflect.defineMetadata("custom:annotation", options, target, key);
+      *     }
+      *
+      */
+    function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
+    }
+    Reflect.defineMetadata = defineMetadata;
+    /**
+      * Gets a value indicating whether the target object or its prototype chain has the provided metadata key defined.
+      * @param metadataKey A key used to store and retrieve metadata.
+      * @param target The target object on which the metadata is defined.
+      * @param propertyKey (Optional) The property key for the target.
+      * @returns `true` if the metadata key was defined on the target object or its prototype chain; otherwise, `false`.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     result = Reflect.hasMetadata("custom:annotation", Example);
+      *
+      *     // property (on constructor)
+      *     result = Reflect.hasMetadata("custom:annotation", Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     result = Reflect.hasMetadata("custom:annotation", Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     result = Reflect.hasMetadata("custom:annotation", Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     result = Reflect.hasMetadata("custom:annotation", Example.prototype, "method");
+      *
+      */
+    function hasMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasMetadata(metadataKey, target, propertyKey);
+    }
+    Reflect.hasMetadata = hasMetadata;
+    /**
+      * Gets a value indicating whether the target object has the provided metadata key defined.
+      * @param metadataKey A key used to store and retrieve metadata.
+      * @param target The target object on which the metadata is defined.
+      * @param propertyKey (Optional) The property key for the target.
+      * @returns `true` if the metadata key was defined on the target object; otherwise, `false`.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     result = Reflect.hasOwnMetadata("custom:annotation", Example);
+      *
+      *     // property (on constructor)
+      *     result = Reflect.hasOwnMetadata("custom:annotation", Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     result = Reflect.hasOwnMetadata("custom:annotation", Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     result = Reflect.hasOwnMetadata("custom:annotation", Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     result = Reflect.hasOwnMetadata("custom:annotation", Example.prototype, "method");
+      *
+      */
+    function hasOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
+    }
+    Reflect.hasOwnMetadata = hasOwnMetadata;
+    /**
+      * Gets the metadata value for the provided metadata key on the target object or its prototype chain.
+      * @param metadataKey A key used to store and retrieve metadata.
+      * @param target The target object on which the metadata is defined.
+      * @param propertyKey (Optional) The property key for the target.
+      * @returns The metadata value for the metadata key if found; otherwise, `undefined`.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     result = Reflect.getMetadata("custom:annotation", Example);
+      *
+      *     // property (on constructor)
+      *     result = Reflect.getMetadata("custom:annotation", Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     result = Reflect.getMetadata("custom:annotation", Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     result = Reflect.getMetadata("custom:annotation", Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     result = Reflect.getMetadata("custom:annotation", Example.prototype, "method");
+      *
+      */
+    function getMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetMetadata(metadataKey, target, propertyKey);
+    }
+    Reflect.getMetadata = getMetadata;
+    /**
+      * Gets the metadata value for the provided metadata key on the target object.
+      * @param metadataKey A key used to store and retrieve metadata.
+      * @param target The target object on which the metadata is defined.
+      * @param propertyKey (Optional) The property key for the target.
+      * @returns The metadata value for the metadata key if found; otherwise, `undefined`.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     result = Reflect.getOwnMetadata("custom:annotation", Example);
+      *
+      *     // property (on constructor)
+      *     result = Reflect.getOwnMetadata("custom:annotation", Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     result = Reflect.getOwnMetadata("custom:annotation", Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     result = Reflect.getOwnMetadata("custom:annotation", Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     result = Reflect.getOwnMetadata("custom:annotation", Example.prototype, "method");
+      *
+      */
+    function getOwnMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
+    }
+    Reflect.getOwnMetadata = getOwnMetadata;
+    /**
+      * Gets the metadata keys defined on the target object or its prototype chain.
+      * @param target The target object on which the metadata is defined.
+      * @param propertyKey (Optional) The property key for the target.
+      * @returns An array of unique metadata keys.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     result = Reflect.getMetadataKeys(Example);
+      *
+      *     // property (on constructor)
+      *     result = Reflect.getMetadataKeys(Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     result = Reflect.getMetadataKeys(Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     result = Reflect.getMetadataKeys(Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     result = Reflect.getMetadataKeys(Example.prototype, "method");
+      *
+      */
+    function getMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryMetadataKeys(target, propertyKey);
+    }
+    Reflect.getMetadataKeys = getMetadataKeys;
+    /**
+      * Gets the unique metadata keys defined on the target object.
+      * @param target The target object on which the metadata is defined.
+      * @param propertyKey (Optional) The property key for the target.
+      * @returns An array of unique metadata keys.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     result = Reflect.getOwnMetadataKeys(Example);
+      *
+      *     // property (on constructor)
+      *     result = Reflect.getOwnMetadataKeys(Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     result = Reflect.getOwnMetadataKeys(Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     result = Reflect.getOwnMetadataKeys(Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     result = Reflect.getOwnMetadataKeys(Example.prototype, "method");
+      *
+      */
+    function getOwnMetadataKeys(target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        return OrdinaryOwnMetadataKeys(target, propertyKey);
+    }
+    Reflect.getOwnMetadataKeys = getOwnMetadataKeys;
+    /**
+      * Deletes the metadata entry from the target object with the provided key.
+      * @param metadataKey A key used to store and retrieve metadata.
+      * @param target The target object on which the metadata is defined.
+      * @param propertyKey (Optional) The property key for the target.
+      * @returns `true` if the metadata entry was found and deleted; otherwise, false.
+      * @example
+      *
+      *     class Example {
+      *         // property declarations are not part of ES6, though they are valid in TypeScript:
+      *         // static staticProperty;
+      *         // property;
+      *
+      *         constructor(p) { }
+      *         static staticMethod(p) { }
+      *         method(p) { }
+      *     }
+      *
+      *     // constructor
+      *     result = Reflect.deleteMetadata("custom:annotation", Example);
+      *
+      *     // property (on constructor)
+      *     result = Reflect.deleteMetadata("custom:annotation", Example, "staticProperty");
+      *
+      *     // property (on prototype)
+      *     result = Reflect.deleteMetadata("custom:annotation", Example.prototype, "property");
+      *
+      *     // method (on constructor)
+      *     result = Reflect.deleteMetadata("custom:annotation", Example, "staticMethod");
+      *
+      *     // method (on prototype)
+      *     result = Reflect.deleteMetadata("custom:annotation", Example.prototype, "method");
+      *
+      */
+    function deleteMetadata(metadataKey, target, propertyKey) {
+        if (!IsObject(target))
+            throw new TypeError();
+        if (!IsUndefined(propertyKey))
+            propertyKey = ToPropertyKey(propertyKey);
+        var metadataMap = GetOrCreateMetadataMap(target, propertyKey, /*Create*/ false);
+        if (IsUndefined(metadataMap))
+            return false;
+        if (!metadataMap.delete(metadataKey))
+            return false;
+        if (metadataMap.size > 0)
+            return true;
+        var targetMetadata = Metadata.get(target);
+        targetMetadata.delete(propertyKey);
+        if (targetMetadata.size > 0)
+            return true;
+        Metadata.delete(target);
+        return true;
+    }
+    Reflect.deleteMetadata = deleteMetadata;
+    function DecorateConstructor(decorators, target) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+            var decorator = decorators[i];
+            var decorated = decorator(target);
+            if (!IsUndefined(decorated) && !IsNull(decorated)) {
+                if (!IsConstructor(decorated))
+                    throw new TypeError();
+                target = decorated;
+            }
+        }
+        return target;
+    }
+    function DecorateProperty(decorators, target, propertyKey, descriptor) {
+        for (var i = decorators.length - 1; i >= 0; --i) {
+            var decorator = decorators[i];
+            var decorated = decorator(target, propertyKey, descriptor);
+            if (!IsUndefined(decorated) && !IsNull(decorated)) {
+                if (!IsObject(decorated))
+                    throw new TypeError();
+                descriptor = decorated;
+            }
+        }
+        return descriptor;
+    }
+    function GetOrCreateMetadataMap(O, P, Create) {
+        var targetMetadata = Metadata.get(O);
+        if (IsUndefined(targetMetadata)) {
+            if (!Create)
+                return undefined;
+            targetMetadata = new _Map();
+            Metadata.set(O, targetMetadata);
+        }
+        var metadataMap = targetMetadata.get(P);
+        if (IsUndefined(metadataMap)) {
+            if (!Create)
+                return undefined;
+            metadataMap = new _Map();
+            targetMetadata.set(P, metadataMap);
+        }
+        return metadataMap;
+    }
+    // 3.1.1.1 OrdinaryHasMetadata(MetadataKey, O, P)
+    // https://rbuckton.github.io/reflect-metadata/#ordinaryhasmetadata
+    function OrdinaryHasMetadata(MetadataKey, O, P) {
+        var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn)
+            return true;
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+            return OrdinaryHasMetadata(MetadataKey, parent, P);
+        return false;
+    }
+    // 3.1.2.1 OrdinaryHasOwnMetadata(MetadataKey, O, P)
+    // https://rbuckton.github.io/reflect-metadata/#ordinaryhasownmetadata
+    function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
+        var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false);
+        if (IsUndefined(metadataMap))
+            return false;
+        return ToBoolean(metadataMap.has(MetadataKey));
+    }
+    // 3.1.3.1 OrdinaryGetMetadata(MetadataKey, O, P)
+    // https://rbuckton.github.io/reflect-metadata/#ordinarygetmetadata
+    function OrdinaryGetMetadata(MetadataKey, O, P) {
+        var hasOwn = OrdinaryHasOwnMetadata(MetadataKey, O, P);
+        if (hasOwn)
+            return OrdinaryGetOwnMetadata(MetadataKey, O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (!IsNull(parent))
+            return OrdinaryGetMetadata(MetadataKey, parent, P);
+        return undefined;
+    }
+    // 3.1.4.1 OrdinaryGetOwnMetadata(MetadataKey, O, P)
+    // https://rbuckton.github.io/reflect-metadata/#ordinarygetownmetadata
+    function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
+        var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false);
+        if (IsUndefined(metadataMap))
+            return undefined;
+        return metadataMap.get(MetadataKey);
+    }
+    // 3.1.5.1 OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P)
+    // https://rbuckton.github.io/reflect-metadata/#ordinarydefineownmetadata
+    function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
+        var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ true);
+        metadataMap.set(MetadataKey, MetadataValue);
+    }
+    // 3.1.6.1 OrdinaryMetadataKeys(O, P)
+    // https://rbuckton.github.io/reflect-metadata/#ordinarymetadatakeys
+    function OrdinaryMetadataKeys(O, P) {
+        var ownKeys = OrdinaryOwnMetadataKeys(O, P);
+        var parent = OrdinaryGetPrototypeOf(O);
+        if (parent === null)
+            return ownKeys;
+        var parentKeys = OrdinaryMetadataKeys(parent, P);
+        if (parentKeys.length <= 0)
+            return ownKeys;
+        if (ownKeys.length <= 0)
+            return parentKeys;
+        var set = new _Set();
+        var keys = [];
+        for (var _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
+            var key = ownKeys_1[_i];
+            var hasKey = set.has(key);
+            if (!hasKey) {
+                set.add(key);
+                keys.push(key);
+            }
+        }
+        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
+            var key = parentKeys_1[_a];
+            var hasKey = set.has(key);
+            if (!hasKey) {
+                set.add(key);
+                keys.push(key);
+            }
+        }
+        return keys;
+    }
+    // 3.1.7.1 OrdinaryOwnMetadataKeys(O, P)
+    // https://rbuckton.github.io/reflect-metadata/#ordinaryownmetadatakeys
+    function OrdinaryOwnMetadataKeys(O, P) {
+        var keys = [];
+        var metadataMap = GetOrCreateMetadataMap(O, P, /*Create*/ false);
+        if (IsUndefined(metadataMap))
+            return keys;
+        var keysObj = metadataMap.keys();
+        var iterator = GetIterator(keysObj);
+        var k = 0;
+        while (true) {
+            var next = IteratorStep(iterator);
+            if (!next) {
+                keys.length = k;
+                return keys;
+            }
+            var nextValue = IteratorValue(next);
+            try {
+                keys[k] = nextValue;
+            }
+            catch (e) {
+                try {
+                    IteratorClose(iterator);
+                }
+                finally {
+                    throw e;
+                }
+            }
+            k++;
+        }
+    }
+    // 6 ECMAScript Data Typ0es and Values
+    // https://tc39.github.io/ecma262/#sec-ecmascript-data-types-and-values
+    function Type(x) {
+        if (x === null)
+            return 1 /* Null */;
+        switch (typeof x) {
+            case "undefined": return 0 /* Undefined */;
+            case "boolean": return 2 /* Boolean */;
+            case "string": return 3 /* String */;
+            case "symbol": return 4 /* Symbol */;
+            case "number": return 5 /* Number */;
+            case "object": return x === null ? 1 /* Null */ : 6 /* Object */;
+            default: return 6 /* Object */;
+        }
+    }
+    // 6.1.1 The Undefined Type
+    // https://tc39.github.io/ecma262/#sec-ecmascript-language-types-undefined-type
+    function IsUndefined(x) {
+        return x === undefined;
+    }
+    // 6.1.2 The Null Type
+    // https://tc39.github.io/ecma262/#sec-ecmascript-language-types-null-type
+    function IsNull(x) {
+        return x === null;
+    }
+    // 6.1.5 The Symbol Type
+    // https://tc39.github.io/ecma262/#sec-ecmascript-language-types-symbol-type
+    function IsSymbol(x) {
+        return typeof x === "symbol";
+    }
+    // 6.1.7 The Object Type
+    // https://tc39.github.io/ecma262/#sec-object-type
+    function IsObject(x) {
+        return typeof x === "object" ? x !== null : typeof x === "function";
+    }
+    // 7.1 Type Conversion
+    // https://tc39.github.io/ecma262/#sec-type-conversion
+    // 7.1.1 ToPrimitive(input [, PreferredType])
+    // https://tc39.github.io/ecma262/#sec-toprimitive
+    function ToPrimitive(input, PreferredType) {
+        switch (Type(input)) {
+            case 0 /* Undefined */: return input;
+            case 1 /* Null */: return input;
+            case 2 /* Boolean */: return input;
+            case 3 /* String */: return input;
+            case 4 /* Symbol */: return input;
+            case 5 /* Number */: return input;
+        }
+        var hint = PreferredType === 3 /* String */ ? "string" : PreferredType === 5 /* Number */ ? "number" : "default";
+        var exoticToPrim = GetMethod(input, toPrimitiveSymbol);
+        if (exoticToPrim !== undefined) {
+            var result = exoticToPrim.call(input, hint);
+            if (IsObject(result))
+                throw new TypeError();
+            return result;
+        }
+        return OrdinaryToPrimitive(input, hint === "default" ? "number" : hint);
+    }
+    // 7.1.1.1 OrdinaryToPrimitive(O, hint)
+    // https://tc39.github.io/ecma262/#sec-ordinarytoprimitive
+    function OrdinaryToPrimitive(O, hint) {
+        if (hint === "string") {
+            var toString_1 = O.toString;
+            if (IsCallable(toString_1)) {
+                var result = toString_1.call(O);
+                if (!IsObject(result))
+                    return result;
+            }
+            var valueOf = O.valueOf;
+            if (IsCallable(valueOf)) {
+                var result = valueOf.call(O);
+                if (!IsObject(result))
+                    return result;
+            }
+        }
+        else {
+            var valueOf = O.valueOf;
+            if (IsCallable(valueOf)) {
+                var result = valueOf.call(O);
+                if (!IsObject(result))
+                    return result;
+            }
+            var toString_2 = O.toString;
+            if (IsCallable(toString_2)) {
+                var result = toString_2.call(O);
+                if (!IsObject(result))
+                    return result;
+            }
+        }
+        throw new TypeError();
+    }
+    // 7.1.2 ToBoolean(argument)
+    // https://tc39.github.io/ecma262/2016/#sec-toboolean
+    function ToBoolean(argument) {
+        return !!argument;
+    }
+    // 7.1.12 ToString(argument)
+    // https://tc39.github.io/ecma262/#sec-tostring
+    function ToString(argument) {
+        return "" + argument;
+    }
+    // 7.1.14 ToPropertyKey(argument)
+    // https://tc39.github.io/ecma262/#sec-topropertykey
+    function ToPropertyKey(argument) {
+        var key = ToPrimitive(argument, 3 /* String */);
+        if (IsSymbol(key))
+            return key;
+        return ToString(key);
+    }
+    // 7.2 Testing and Comparison Operations
+    // https://tc39.github.io/ecma262/#sec-testing-and-comparison-operations
+    // 7.2.2 IsArray(argument)
+    // https://tc39.github.io/ecma262/#sec-isarray
+    function IsArray(argument) {
+        return Array.isArray
+            ? Array.isArray(argument)
+            : argument instanceof Object
+                ? argument instanceof Array
+                : Object.prototype.toString.call(argument) === "[object Array]";
+    }
+    // 7.2.3 IsCallable(argument)
+    // https://tc39.github.io/ecma262/#sec-iscallable
+    function IsCallable(argument) {
+        // NOTE: This is an approximation as we cannot check for [[Call]] internal method.
+        return typeof argument === "function";
+    }
+    // 7.2.4 IsConstructor(argument)
+    // https://tc39.github.io/ecma262/#sec-isconstructor
+    function IsConstructor(argument) {
+        // NOTE: This is an approximation as we cannot check for [[Construct]] internal method.
+        return typeof argument === "function";
+    }
+    // 7.2.7 IsPropertyKey(argument)
+    // https://tc39.github.io/ecma262/#sec-ispropertykey
+    function IsPropertyKey(argument) {
+        switch (Type(argument)) {
+            case 3 /* String */: return true;
+            case 4 /* Symbol */: return true;
+            default: return false;
+        }
+    }
+    // 7.3 Operations on Objects
+    // https://tc39.github.io/ecma262/#sec-operations-on-objects
+    // 7.3.9 GetMethod(V, P)
+    // https://tc39.github.io/ecma262/#sec-getmethod
+    function GetMethod(V, P) {
+        var func = V[P];
+        if (func === undefined || func === null)
+            return undefined;
+        if (!IsCallable(func))
+            throw new TypeError();
+        return func;
+    }
+    // 7.4 Operations on Iterator Objects
+    // https://tc39.github.io/ecma262/#sec-operations-on-iterator-objects
+    function GetIterator(obj) {
+        var method = GetMethod(obj, iteratorSymbol);
+        if (!IsCallable(method))
+            throw new TypeError(); // from Call
+        var iterator = method.call(obj);
+        if (!IsObject(iterator))
+            throw new TypeError();
+        return iterator;
+    }
+    // 7.4.4 IteratorValue(iterResult)
+    // https://tc39.github.io/ecma262/2016/#sec-iteratorvalue
+    function IteratorValue(iterResult) {
+        return iterResult.value;
+    }
+    // 7.4.5 IteratorStep(iterator)
+    // https://tc39.github.io/ecma262/#sec-iteratorstep
+    function IteratorStep(iterator) {
+        var result = iterator.next();
+        return result.done ? false : result;
+    }
+    // 7.4.6 IteratorClose(iterator, completion)
+    // https://tc39.github.io/ecma262/#sec-iteratorclose
+    function IteratorClose(iterator) {
+        var f = iterator["return"];
+        if (f)
+            f.call(iterator);
+    }
+    // 9.1 Ordinary Object Internal Methods and Internal Slots
+    // https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots
+    // 9.1.1.1 OrdinaryGetPrototypeOf(O)
+    // https://tc39.github.io/ecma262/#sec-ordinarygetprototypeof
+    function OrdinaryGetPrototypeOf(O) {
+        var proto = Object.getPrototypeOf(O);
+        if (typeof O !== "function" || O === functionPrototype)
+            return proto;
+        // TypeScript doesn't set __proto__ in ES5, as it's non-standard.
+        // Try to determine the superclass constructor. Compatible implementations
+        // must either set __proto__ on a subclass constructor to the superclass constructor,
+        // or ensure each class has a valid `constructor` property on its prototype that
+        // points back to the constructor.
+        // If this is not the same as Function.[[Prototype]], then this is definately inherited.
+        // This is the case when in ES6 or when using __proto__ in a compatible browser.
+        if (proto !== functionPrototype)
+            return proto;
+        // If the super prototype is Object.prototype, null, or undefined, then we cannot determine the heritage.
+        var prototype = O.prototype;
+        var prototypeProto = prototype && Object.getPrototypeOf(prototype);
+        if (prototypeProto == null || prototypeProto === Object.prototype)
+            return proto;
+        // If the constructor was not a function, then we cannot determine the heritage.
+        var constructor = prototypeProto.constructor;
+        if (typeof constructor !== "function")
+            return proto;
+        // If we have some kind of self-reference, then we cannot determine the heritage.
+        if (constructor === O)
+            return proto;
+        // we have a pretty good guess at the heritage.
+        return constructor;
+    }
+    // naive Map shim
+    function CreateMapPolyfill() {
+        var cacheSentinel = {};
+        var arraySentinel = [];
+        var MapIterator = (function () {
+            function MapIterator(keys, values, selector) {
+                this._index = 0;
+                this._keys = keys;
+                this._values = values;
+                this._selector = selector;
+            }
+            MapIterator.prototype["@@iterator"] = function () { return this; };
+            MapIterator.prototype[iteratorSymbol] = function () { return this; };
+            MapIterator.prototype.next = function () {
+                var index = this._index;
+                if (index >= 0 && index < this._keys.length) {
+                    var result = this._selector(this._keys[index], this._values[index]);
+                    if (index + 1 >= this._keys.length) {
+                        this._index = -1;
+                        this._keys = arraySentinel;
+                        this._values = arraySentinel;
+                    }
+                    else {
+                        this._index++;
+                    }
+                    return { value: result, done: false };
+                }
+                return { value: undefined, done: true };
+            };
+            MapIterator.prototype.throw = function (error) {
+                if (this._index >= 0) {
+                    this._index = -1;
+                    this._keys = arraySentinel;
+                    this._values = arraySentinel;
+                }
+                throw error;
+            };
+            MapIterator.prototype.return = function (value) {
+                if (this._index >= 0) {
+                    this._index = -1;
+                    this._keys = arraySentinel;
+                    this._values = arraySentinel;
+                }
+                return { value: value, done: true };
+            };
+            return MapIterator;
+        }());
+        return (function () {
+            function Map() {
+                this._keys = [];
+                this._values = [];
+                this._cacheKey = cacheSentinel;
+                this._cacheIndex = -2;
+            }
+            Object.defineProperty(Map.prototype, "size", {
+                get: function () { return this._keys.length; },
+                enumerable: true,
+                configurable: true
+            });
+            Map.prototype.has = function (key) { return this._find(key, /*insert*/ false) >= 0; };
+            Map.prototype.get = function (key) {
+                var index = this._find(key, /*insert*/ false);
+                return index >= 0 ? this._values[index] : undefined;
+            };
+            Map.prototype.set = function (key, value) {
+                var index = this._find(key, /*insert*/ true);
+                this._values[index] = value;
+                return this;
+            };
+            Map.prototype.delete = function (key) {
+                var index = this._find(key, /*insert*/ false);
+                if (index >= 0) {
+                    var size = this._keys.length;
+                    for (var i = index + 1; i < size; i++) {
+                        this._keys[i - 1] = this._keys[i];
+                        this._values[i - 1] = this._values[i];
+                    }
+                    this._keys.length--;
+                    this._values.length--;
+                    if (key === this._cacheKey) {
+                        this._cacheKey = cacheSentinel;
+                        this._cacheIndex = -2;
+                    }
+                    return true;
+                }
+                return false;
+            };
+            Map.prototype.clear = function () {
+                this._keys.length = 0;
+                this._values.length = 0;
+                this._cacheKey = cacheSentinel;
+                this._cacheIndex = -2;
+            };
+            Map.prototype.keys = function () { return new MapIterator(this._keys, this._values, getKey); };
+            Map.prototype.values = function () { return new MapIterator(this._keys, this._values, getValue); };
+            Map.prototype.entries = function () { return new MapIterator(this._keys, this._values, getEntry); };
+            Map.prototype["@@iterator"] = function () { return this.entries(); };
+            Map.prototype[iteratorSymbol] = function () { return this.entries(); };
+            Map.prototype._find = function (key, insert) {
+                if (this._cacheKey !== key) {
+                    this._cacheIndex = this._keys.indexOf(this._cacheKey = key);
+                }
+                if (this._cacheIndex < 0 && insert) {
+                    this._cacheIndex = this._keys.length;
+                    this._keys.push(key);
+                    this._values.push(undefined);
+                }
+                return this._cacheIndex;
+            };
+            return Map;
+        }());
+        function getKey(key, _) {
+            return key;
+        }
+        function getValue(_, value) {
+            return value;
+        }
+        function getEntry(key, value) {
+            return [key, value];
+        }
+    }
+    // naive Set shim
+    function CreateSetPolyfill() {
+        return (function () {
+            function Set() {
+                this._map = new _Map();
+            }
+            Object.defineProperty(Set.prototype, "size", {
+                get: function () { return this._map.size; },
+                enumerable: true,
+                configurable: true
+            });
+            Set.prototype.has = function (value) { return this._map.has(value); };
+            Set.prototype.add = function (value) { return this._map.set(value, value), this; };
+            Set.prototype.delete = function (value) { return this._map.delete(value); };
+            Set.prototype.clear = function () { this._map.clear(); };
+            Set.prototype.keys = function () { return this._map.keys(); };
+            Set.prototype.values = function () { return this._map.values(); };
+            Set.prototype.entries = function () { return this._map.entries(); };
+            Set.prototype["@@iterator"] = function () { return this.keys(); };
+            Set.prototype[iteratorSymbol] = function () { return this.keys(); };
+            return Set;
+        }());
+    }
+    // naive WeakMap shim
+    function CreateWeakMapPolyfill() {
+        var UUID_SIZE = 16;
+        var keys = HashMap.create();
+        var rootKey = CreateUniqueKey();
+        return (function () {
+            function WeakMap() {
+                this._key = CreateUniqueKey();
+            }
+            WeakMap.prototype.has = function (target) {
+                var table = GetOrCreateWeakMapTable(target, /*create*/ false);
+                return table !== undefined ? HashMap.has(table, this._key) : false;
+            };
+            WeakMap.prototype.get = function (target) {
+                var table = GetOrCreateWeakMapTable(target, /*create*/ false);
+                return table !== undefined ? HashMap.get(table, this._key) : undefined;
+            };
+            WeakMap.prototype.set = function (target, value) {
+                var table = GetOrCreateWeakMapTable(target, /*create*/ true);
+                table[this._key] = value;
+                return this;
+            };
+            WeakMap.prototype.delete = function (target) {
+                var table = GetOrCreateWeakMapTable(target, /*create*/ false);
+                return table !== undefined ? delete table[this._key] : false;
+            };
+            WeakMap.prototype.clear = function () {
+                // NOTE: not a real clear, just makes the previous data unreachable
+                this._key = CreateUniqueKey();
+            };
+            return WeakMap;
+        }());
+        function CreateUniqueKey() {
+            var key;
+            do
+                key = "@@WeakMap@@" + CreateUUID();
+            while (HashMap.has(keys, key));
+            keys[key] = true;
+            return key;
+        }
+        function GetOrCreateWeakMapTable(target, create) {
+            if (!hasOwn.call(target, rootKey)) {
+                if (!create)
+                    return undefined;
+                Object.defineProperty(target, rootKey, { value: HashMap.create() });
+            }
+            return target[rootKey];
+        }
+        function FillRandomBytes(buffer, size) {
+            for (var i = 0; i < size; ++i)
+                buffer[i] = Math.random() * 0xff | 0;
+            return buffer;
+        }
+        function GenRandomBytes(size) {
+            if (typeof Uint8Array === "function") {
+                if (typeof crypto !== "undefined")
+                    return crypto.getRandomValues(new Uint8Array(size));
+                if (typeof msCrypto !== "undefined")
+                    return msCrypto.getRandomValues(new Uint8Array(size));
+                return FillRandomBytes(new Uint8Array(size), size);
+            }
+            return FillRandomBytes(new Array(size), size);
+        }
+        function CreateUUID() {
+            var data = GenRandomBytes(UUID_SIZE);
+            // mark as random - RFC 4122 § 4.4
+            data[6] = data[6] & 0x4f | 0x40;
+            data[8] = data[8] & 0xbf | 0x80;
+            var result = "";
+            for (var offset = 0; offset < UUID_SIZE; ++offset) {
+                var byte = data[offset];
+                if (offset === 4 || offset === 6 || offset === 8)
+                    result += "-";
+                if (byte < 16)
+                    result += "0";
+                result += byte.toString(16).toLowerCase();
+            }
+            return result;
+        }
+    }
+    // uses a heuristic used by v8 and chakra to force an object into dictionary mode.
+    function MakeDictionary(obj) {
+        obj.__ = undefined;
+        delete obj.__;
+        return obj;
+    }
+    // patch global Reflect
+    (function (__global) {
+        if (typeof __global.Reflect !== "undefined") {
+            if (__global.Reflect !== Reflect) {
+                for (var p in Reflect) {
+                    if (hasOwn.call(Reflect, p)) {
+                        __global.Reflect[p] = Reflect[p];
+                    }
+                }
+            }
+        }
+        else {
+            __global.Reflect = Reflect;
+        }
+    })(typeof global !== "undefined" ? global :
+        typeof self !== "undefined" ? self :
+            Function("return this;")());
+})(Reflect || (Reflect = {}));
+//# sourceMappingURL=Reflect.js.map
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(10)))
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1833,1184 +3059,35 @@ module.exports = g;
 
 
 /***/ }),
-/* 16 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_baseHas.js
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var _baseHas_hasOwnProperty = objectProto.hasOwnProperty;
-
 /**
- * The base implementation of `_.has` without support for deep paths.
- *
- * @private
- * @param {Object} [object] The object to query.
- * @param {Array|string} key The key to check.
- * @returns {boolean} Returns `true` if `key` exists, else `false`.
- */
-function baseHas(object, key) {
-  return object != null && _baseHas_hasOwnProperty.call(object, key);
-}
-
-/* harmony default export */ var _baseHas = (baseHas);
-// EXTERNAL MODULE: ./node_modules/lodash-es/isArray.js
-var isArray = __webpack_require__(0);
-
-// EXTERNAL MODULE: ./node_modules/lodash-es/isSymbol.js
-var isSymbol = __webpack_require__(3);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_isKey.js
-
-
-
-/** Used to match property names within property paths. */
-var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
-    reIsPlainProp = /^\w*$/;
-
-/**
- * Checks if `value` is a property name and not a property path.
- *
- * @private
- * @param {*} value The value to check.
- * @param {Object} [object] The object to query keys on.
- * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
- */
-function isKey(value, object) {
-  if (Object(isArray["a" /* default */])(value)) {
-    return false;
-  }
-  var type = typeof value;
-  if (type == 'number' || type == 'symbol' || type == 'boolean' || value == null || Object(isSymbol["a" /* default */])(value)) {
-    return true;
-  }
-  return reIsPlainProp.test(value) || !reIsDeepProp.test(value) || object != null && value in Object(object);
-}
-
-/* harmony default export */ var _isKey = (isKey);
-// EXTERNAL MODULE: ./node_modules/lodash-es/_baseGetTag.js + 2 modules
-var _baseGetTag = __webpack_require__(4);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/isObject.js
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ * This method returns `undefined`.
  *
  * @static
  * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @since 2.3.0
+ * @category Util
  * @example
  *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
+ * _.times(2, _.noop);
+ * // => [undefined, undefined]
  */
-function isObject(value) {
-  var type = typeof value;
-  return value != null && (type == 'object' || type == 'function');
+function noop() {
+  // No operation performed.
 }
 
-/* harmony default export */ var lodash_es_isObject = (isObject);
-// CONCATENATED MODULE: ./node_modules/lodash-es/isFunction.js
-
-
-
-/** `Object#toString` result references. */
-var asyncTag = '[object AsyncFunction]',
-    funcTag = '[object Function]',
-    genTag = '[object GeneratorFunction]',
-    proxyTag = '[object Proxy]';
-
-/**
- * Checks if `value` is classified as a `Function` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a function, else `false`.
- * @example
- *
- * _.isFunction(_);
- * // => true
- *
- * _.isFunction(/abc/);
- * // => false
- */
-function isFunction(value) {
-  if (!lodash_es_isObject(value)) {
-    return false;
-  }
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in Safari 9 which returns 'object' for typed arrays and other constructors.
-  var tag = Object(_baseGetTag["a" /* default */])(value);
-  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
-}
-
-/* harmony default export */ var lodash_es_isFunction = (isFunction);
-// EXTERNAL MODULE: ./node_modules/lodash-es/_root.js
-var _root = __webpack_require__(2);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_coreJsData.js
-
-
-/** Used to detect overreaching core-js shims. */
-var coreJsData = _root["a" /* default */]['__core-js_shared__'];
-
-/* harmony default export */ var _coreJsData = (coreJsData);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_isMasked.js
-
-
-/** Used to detect methods masquerading as native. */
-var maskSrcKey = function () {
-  var uid = /[^.]+$/.exec(_coreJsData && _coreJsData.keys && _coreJsData.keys.IE_PROTO || '');
-  return uid ? 'Symbol(src)_1.' + uid : '';
-}();
-
-/**
- * Checks if `func` has its source masked.
- *
- * @private
- * @param {Function} func The function to check.
- * @returns {boolean} Returns `true` if `func` is masked, else `false`.
- */
-function isMasked(func) {
-  return !!maskSrcKey && maskSrcKey in func;
-}
-
-/* harmony default export */ var _isMasked = (isMasked);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_toSource.js
-/** Used for built-in method references. */
-var funcProto = Function.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var funcToString = funcProto.toString;
-
-/**
- * Converts `func` to its source code.
- *
- * @private
- * @param {Function} func The function to convert.
- * @returns {string} Returns the source code.
- */
-function toSource(func) {
-  if (func != null) {
-    try {
-      return funcToString.call(func);
-    } catch (e) {}
-    try {
-      return func + '';
-    } catch (e) {}
-  }
-  return '';
-}
-
-/* harmony default export */ var _toSource = (toSource);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_baseIsNative.js
-
-
-
-
-
-/**
- * Used to match `RegExp`
- * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
- */
-var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-
-/** Used to detect host constructors (Safari). */
-var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-/** Used for built-in method references. */
-var _baseIsNative_funcProto = Function.prototype,
-    _baseIsNative_objectProto = Object.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var _baseIsNative_funcToString = _baseIsNative_funcProto.toString;
-
-/** Used to check objects for own properties. */
-var _baseIsNative_hasOwnProperty = _baseIsNative_objectProto.hasOwnProperty;
-
-/** Used to detect if a method is native. */
-var reIsNative = RegExp('^' + _baseIsNative_funcToString.call(_baseIsNative_hasOwnProperty).replace(reRegExpChar, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
-
-/**
- * The base implementation of `_.isNative` without bad shim checks.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a native function,
- *  else `false`.
- */
-function baseIsNative(value) {
-  if (!lodash_es_isObject(value) || _isMasked(value)) {
-    return false;
-  }
-  var pattern = lodash_es_isFunction(value) ? reIsNative : reIsHostCtor;
-  return pattern.test(_toSource(value));
-}
-
-/* harmony default export */ var _baseIsNative = (baseIsNative);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_getValue.js
-/**
- * Gets the value at `key` of `object`.
- *
- * @private
- * @param {Object} [object] The object to query.
- * @param {string} key The key of the property to get.
- * @returns {*} Returns the property value.
- */
-function getValue(object, key) {
-  return object == null ? undefined : object[key];
-}
-
-/* harmony default export */ var _getValue = (getValue);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_getNative.js
-
-
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = _getValue(object, key);
-  return _baseIsNative(value) ? value : undefined;
-}
-
-/* harmony default export */ var _getNative = (getNative);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_nativeCreate.js
-
-
-/* Built-in method references that are verified to be native. */
-var nativeCreate = _getNative(Object, 'create');
-
-/* harmony default export */ var _nativeCreate = (nativeCreate);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_hashClear.js
-
-
-/**
- * Removes all key-value entries from the hash.
- *
- * @private
- * @name clear
- * @memberOf Hash
- */
-function hashClear() {
-  this.__data__ = _nativeCreate ? _nativeCreate(null) : {};
-  this.size = 0;
-}
-
-/* harmony default export */ var _hashClear = (hashClear);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_hashDelete.js
-/**
- * Removes `key` and its value from the hash.
- *
- * @private
- * @name delete
- * @memberOf Hash
- * @param {Object} hash The hash to modify.
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed, else `false`.
- */
-function hashDelete(key) {
-  var result = this.has(key) && delete this.__data__[key];
-  this.size -= result ? 1 : 0;
-  return result;
-}
-
-/* harmony default export */ var _hashDelete = (hashDelete);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_hashGet.js
-
-
-/** Used to stand-in for `undefined` hash values. */
-var HASH_UNDEFINED = '__lodash_hash_undefined__';
-
-/** Used for built-in method references. */
-var _hashGet_objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var _hashGet_hasOwnProperty = _hashGet_objectProto.hasOwnProperty;
-
-/**
- * Gets the hash value for `key`.
- *
- * @private
- * @name get
- * @memberOf Hash
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the entry value.
- */
-function hashGet(key) {
-  var data = this.__data__;
-  if (_nativeCreate) {
-    var result = data[key];
-    return result === HASH_UNDEFINED ? undefined : result;
-  }
-  return _hashGet_hasOwnProperty.call(data, key) ? data[key] : undefined;
-}
-
-/* harmony default export */ var _hashGet = (hashGet);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_hashHas.js
-
-
-/** Used for built-in method references. */
-var _hashHas_objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var _hashHas_hasOwnProperty = _hashHas_objectProto.hasOwnProperty;
-
-/**
- * Checks if a hash value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf Hash
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function hashHas(key) {
-  var data = this.__data__;
-  return _nativeCreate ? data[key] !== undefined : _hashHas_hasOwnProperty.call(data, key);
-}
-
-/* harmony default export */ var _hashHas = (hashHas);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_hashSet.js
-
-
-/** Used to stand-in for `undefined` hash values. */
-var _hashSet_HASH_UNDEFINED = '__lodash_hash_undefined__';
-
-/**
- * Sets the hash `key` to `value`.
- *
- * @private
- * @name set
- * @memberOf Hash
- * @param {string} key The key of the value to set.
- * @param {*} value The value to set.
- * @returns {Object} Returns the hash instance.
- */
-function hashSet(key, value) {
-  var data = this.__data__;
-  this.size += this.has(key) ? 0 : 1;
-  data[key] = _nativeCreate && value === undefined ? _hashSet_HASH_UNDEFINED : value;
-  return this;
-}
-
-/* harmony default export */ var _hashSet = (hashSet);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_Hash.js
-
-
-
-
-
-
-/**
- * Creates a hash object.
- *
- * @private
- * @constructor
- * @param {Array} [entries] The key-value pairs to cache.
- */
-function Hash(entries) {
-  var index = -1,
-      length = entries == null ? 0 : entries.length;
-
-  this.clear();
-  while (++index < length) {
-    var entry = entries[index];
-    this.set(entry[0], entry[1]);
-  }
-}
-
-// Add methods to `Hash`.
-Hash.prototype.clear = _hashClear;
-Hash.prototype['delete'] = _hashDelete;
-Hash.prototype.get = _hashGet;
-Hash.prototype.has = _hashHas;
-Hash.prototype.set = _hashSet;
-
-/* harmony default export */ var _Hash = (Hash);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_listCacheClear.js
-/**
- * Removes all key-value entries from the list cache.
- *
- * @private
- * @name clear
- * @memberOf ListCache
- */
-function listCacheClear() {
-  this.__data__ = [];
-  this.size = 0;
-}
-
-/* harmony default export */ var _listCacheClear = (listCacheClear);
-// CONCATENATED MODULE: ./node_modules/lodash-es/eq.js
-/**
- * Performs a
- * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
- * comparison between two values to determine if they are equivalent.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to compare.
- * @param {*} other The other value to compare.
- * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
- * @example
- *
- * var object = { 'a': 1 };
- * var other = { 'a': 1 };
- *
- * _.eq(object, object);
- * // => true
- *
- * _.eq(object, other);
- * // => false
- *
- * _.eq('a', 'a');
- * // => true
- *
- * _.eq('a', Object('a'));
- * // => false
- *
- * _.eq(NaN, NaN);
- * // => true
- */
-function eq(value, other) {
-  return value === other || value !== value && other !== other;
-}
-
-/* harmony default export */ var lodash_es_eq = (eq);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_assocIndexOf.js
-
-
-/**
- * Gets the index at which the `key` is found in `array` of key-value pairs.
- *
- * @private
- * @param {Array} array The array to inspect.
- * @param {*} key The key to search for.
- * @returns {number} Returns the index of the matched value, else `-1`.
- */
-function assocIndexOf(array, key) {
-  var length = array.length;
-  while (length--) {
-    if (lodash_es_eq(array[length][0], key)) {
-      return length;
-    }
-  }
-  return -1;
-}
-
-/* harmony default export */ var _assocIndexOf = (assocIndexOf);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_listCacheDelete.js
-
-
-/** Used for built-in method references. */
-var arrayProto = Array.prototype;
-
-/** Built-in value references. */
-var splice = arrayProto.splice;
-
-/**
- * Removes `key` and its value from the list cache.
- *
- * @private
- * @name delete
- * @memberOf ListCache
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed, else `false`.
- */
-function listCacheDelete(key) {
-  var data = this.__data__,
-      index = _assocIndexOf(data, key);
-
-  if (index < 0) {
-    return false;
-  }
-  var lastIndex = data.length - 1;
-  if (index == lastIndex) {
-    data.pop();
-  } else {
-    splice.call(data, index, 1);
-  }
-  --this.size;
-  return true;
-}
-
-/* harmony default export */ var _listCacheDelete = (listCacheDelete);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_listCacheGet.js
-
-
-/**
- * Gets the list cache value for `key`.
- *
- * @private
- * @name get
- * @memberOf ListCache
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the entry value.
- */
-function listCacheGet(key) {
-  var data = this.__data__,
-      index = _assocIndexOf(data, key);
-
-  return index < 0 ? undefined : data[index][1];
-}
-
-/* harmony default export */ var _listCacheGet = (listCacheGet);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_listCacheHas.js
-
-
-/**
- * Checks if a list cache value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf ListCache
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function listCacheHas(key) {
-  return _assocIndexOf(this.__data__, key) > -1;
-}
-
-/* harmony default export */ var _listCacheHas = (listCacheHas);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_listCacheSet.js
-
-
-/**
- * Sets the list cache `key` to `value`.
- *
- * @private
- * @name set
- * @memberOf ListCache
- * @param {string} key The key of the value to set.
- * @param {*} value The value to set.
- * @returns {Object} Returns the list cache instance.
- */
-function listCacheSet(key, value) {
-  var data = this.__data__,
-      index = _assocIndexOf(data, key);
-
-  if (index < 0) {
-    ++this.size;
-    data.push([key, value]);
-  } else {
-    data[index][1] = value;
-  }
-  return this;
-}
-
-/* harmony default export */ var _listCacheSet = (listCacheSet);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_ListCache.js
-
-
-
-
-
-
-/**
- * Creates an list cache object.
- *
- * @private
- * @constructor
- * @param {Array} [entries] The key-value pairs to cache.
- */
-function ListCache(entries) {
-  var index = -1,
-      length = entries == null ? 0 : entries.length;
-
-  this.clear();
-  while (++index < length) {
-    var entry = entries[index];
-    this.set(entry[0], entry[1]);
-  }
-}
-
-// Add methods to `ListCache`.
-ListCache.prototype.clear = _listCacheClear;
-ListCache.prototype['delete'] = _listCacheDelete;
-ListCache.prototype.get = _listCacheGet;
-ListCache.prototype.has = _listCacheHas;
-ListCache.prototype.set = _listCacheSet;
-
-/* harmony default export */ var _ListCache = (ListCache);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_Map.js
-
-
-
-/* Built-in method references that are verified to be native. */
-var Map = _getNative(_root["a" /* default */], 'Map');
-
-/* harmony default export */ var _Map = (Map);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_mapCacheClear.js
-
-
-
-
-/**
- * Removes all key-value entries from the map.
- *
- * @private
- * @name clear
- * @memberOf MapCache
- */
-function mapCacheClear() {
-  this.size = 0;
-  this.__data__ = {
-    'hash': new _Hash(),
-    'map': new (_Map || _ListCache)(),
-    'string': new _Hash()
-  };
-}
-
-/* harmony default export */ var _mapCacheClear = (mapCacheClear);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_isKeyable.js
-/**
- * Checks if `value` is suitable for use as unique object key.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
- */
-function isKeyable(value) {
-  var type = typeof value;
-  return type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean' ? value !== '__proto__' : value === null;
-}
-
-/* harmony default export */ var _isKeyable = (isKeyable);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_getMapData.js
-
-
-/**
- * Gets the data for `map`.
- *
- * @private
- * @param {Object} map The map to query.
- * @param {string} key The reference key.
- * @returns {*} Returns the map data.
- */
-function getMapData(map, key) {
-  var data = map.__data__;
-  return _isKeyable(key) ? data[typeof key == 'string' ? 'string' : 'hash'] : data.map;
-}
-
-/* harmony default export */ var _getMapData = (getMapData);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_mapCacheDelete.js
-
-
-/**
- * Removes `key` and its value from the map.
- *
- * @private
- * @name delete
- * @memberOf MapCache
- * @param {string} key The key of the value to remove.
- * @returns {boolean} Returns `true` if the entry was removed, else `false`.
- */
-function mapCacheDelete(key) {
-  var result = _getMapData(this, key)['delete'](key);
-  this.size -= result ? 1 : 0;
-  return result;
-}
-
-/* harmony default export */ var _mapCacheDelete = (mapCacheDelete);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_mapCacheGet.js
-
-
-/**
- * Gets the map value for `key`.
- *
- * @private
- * @name get
- * @memberOf MapCache
- * @param {string} key The key of the value to get.
- * @returns {*} Returns the entry value.
- */
-function mapCacheGet(key) {
-  return _getMapData(this, key).get(key);
-}
-
-/* harmony default export */ var _mapCacheGet = (mapCacheGet);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_mapCacheHas.js
-
-
-/**
- * Checks if a map value for `key` exists.
- *
- * @private
- * @name has
- * @memberOf MapCache
- * @param {string} key The key of the entry to check.
- * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
- */
-function mapCacheHas(key) {
-  return _getMapData(this, key).has(key);
-}
-
-/* harmony default export */ var _mapCacheHas = (mapCacheHas);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_mapCacheSet.js
-
-
-/**
- * Sets the map `key` to `value`.
- *
- * @private
- * @name set
- * @memberOf MapCache
- * @param {string} key The key of the value to set.
- * @param {*} value The value to set.
- * @returns {Object} Returns the map cache instance.
- */
-function mapCacheSet(key, value) {
-  var data = _getMapData(this, key),
-      size = data.size;
-
-  data.set(key, value);
-  this.size += data.size == size ? 0 : 1;
-  return this;
-}
-
-/* harmony default export */ var _mapCacheSet = (mapCacheSet);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_MapCache.js
-
-
-
-
-
-
-/**
- * Creates a map cache object to store key-value pairs.
- *
- * @private
- * @constructor
- * @param {Array} [entries] The key-value pairs to cache.
- */
-function MapCache(entries) {
-  var index = -1,
-      length = entries == null ? 0 : entries.length;
-
-  this.clear();
-  while (++index < length) {
-    var entry = entries[index];
-    this.set(entry[0], entry[1]);
-  }
-}
-
-// Add methods to `MapCache`.
-MapCache.prototype.clear = _mapCacheClear;
-MapCache.prototype['delete'] = _mapCacheDelete;
-MapCache.prototype.get = _mapCacheGet;
-MapCache.prototype.has = _mapCacheHas;
-MapCache.prototype.set = _mapCacheSet;
-
-/* harmony default export */ var _MapCache = (MapCache);
-// CONCATENATED MODULE: ./node_modules/lodash-es/memoize.js
-
-
-/** Error message constants. */
-var FUNC_ERROR_TEXT = 'Expected a function';
-
-/**
- * Creates a function that memoizes the result of `func`. If `resolver` is
- * provided, it determines the cache key for storing the result based on the
- * arguments provided to the memoized function. By default, the first argument
- * provided to the memoized function is used as the map cache key. The `func`
- * is invoked with the `this` binding of the memoized function.
- *
- * **Note:** The cache is exposed as the `cache` property on the memoized
- * function. Its creation may be customized by replacing the `_.memoize.Cache`
- * constructor with one whose instances implement the
- * [`Map`](http://ecma-international.org/ecma-262/7.0/#sec-properties-of-the-map-prototype-object)
- * method interface of `clear`, `delete`, `get`, `has`, and `set`.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Function
- * @param {Function} func The function to have its output memoized.
- * @param {Function} [resolver] The function to resolve the cache key.
- * @returns {Function} Returns the new memoized function.
- * @example
- *
- * var object = { 'a': 1, 'b': 2 };
- * var other = { 'c': 3, 'd': 4 };
- *
- * var values = _.memoize(_.values);
- * values(object);
- * // => [1, 2]
- *
- * values(other);
- * // => [3, 4]
- *
- * object.a = 2;
- * values(object);
- * // => [1, 2]
- *
- * // Modify the result cache.
- * values.cache.set(object, ['a', 'b']);
- * values(object);
- * // => ['a', 'b']
- *
- * // Replace `_.memoize.Cache`.
- * _.memoize.Cache = WeakMap;
- */
-function memoize(func, resolver) {
-  if (typeof func != 'function' || resolver != null && typeof resolver != 'function') {
-    throw new TypeError(FUNC_ERROR_TEXT);
-  }
-  var memoized = function () {
-    var args = arguments,
-        key = resolver ? resolver.apply(this, args) : args[0],
-        cache = memoized.cache;
-
-    if (cache.has(key)) {
-      return cache.get(key);
-    }
-    var result = func.apply(this, args);
-    memoized.cache = cache.set(key, result) || cache;
-    return result;
-  };
-  memoized.cache = new (memoize.Cache || _MapCache)();
-  return memoized;
-}
-
-// Expose `MapCache`.
-memoize.Cache = _MapCache;
-
-/* harmony default export */ var lodash_es_memoize = (memoize);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_memoizeCapped.js
-
-
-/** Used as the maximum memoize cache size. */
-var MAX_MEMOIZE_SIZE = 500;
-
-/**
- * A specialized version of `_.memoize` which clears the memoized function's
- * cache when it exceeds `MAX_MEMOIZE_SIZE`.
- *
- * @private
- * @param {Function} func The function to have its output memoized.
- * @returns {Function} Returns the new memoized function.
- */
-function memoizeCapped(func) {
-  var result = lodash_es_memoize(func, function (key) {
-    if (cache.size === MAX_MEMOIZE_SIZE) {
-      cache.clear();
-    }
-    return key;
-  });
-
-  var cache = result.cache;
-  return result;
-}
-
-/* harmony default export */ var _memoizeCapped = (memoizeCapped);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_stringToPath.js
-
-
-/** Used to match property names within property paths. */
-var reLeadingDot = /^\./,
-    rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
-
-/** Used to match backslashes in property paths. */
-var reEscapeChar = /\\(\\)?/g;
-
-/**
- * Converts `string` to a property path array.
- *
- * @private
- * @param {string} string The string to convert.
- * @returns {Array} Returns the property path array.
- */
-var stringToPath = _memoizeCapped(function (string) {
-  var result = [];
-  if (reLeadingDot.test(string)) {
-    result.push('');
-  }
-  string.replace(rePropName, function (match, number, quote, string) {
-    result.push(quote ? string.replace(reEscapeChar, '$1') : number || match);
-  });
-  return result;
-});
-
-/* harmony default export */ var _stringToPath = (stringToPath);
-// EXTERNAL MODULE: ./node_modules/lodash-es/toString.js + 2 modules
-var lodash_es_toString = __webpack_require__(6);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_castPath.js
-
-
-
-
-
-/**
- * Casts `value` to a path array if it's not one.
- *
- * @private
- * @param {*} value The value to inspect.
- * @param {Object} [object] The object to query keys on.
- * @returns {Array} Returns the cast property path array.
- */
-function castPath(value, object) {
-  if (Object(isArray["a" /* default */])(value)) {
-    return value;
-  }
-  return _isKey(value, object) ? [value] : _stringToPath(Object(lodash_es_toString["a" /* default */])(value));
-}
-
-/* harmony default export */ var _castPath = (castPath);
-// EXTERNAL MODULE: ./node_modules/lodash-es/isObjectLike.js
-var isObjectLike = __webpack_require__(5);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/_baseIsArguments.js
-
-
-
-/** `Object#toString` result references. */
-var argsTag = '[object Arguments]';
-
-/**
- * The base implementation of `_.isArguments`.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an `arguments` object,
- */
-function baseIsArguments(value) {
-  return Object(isObjectLike["a" /* default */])(value) && Object(_baseGetTag["a" /* default */])(value) == argsTag;
-}
-
-/* harmony default export */ var _baseIsArguments = (baseIsArguments);
-// CONCATENATED MODULE: ./node_modules/lodash-es/isArguments.js
-
-
-
-/** Used for built-in method references. */
-var isArguments_objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var isArguments_hasOwnProperty = isArguments_objectProto.hasOwnProperty;
-
-/** Built-in value references. */
-var propertyIsEnumerable = isArguments_objectProto.propertyIsEnumerable;
-
-/**
- * Checks if `value` is likely an `arguments` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an `arguments` object,
- *  else `false`.
- * @example
- *
- * _.isArguments(function() { return arguments; }());
- * // => true
- *
- * _.isArguments([1, 2, 3]);
- * // => false
- */
-var isArguments = _baseIsArguments(function () {
-  return arguments;
-}()) ? _baseIsArguments : function (value) {
-  return Object(isObjectLike["a" /* default */])(value) && isArguments_hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
-};
-
-/* harmony default export */ var lodash_es_isArguments = (isArguments);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_isIndex.js
-/** Used as references for various `Number` constants. */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/** Used to detect unsigned integer values. */
-var reIsUint = /^(?:0|[1-9]\d*)$/;
-
-/**
- * Checks if `value` is a valid array-like index.
- *
- * @private
- * @param {*} value The value to check.
- * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
- * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
- */
-function isIndex(value, length) {
-  length = length == null ? MAX_SAFE_INTEGER : length;
-  return !!length && (typeof value == 'number' || reIsUint.test(value)) && value > -1 && value % 1 == 0 && value < length;
-}
-
-/* harmony default export */ var _isIndex = (isIndex);
-// CONCATENATED MODULE: ./node_modules/lodash-es/isLength.js
-/** Used as references for various `Number` constants. */
-var isLength_MAX_SAFE_INTEGER = 9007199254740991;
-
-/**
- * Checks if `value` is a valid array-like length.
- *
- * **Note:** This method is loosely based on
- * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
- * @example
- *
- * _.isLength(3);
- * // => true
- *
- * _.isLength(Number.MIN_VALUE);
- * // => false
- *
- * _.isLength(Infinity);
- * // => false
- *
- * _.isLength('3');
- * // => false
- */
-function isLength(value) {
-  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= isLength_MAX_SAFE_INTEGER;
-}
-
-/* harmony default export */ var lodash_es_isLength = (isLength);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_toKey.js
-
-
-/** Used as references for various `Number` constants. */
-var INFINITY = 1 / 0;
-
-/**
- * Converts `value` to a string key if it's not a string or symbol.
- *
- * @private
- * @param {*} value The value to inspect.
- * @returns {string|symbol} Returns the key.
- */
-function toKey(value) {
-  if (typeof value == 'string' || Object(isSymbol["a" /* default */])(value)) {
-    return value;
-  }
-  var result = value + '';
-  return result == '0' && 1 / value == -INFINITY ? '-0' : result;
-}
-
-/* harmony default export */ var _toKey = (toKey);
-// CONCATENATED MODULE: ./node_modules/lodash-es/_hasPath.js
-
-
-
-
-
-
-
-/**
- * Checks if `path` exists on `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {Array|string} path The path to check.
- * @param {Function} hasFunc The function to check properties.
- * @returns {boolean} Returns `true` if `path` exists, else `false`.
- */
-function hasPath(object, path, hasFunc) {
-  path = _castPath(path, object);
-
-  var index = -1,
-      length = path.length,
-      result = false;
-
-  while (++index < length) {
-    var key = _toKey(path[index]);
-    if (!(result = object != null && hasFunc(object, key))) {
-      break;
-    }
-    object = object[key];
-  }
-  if (result || ++index != length) {
-    return result;
-  }
-  length = object == null ? 0 : object.length;
-  return !!length && lodash_es_isLength(length) && _isIndex(key, length) && (Object(isArray["a" /* default */])(object) || lodash_es_isArguments(object));
-}
-
-/* harmony default export */ var _hasPath = (hasPath);
-// CONCATENATED MODULE: ./node_modules/lodash-es/has.js
-
-
-
-/**
- * Checks if `path` is a direct property of `object`.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Object
- * @param {Object} object The object to query.
- * @param {Array|string} path The path to check.
- * @returns {boolean} Returns `true` if `path` exists, else `false`.
- * @example
- *
- * var object = { 'a': { 'b': 2 } };
- * var other = _.create({ 'a': _.create({ 'b': 2 }) });
- *
- * _.has(object, 'a');
- * // => true
- *
- * _.has(object, 'a.b');
- * // => true
- *
- * _.has(object, ['a', 'b']);
- * // => true
- *
- * _.has(other, 'a');
- * // => false
- */
-function has(object, path) {
-  return object != null && _hasPath(object, path, _baseHas);
-}
-
-/* harmony default export */ var lodash_es_has = __webpack_exports__["default"] = (has);
+/* harmony default export */ __webpack_exports__["default"] = (noop);
 
 /***/ }),
-/* 17 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-
-// EXTERNAL MODULE: ./node_modules/lodash-es/noop.js
-var noop = __webpack_require__(7);
-
-// CONCATENATED MODULE: ./node_modules/lodash-es/identity.js
 /**
  * This method returns the first argument it receives.
  *
@@ -3031,274 +3108,10 @@ function identity(value) {
   return value;
 }
 
-/* harmony default export */ var lodash_es_identity = (identity);
-// CONCATENATED MODULE: ./src/core/props.js
-
-
-
-function objFactory() {
-  return {};
-}
-
-/* harmony default export */ var props = __webpack_exports__["default"] = ({
-  tag: {
-    type: String,
-    default: "div"
-  },
-  uploadAreaClasses: {
-    type: [Array, Object, String],
-    default: null
-  },
-  uploadAreaAttrs: {
-    type: Object,
-    default: objFactory
-  },
-  uploadAreaListeners: {
-    type: Object,
-    default: objFactory
-  },
-  dragClass: {
-    type: String,
-    default: null
-  },
-  url: {
-    type: String,
-    required: true
-  },
-  method: {
-    type: String,
-    default: "post"
-  },
-  withCredentials: {
-    type: Boolean,
-    default: false
-  },
-  // timeout in milliseconds
-  timeout: {
-    type: Number,
-    default: 0
-  },
-  maxConcurrentUploads: {
-    type: Number,
-    default: 2
-  },
-  // Whether to send multiple files in one request.
-  uploadMultiple: {
-    type: Boolean,
-    default: false
-  },
-  // in MB
-  maxFileSize: {
-    type: Number,
-    default: 256
-  },
-  // The name of the file param that gets transferred.
-  paramName: {
-    type: String,
-    default: "file"
-  },
-  createImageThumbnails: {
-    type: Boolean,
-    default: true
-  },
-  // in MB. When the filename exceeds this limit, the thumbnail will not be generated.
-  maxThumbnailFileSize: {
-    type: Number,
-    default: 10
-  },
-  thumbnailWidth: {
-    type: Number,
-    default: 120
-  },
-  thumbnailHeight: {
-    type: Number,
-    default: 120
-  },
-  /**
-   * The base that is used to calculate the file size. You can change this to
-   * 1024 if you would rather display kibibytes, mebibytes, etc...
-   * 1024 is technically incorrect,
-   * because `1024 bytes` are `1 kibibyte` not `1 kilobyte`.
-   * You can change this to `1024` if you don't care about validity.
-   */
-  fileSizeBase: {
-    type: Number,
-    default: 1000
-  },
-  /**
-   * Can be used to limit the maximum number of files that will be handled
-   * by this Dropzone
-   */
-  maxFiles: {
-    type: Number,
-    default: null
-  },
-  /**
-   * Can be an object of additional parameters to transfer to the server.
-   * This is the same as adding hidden input fields in the form element.
-   */
-  params: {
-    type: Object,
-    default: objFactory
-  },
-  headers: {
-    type: Object,
-    default: objFactory
-  },
-  // If true, the dropzone will present a file selector when clicked.
-  clickable: {
-    type: Boolean,
-    default: true
-  },
-  // Whether hidden files in directories should be ignored.
-  ignoreHiddenFiles: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * You can set accepted mime types here.
-   *
-   * The default implementation of the `accept()` function will check this
-   * property, and if the Dropzone is clickable this will be used as
-   * `accept` attribute.
-   *
-   * This is a comma separated list of mime types or extensions. E.g.:
-   * - audio/*,video/*,image/png,.pdf
-   *
-   * See https://developer.mozilla.org/en-US/docs/HTML/Element/input#attr-accept
-   * for a reference.
-   */
-  acceptedFileTypes: {
-    type: Array,
-    default: function () {
-      return [];
-    }
-  },
-  /**
-   * If false, files will be added to the queue but the queue will not be
-   * processed automatically.
-   * This can be useful if you need some additional user input before sending
-   * files (or if you want want all files sent at once).
-   * If you're ready to send the file simply call myDropzone.processQueue()
-   */
-  autoProcessQueue: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * If false, files added to the dropzone will not be queued by default.
-   * You'll have to call `enqueueFile(file)` manually.
-   */
-  autoQueue: {
-    type: Boolean,
-    default: true
-  },
-  /**
-   * If null, no capture type will be specified
-   * If camera, mobile devices will skip the file selection and choose camera
-   * If microphone, mobile devices will skip the file selection and choose the microphone
-   * If camcorder, mobile devices will skip the file selection and choose the camera in video mode
-   * On apple devices multiple must be set to false.  AcceptedFiles may need to
-   * be set to an appropriate mime type (e.g. "image/*", "audio/*", or "video/*").
-   */
-  capture: {
-    type: String,
-    default: null
-  },
-  /**
-   * Before the file is appended to the formData, the function _renameFilename is performed for file.name, file
-   * which executes the function defined in renameFilename
-   */
-  renameFile: {
-    type: Function,
-    default: lodash_es_identity
-  },
-  // If the file size is too big.
-  dictFileTooBig: {
-    type: String,
-    default: "File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MiB."
-  },
-  // If the file doesn't match the file type.
-  dictInvalidFileType: {
-    type: String,
-    default: "You can't upload files of this type."
-  },
-  // If the server response was invalid.
-  dictResponseError: {
-    type: String,
-    default: "Server responded with {{ statusCode }} code."
-  },
-  /**
-   * Displayed when the maxFiles have been exceeded
-   * You can use {{maxFiles}} here, which will be replaced by the option.
-   */
-  dictMaxFilesExceeded: {
-    type: String,
-    default: "You can not upload any more files."
-  },
-  /**
-   * If `done()` is called without argument the file is accepted
-   * If you call it with an error message, the file is rejected
-   * (This allows for asynchronous validation).
-   */
-  accept: {
-    type: Function,
-    default: function (file, done) {
-      return done();
-    }
-  },
-  resize: {
-    type: Function,
-    default: function (_ref) {
-      let width = _ref.width,
-          height = _ref.height;
-
-      let info = {
-        srcX: 0,
-        srcY: 0,
-        srcWidth: width,
-        srcHeight: height
-      };
-
-      const srcRatio = width / height;
-
-      info.optWidth = this.thumbnailWidth;
-      info.optHeight = this.thumbnailHeight;
-
-      if (info.optWidth == null && info.optHeight == null) {
-        info.optWidth = info.srcWidth;
-        info.optHeight = info.srcHeight;
-      } else if (info.optWidth == null) {
-        info.optWidth = srcRatio * info.optHeight;
-      } else if (info.optHeight == null) {
-        info.optHeight = 1 / srcRatio * info.optWidth;
-      }
-
-      const trgRatio = info.optWidth / info.optHeight;
-
-      if (height < info.optHeight || width < info.optWidth) {
-        info.trgHeight = info.srcHeight;
-        info.trgWidth = info.srcWidth;
-      } else {
-        if (srcRatio > trgRatio) {
-          info.srcHeight = height;
-          info.srcWidth = info.srcHeight * trgRatio;
-        } else {
-          info.srcWidth = width;
-          info.srcHeight = info.srcWidth / trgRatio;
-        }
-      }
-
-      info.srcX = (width - info.srcWidth) / 2;
-      info.srcY = (height - info.srcHeight) / 2;
-
-      return info;
-    }
-  }
-});
+/* harmony default export */ __webpack_exports__["default"] = (identity);
 
 /***/ }),
-/* 18 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3310,7 +3123,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _utils = __webpack_require__(8);
+var _utils = __webpack_require__(1);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 

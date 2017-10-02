@@ -3,11 +3,17 @@ const { promisify } = require("util")
 const { resolve } = require("path")
 const fs = require("fs")
 const [unlink, readdir] = [fs.unlink, fs.readdir].map(promisify)
+const $rimraf = require("rimraf")
+
+function rimraf(...args) {
+  return new Promise((resolve, reject) => {
+    $rimraf(...args, resolve)
+  })
+}
 
 async function rmDirContents(dirPath) {
   try {
-    const entries = await readdir(dirPath, { encoding: "utf8" })
-    return await Promise.all(entries.map(entry => unlink(resolve(dirPath, entry))))
+    return await rimraf(dirPath)
   } catch (err) {
     console.error(err)
   }
