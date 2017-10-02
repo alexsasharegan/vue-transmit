@@ -1,3 +1,4 @@
+import VTransmitFile from "../classes/VTransmitFile";
 export declare const assign: {
     <T, U>(target: T, source: U): T & U;
     <T, U, V>(target: T, source1: U, source2: V): T & U & V;
@@ -14,6 +15,7 @@ export declare function toKbps(bytes: number, seconds: number): number;
 export declare function toMbps(bytes: number, seconds: number): number;
 export declare const hbsRegex: RegExp;
 export declare function hbsReplacer(context?: object): (match: string, capture: string) => any;
+export declare function objFactory(): {};
 export declare enum READY_STATES {
     UNSENT = 0,
     OPENED = 1,
@@ -21,3 +23,27 @@ export declare enum READY_STATES {
     LOADING = 3,
     DONE = 4,
 }
+export interface IDrawImageArgs {
+    sx: number;
+    sy: number;
+    sWidth: number;
+    sHeight: number;
+    dx: number;
+    dy: number;
+    dWidth: number;
+    dHeight: number;
+}
+export interface IDimensions {
+    width: number;
+    height: number;
+}
+export declare function resizeImg(file: VTransmitFile, dims: IDimensions): {
+    sx: number;
+    sy: number;
+    sWidth: number;
+    sHeight: number;
+    dx: number;
+    dy: number;
+    dWidth: number;
+    dHeight: number;
+};

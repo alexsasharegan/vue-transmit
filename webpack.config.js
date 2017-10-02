@@ -77,7 +77,9 @@ function config(ctx) {
               scss: ExtractTextPlugin.extract({
                 use: ["css-loader!sass-loader", { loader: "postcss-loader", options: { sourceMap: true } }],
                 fallback: "vue-style-loader"
-              })
+              }),
+              ts: [{ loader: "babel-loader" }, { loader: "vue-ts-loader" }]
+              // ts: "vue-ts-loader"
             }
           }
         },
@@ -95,6 +97,9 @@ function config(ctx) {
       })
       // new DashboardPlugin()
     ],
+    externals: {
+      vue: "Vue"
+    },
     performance: {
       hints: false
     },

@@ -1,3 +1,5 @@
+import VTransmitFile from "../classes/VTransmitFile"
+
 export const assign = Object.assign
 
 let idCounter = 0
@@ -46,10 +48,75 @@ export function hbsReplacer(context: object = {}) {
   }
 }
 
+export function objFactory() {
+  return {}
+}
+
 export enum READY_STATES {
   UNSENT = 0,
   OPENED = 1,
   HEADERS_RECEIVED = 2,
   LOADING = 3,
   DONE = 4
+}
+
+export interface IDrawImageArgs {
+  sx: number
+  sy: number
+  sWidth: number
+  sHeight: number
+  dx: number
+  dy: number
+  dWidth: number
+  dHeight: number
+}
+
+export interface IDimensions {
+  width: number
+  height: number
+}
+
+export function resizeImg(file: VTransmitFile, dims: IDimensions) {
+  // Extract the object's primitive values so we don't mutate the input
+  let { width: oWidth, height: oHeight } = dims
+  const sRatio = file.width / file.height
+  const imgCoords = {
+    sx: 0,
+    sy: 0,
+    sWidth: file.width,
+    sHeight: file.height,
+    dx: 0,
+    dy: 0,
+    dWidth: 0,
+    dHeight: 0
+  }
+
+  if (oWidth == null && oHeight == null) {
+    oWidth = imgCoords.sWidth
+    oHeight = imgCoords.sHeight
+  } else if (oWidth == null) {
+    oWidth = sRatio * oHeight
+  } else if (oHeight == null) {
+    oHeight = 1 / sRatio * oWidth
+  }
+
+  const dRatio = oWidth / oHeight
+
+  if (file.height < oHeight || file.width < oWidth) {
+    imgCoords.dHeight = imgCoords.sHeight
+    imgCoords.dWidth = imgCoords.sWidth
+  } else {
+    if (sRatio > dRatio) {
+      imgCoords.sHeight = file.height
+      imgCoords.sWidth = imgCoords.sHeight * dRatio
+    } else {
+      imgCoords.sWidth = file.width
+      imgCoords.sHeight = imgCoords.sWidth / dRatio
+    }
+  }
+
+  imgCoords.sx = (file.width - imgCoords.sWidth) / 2
+  imgCoords.sy = (file.height - imgCoords.sHeight) / 2
+
+  return imgCoords
 }
