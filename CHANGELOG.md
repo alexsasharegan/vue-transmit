@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.4.0...v6.0.0) (2017-10-02)
+
+
+### Code Refactoring
+
+* rewrite component in typescript ([#3](https://github.com/alexsasharegan/vue-transmit/issues/3)) ([7af5b17](https://github.com/alexsasharegan/vue-transmit/commit/7af5b17))
+
+
+### BREAKING CHANGES
+
+* remove check mark component from plugin
+* the resize callback prop's call signature and return signature has been revised to conform to interfaces
+
+* fix(utils): correct return signature for resizeImg
+
+* chore(component): add access modifiers to data members
+
+* chore: remove old props
+
+* chore(test): more exhaustive test app
+
+* chore: remove all old code
+
+* chore: config files
+
+* chore: improve clean script to rm -Rf
+
+
+
 <a name="5.4.0"></a>
 # [5.4.0](https://github.com/alexsasharegan/vue-transmit/compare/v5.3.2...v5.4.0) (2017-10-01)
 
