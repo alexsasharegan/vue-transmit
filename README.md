@@ -24,7 +24,7 @@ In order to comply with Vue.js reactivity, an object's properties must be define
 - Support for concurrent uploads
 - Completely written in Vue.js&mdash;no wrapper components
 - Scoped slots allow for fully customizable styling
-- Written in modern ES6 with modules
+- Written in modern TypeScript/ES6 with modules
 
 _\* Note: this library uses some built-ins like `Array.from` & `Array.prototype.includes` that require a polyfill. All other ESNext language features (arrow fns, for of, etc.) are transpiled with babel._
 
