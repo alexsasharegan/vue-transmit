@@ -97,13 +97,12 @@ export default class VueTransmit extends Vue {
     accept: (file: VTransmitFile, done: Function) => void;
     resize: (file: VTransmitFile, dims: IDimensions) => IDrawImageArgs;
     dragging: boolean;
-    processingThumbnail: boolean;
+    private processingThumbnail;
     thumbnailQueue: any[];
-    clickableElements: any[];
-    listeners: any[];
     files: any[];
     defaultHeaders: object;
     fileInputStyles: object;
+    readonly inputEl: HTMLInputElement;
     readonly filesToAccept: string;
     readonly multiple: boolean;
     readonly acceptedFiles: any[];

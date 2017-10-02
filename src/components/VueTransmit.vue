@@ -269,6 +269,13 @@ export default class VueTransmit extends Vue {
     width: "0px !important",
   }
 
+  get inputEl(): HTMLInputElement {
+    let el = null
+    if (this.$refs.hiddenFileInput instanceof HTMLInputElement) {
+      el = this.$refs.hiddenFileInput
+    }
+    return el
+  }
   get filesToAccept() {
     return this.acceptedFileTypes.join(",")
   }
@@ -336,7 +343,7 @@ export default class VueTransmit extends Vue {
     return this.files.filter(f => statuses.includes(f.status))
   }
   onFileInputChange() {
-    this.$emit('added-files', Array.from(this.$refs.hiddenFileInput.files).map(this.addFile))
+    this.$emit('added-files', Array.from(this.inputEl.files).map(this.addFile))
   }
   addFile(file: File) {
     const vTransmitFile = VTransmitFile.fromNativeFile(file)
@@ -381,7 +388,7 @@ export default class VueTransmit extends Vue {
     }
   }
   triggerBrowseFiles() {
-    this.$refs.hiddenFileInput.click()
+    this.inputEl.click()
   }
   handleClickUploaderAction() {
     if (this.clickable) {

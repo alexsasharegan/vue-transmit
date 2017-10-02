@@ -37,13 +37,4 @@ export interface IDimensions {
     width: number;
     height: number;
 }
-export declare function resizeImg(file: VTransmitFile, dims: IDimensions): {
-    sx: number;
-    sy: number;
-    sWidth: number;
-    sHeight: number;
-    dx: number;
-    dy: number;
-    dWidth: number;
-    dHeight: number;
-};
+export declare function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArgs;

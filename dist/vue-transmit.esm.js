@@ -193,7 +193,6 @@ function resizeImg(file, dims) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var src_namespaceObject = {};
 __webpack_require__.d(src_namespaceObject, "VueTransmit", function() { return src_components_VueTransmit; });
-__webpack_require__.d(src_namespaceObject, "CheckMark", function() { return CheckMark; });
 
 // EXTERNAL MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-ts-loader!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VueTransmit.vue
 var VueTransmit = __webpack_require__(5);
@@ -229,46 +228,7 @@ var Component = normalizeComponent(
 
 /* harmony default export */ var src_components_VueTransmit = (Component.exports);
 
-// CONCATENATED MODULE: ./node_modules/vue-functional-data-merge/dist/lib.esm.js
-function concat(){return Array.prototype.concat.apply([],arguments)}function mergeData(){for(var e=__assign({},arguments[0]),a=1;a<arguments.length;a++)for(var s=0,t=keys(arguments[a]);s<t.length;s++){var c=t[s];if(void 0!==e[c])switch(c){case"class":case"style":case"directives":e[c]=concat(e[c],arguments[a][c]);break;case"staticClass":e[c]&&(e[c]=e[c].trim()+" "),e[c]+=arguments[a][c].trim();break;case"on":case"nativeOn":for(var r=0,o=keys(arguments[a][c]);r<o.length;r++){var n=o[r];e[c][n]?e[c][n]=concat(arguments[a][c][n],e[c][n]):e[c][n]=arguments[a][c][n]}break;case"attrs":case"props":case"domProps":case"scopedSlots":case"staticStyle":case"hook":case"transition":e[c]=__assign({},e[c],arguments[a][c]);break;case"slot":case"key":case"ref":case"tag":case"show":case"keepAlive":default:e[c]=arguments[a][c]}else e[c]=arguments[a][c]}return e}var __assign=Object.assign||function(e){for(var a,s=1,t=arguments.length;s<t;s++){a=arguments[s];for(var c in a)Object.prototype.hasOwnProperty.call(a,c)&&(e[c]=a[c])}return e},keys=Object.keys;/* harmony default export */ var lib_esm = (mergeData);
-//# sourceMappingURL=lib.esm.js.map
-
-// CONCATENATED MODULE: ./src/components/CheckMark.js
-
-
-/* harmony default export */ var CheckMark = ({
-  functional: true,
-  props: {
-    color: {
-      type: String,
-      default: "#14C18B"
-    },
-    fill: {
-      type: String,
-      default: "#FFFFFF"
-    }
-  },
-  render: function (h, _ref) {
-    let props = _ref.props,
-        data = _ref.data;
-
-    return h("svg", lib_esm(data, { attrs: { viewBox: "0 0 64 64" } }), [h("circle", {
-      attrs: {
-        cx: "32",
-        cy: "32",
-        r: "32",
-        fill: props.color
-      }
-    }), h("polygon", {
-      attrs: {
-        fill: props.fill,
-        points: "43.266,18.345 27.915,37 21.465,30.725 17.211,35.34 28.413,46.236 47.989,22.449"
-      }
-    })]);
-  }
-});
 // CONCATENATED MODULE: ./src/index.js
-
 
 
 
@@ -285,8 +245,6 @@ function concat(){return Array.prototype.concat.apply([],arguments)}function mer
   },
 
   name: "vue-transmit"
-  // name: NAME,
-  // version: VERSION
 });
 
 /***/ }),
@@ -468,10 +426,9 @@ var VueTransmit = function (_Vue) {
         var _this = _possibleConstructorReturn(this, (VueTransmit.__proto__ || Object.getPrototypeOf(VueTransmit)).apply(this, arguments));
 
         _this.dragging = false;
-        _this.processingThumbnail = false; // Used to keep the createThumbnail calls processing async one-at-a-time
+        // Used to keep the createThumbnail calls processing async one-at-a-time
+        _this.processingThumbnail = false;
         _this.thumbnailQueue = [];
-        _this.clickableElements = [];
-        _this.listeners = [];
         _this.files = [];
         _this.defaultHeaders = {
             "Accept": "application/json",
@@ -513,7 +470,7 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "onFileInputChange",
         value: function onFileInputChange() {
-            this.$emit('added-files', Array.from(this.$refs.hiddenFileInput.files).map(this.addFile));
+            this.$emit('added-files', Array.from(this.inputEl.files).map(this.addFile));
         }
     }, {
         key: "addFile",
@@ -591,7 +548,7 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "triggerBrowseFiles",
         value: function triggerBrowseFiles() {
-            this.$refs.hiddenFileInput.click();
+            this.inputEl.click();
         }
     }, {
         key: "handleClickUploaderAction",
@@ -1365,6 +1322,15 @@ var VueTransmit = function (_Vue) {
                 }
             });
             this.$emit('initialize', this);
+        }
+    }, {
+        key: "inputEl",
+        get: function get() {
+            var el = null;
+            if (this.$refs.hiddenFileInput instanceof HTMLInputElement) {
+                el = this.$refs.hiddenFileInput;
+            }
+            return el;
         }
     }, {
         key: "filesToAccept",

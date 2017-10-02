@@ -39,6 +39,7 @@
       max-height: 300px;
       overflow-y: scroll;
     }
+    [v-cloak] { display: none; }
     <?= file_get_contents(__DIR__. "/../dist/vue-transmit.css" ); ?>
   </style>
 </head>
@@ -46,7 +47,8 @@
 <body>
   <b-container fluid
                tag="main"
-               id="app">
+               id="app"
+               v-cloak>
     <b-navbar toggleable="md"
               class="mb-3"
               type="light"
@@ -183,6 +185,7 @@
           this.$refs.uploader.triggerBrowseFiles()
         },
         onUploadSuccess(file, res) {
+          console.log(res)
           file.src = res.url
           this.files.push(file)
         },
