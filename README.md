@@ -1,5 +1,7 @@
 # Vue-Transmit
 
+<img src="./docs/vt-logo.svg" height="250">
+
 [![npm version](https://badge.fury.io/js/vue-transmit.svg)](https://badge.fury.io/js/vue-transmit)
 [![npm downloads](https://img.shields.io/npm/dt/vue-transmit.svg)](https://www.npmjs.com/package/vue-transmit)
 [![GitHub issues](https://img.shields.io/github/issues/alexsasharegan/vue-transmit.svg?style=flat)](https://github.com/alexsasharegan/vue-transmit/issues)
