@@ -14,7 +14,7 @@ A Vue.js drag & drop uploader based on Dropzone.js (`~42kB`, `~12.5kB` gzipped).
 
 ## Features
 
-Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in ES6 for Vue.js. Instead of creating a Vue wrapper component that duplicates and proxies all of the methods and event logic between Dropzone and the component, Vue-Transmit implements them directly from the component. This cuts down on library size and offers a much tighter integration.
+Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in TypeScript/ES6 for Vue.js. Instead of creating a Vue wrapper component that duplicates and proxies all of the methods and event logic between Dropzone and the component, Vue-Transmit implements them directly from the component. This cuts down on library size and offers a much tighter integration.
 
 Vue-Transmit takes an event-based approach to the upload cycle. Instead of passing callbacks to the component via an options object, use the template event binding syntax (`<vue-transmit @event="callback" />`). All events strictly conform to kebab-casing, including events proxied off native events (e.g. `dragover => @drag-over`). This is for uniformity and so events can be easily distinguished.
 
