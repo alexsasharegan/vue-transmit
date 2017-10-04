@@ -60,6 +60,20 @@ export enum READY_STATES {
   DONE = 4
 }
 
+export function scaleH(ratio: number, width: number): number {
+  return width / ratio
+}
+
+export function scaleW(ratio: number, height: number): number {
+  return height * ratio
+}
+
+export function scaleDims(ratio: number, width?: number, height?: number): number[] {
+  console.log(arguments);
+
+  return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height]
+}
+
 export interface IDrawImageArgs {
   sx: number
   sy: number
@@ -78,8 +92,8 @@ export interface IDimensions {
 
 export function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArgs {
   // Extract the object's primitive values so we don't mutate the input
-  let { width: oWidth, height: oHeight } = dims
   const sRatio = file.width / file.height
+  const dRatio = dims.width / dims.height
   const imgCoords = {
     sx: 0,
     sy: 0,
@@ -87,36 +101,25 @@ export function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArg
     sHeight: file.height,
     dx: 0,
     dy: 0,
-    dWidth: 0,
-    dHeight: 0
+    dWidth: dims.width,
+    dHeight: dims.height
   }
 
-  if (oWidth == null && oHeight == null) {
-    oWidth = imgCoords.sWidth
-    oHeight = imgCoords.sHeight
-  } else if (oWidth == null) {
-    oWidth = sRatio * oHeight
-  } else if (oHeight == null) {
-    oHeight = 1 / sRatio * oWidth
-  }
-
-  const dRatio = oWidth / oHeight
-
-  if (file.height < oHeight || file.width < oWidth) {
-    imgCoords.dHeight = imgCoords.sHeight
-    imgCoords.dWidth = imgCoords.sWidth
+  let w, h
+  if (dRatio > sRatio) {
+    [w, h] = scaleDims(dRatio, file.width)
   } else {
-    if (sRatio > dRatio) {
-      imgCoords.sHeight = file.height
-      imgCoords.sWidth = imgCoords.sHeight * dRatio
-    } else {
-      imgCoords.sWidth = file.width
-      imgCoords.sHeight = imgCoords.sWidth / dRatio
-    }
+    [w, h] = scaleDims(dRatio, undefined, file.height)
   }
 
-  imgCoords.sx = (file.width - imgCoords.sWidth) / 2
-  imgCoords.sy = (file.height - imgCoords.sHeight) / 2
+  if (w < file.width) {
+    imgCoords.sx = (file.width - w) / 2
+    imgCoords.sWidth = w
+  }
+  if (h < file.height) {
+    imgCoords.sy = (file.height - h) / 2
+    imgCoords.sHeight = h
+  }
 
   return imgCoords
 }

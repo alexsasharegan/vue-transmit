@@ -395,7 +395,7 @@ export default class VueTransmit extends Vue {
       this.triggerBrowseFiles()
     }
   }
-  enqueueFile(file: VTransmitFile) {
+  enqueueFile(file: VTransmitFile): void {
     if (file.status === STATUSES.ADDED && file.accepted === true) {
       file.status = STATUSES.QUEUED
       if (this.autoProcessQueue) {
@@ -405,39 +405,39 @@ export default class VueTransmit extends Vue {
       throw new Error("This file can't be queued because it has already been processed or was rejected.")
     }
   }
-  enqueueThumbnail(file: VTransmitFile) {
+  enqueueThumbnail(file: VTransmitFile): void {
     if (this.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.maxThumbnailFileSize * 1024 * 1024) {
       this.thumbnailQueue.push(file)
       setTimeout(this.processThumbnailQueue, 0)
     }
   }
-  processThumbnailQueue() {
+  processThumbnailQueue(): void {
     // Employ a chain of self-calling, self-queuing createThumbnail calls
     // so execution can stay as non-blocking as possible.
     if (this.processingThumbnail || this.thumbnailQueue.length === 0) {
       return
     }
     this.processingThumbnail = true
-    return this.createThumbnail(this.thumbnailQueue.shift(), () => {
+    this.createThumbnail(this.thumbnailQueue.shift(), () => {
       this.processingThumbnail = false
-      return this.processThumbnailQueue()
+      this.processThumbnailQueue()
     })
   }
-  createThumbnail(file: VTransmitFile, callback = noop) {
+  createThumbnail(file: VTransmitFile, callback = noop): void {
     const reader = new FileReader()
     reader.addEventListener("load", () => {
       if (file.type === "image/svg+xml") {
         file.dataUrl = reader.result
         this.$emit("thumbnail", file, reader.result)
-        return callback()
+        callback()
       }
-      return this.createThumbnailFromUrl(file, reader.result, callback)
+      this.createThumbnailFromUrl(file, reader.result, callback)
     }, false)
 
     // FileReader requires a native File|Blob object
-    return reader.readAsDataURL(file.nativeFile)
+    reader.readAsDataURL(file.nativeFile)
   }
-  createThumbnailFromUrl(file: VTransmitFile, imageUrl: string, callback?: Function) {
+  createThumbnailFromUrl(file: VTransmitFile, imageUrl: string, callback?: Function): void {
     const imgEl = document.createElement("img")
 
     imgEl.addEventListener("load", () => {
@@ -447,7 +447,6 @@ export default class VueTransmit extends Vue {
         width: this.thumbnailWidth,
         height: this.thumbnailHeight
       })
-
       const canvas = document.createElement("canvas")
       const ctx = canvas.getContext("2d")
       canvas.width = resizeInfo.dWidth
@@ -472,10 +471,10 @@ export default class VueTransmit extends Vue {
       }
     }, false)
     if (callback) {
-      imgEl.addEventListener("error", callback, false)
+      imgEl.addEventListener("error", (callback as EventListenerOrEventListenerObject), false)
     }
 
-    return imgEl.src = imageUrl
+    imgEl.src = imageUrl
   }
   processQueue() {
     const processingLength = this.uploadingFiles.length

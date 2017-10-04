@@ -11,7 +11,7 @@ export interface ISpeedStats {
     kbps: number;
     mbps: number;
 }
-export default class VTransmitFile {
+declare class VTransmitFile {
     private _nativeFile;
     id: string;
     accepted: boolean;
@@ -40,3 +40,4 @@ export default class VTransmitFile {
     static fromNativeFile(file: File, ...data: any[]): VTransmitFile;
     static idFactory(): string;
 }
+export default VTransmitFile;

@@ -23,6 +23,9 @@ export declare enum READY_STATES {
     LOADING = 3,
     DONE = 4,
 }
+export declare function scaleH(ratio: number, width: number): number;
+export declare function scaleW(ratio: number, height: number): number;
+export declare function scaleDims(ratio: number, width?: number, height?: number): number[];
 export interface IDrawImageArgs {
     sx: number;
     sy: number;

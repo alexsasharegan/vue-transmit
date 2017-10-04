@@ -80,6 +80,9 @@ module.exports = require("vue");
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 exports.uniqueId = uniqueId;
 exports.copyOwnAndInheritedProps = copyOwnAndInheritedProps;
 exports.round = round;
@@ -89,6 +92,9 @@ exports.toKbps = toKbps;
 exports.toMbps = toMbps;
 exports.hbsReplacer = hbsReplacer;
 exports.objFactory = objFactory;
+exports.scaleH = scaleH;
+exports.scaleW = scaleW;
+exports.scaleDims = scaleDims;
 exports.resizeImg = resizeImg;
 var assign = exports.assign = Object.assign;
 var idCounter = 0;
@@ -143,12 +149,20 @@ var READY_STATES = exports.READY_STATES = undefined;
     READY_STATES[READY_STATES["LOADING"] = 3] = "LOADING";
     READY_STATES[READY_STATES["DONE"] = 4] = "DONE";
 })(READY_STATES || (exports.READY_STATES = READY_STATES = {}));
+function scaleH(ratio, width) {
+    return width / ratio;
+}
+function scaleW(ratio, height) {
+    return height * ratio;
+}
+function scaleDims(ratio, width, height) {
+    console.log(arguments);
+    return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height];
+}
 function resizeImg(file, dims) {
     // Extract the object's primitive values so we don't mutate the input
-    var oWidth = dims.width,
-        oHeight = dims.height;
-
     var sRatio = file.width / file.height;
+    var dRatio = dims.width / dims.height;
     var imgCoords = {
         sx: 0,
         sy: 0,
@@ -156,63 +170,58 @@ function resizeImg(file, dims) {
         sHeight: file.height,
         dx: 0,
         dy: 0,
-        dWidth: 0,
-        dHeight: 0
+        dWidth: dims.width,
+        dHeight: dims.height
     };
-    if (oWidth == null && oHeight == null) {
-        oWidth = imgCoords.sWidth;
-        oHeight = imgCoords.sHeight;
-    } else if (oWidth == null) {
-        oWidth = sRatio * oHeight;
-    } else if (oHeight == null) {
-        oHeight = 1 / sRatio * oWidth;
-    }
-    var dRatio = oWidth / oHeight;
-    if (file.height < oHeight || file.width < oWidth) {
-        imgCoords.dHeight = imgCoords.sHeight;
-        imgCoords.dWidth = imgCoords.sWidth;
+    var w = void 0,
+        h = void 0;
+    if (dRatio > sRatio) {
+        var _scaleDims = scaleDims(dRatio, file.width);
+
+        var _scaleDims2 = _slicedToArray(_scaleDims, 2);
+
+        w = _scaleDims2[0];
+        h = _scaleDims2[1];
     } else {
-        if (sRatio > dRatio) {
-            imgCoords.sHeight = file.height;
-            imgCoords.sWidth = imgCoords.sHeight * dRatio;
-        } else {
-            imgCoords.sWidth = file.width;
-            imgCoords.sHeight = imgCoords.sWidth / dRatio;
-        }
+        var _scaleDims3 = scaleDims(dRatio, undefined, file.height);
+
+        var _scaleDims4 = _slicedToArray(_scaleDims3, 2);
+
+        w = _scaleDims4[0];
+        h = _scaleDims4[1];
     }
-    imgCoords.sx = (file.width - imgCoords.sWidth) / 2;
-    imgCoords.sy = (file.height - imgCoords.sHeight) / 2;
+    if (w < file.width) {
+        imgCoords.sx = (file.width - w) / 2;
+        imgCoords.sWidth = w;
+    }
+    if (h < file.height) {
+        imgCoords.sy = (file.height - h) / 2;
+        imgCoords.sHeight = h;
+    }
     return imgCoords;
 }
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__src__);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _src = __webpack_require__(3);
-
-var components = _interopRequireWildcard(_src);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-exports.default = {
-  install: function install(Vue, options) {
-    for (var component in components) {
-      if (Object.prototype.hasOwnProperty.call(components, component)) {
-        Vue.component(component, components[component]);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  install(Vue, options) {
+    for (const component in __WEBPACK_IMPORTED_MODULE_0__src__) {
+      if (Object.prototype.hasOwnProperty.call(__WEBPACK_IMPORTED_MODULE_0__src__, component)) {
+        Vue.component(component, __WEBPACK_IMPORTED_MODULE_0__src__[component])
       }
     }
   },
-
   name: "vue-transmit"
-};
+});
+
 
 /***/ }),
 /* 3 */
@@ -617,9 +626,9 @@ var VueTransmit = function (_Vue) {
                 return;
             }
             this.processingThumbnail = true;
-            return this.createThumbnail(this.thumbnailQueue.shift(), function () {
+            this.createThumbnail(this.thumbnailQueue.shift(), function () {
                 _this3.processingThumbnail = false;
-                return _this3.processThumbnailQueue();
+                _this3.processThumbnailQueue();
             });
         }
     }, {
@@ -634,12 +643,12 @@ var VueTransmit = function (_Vue) {
                 if (file.type === "image/svg+xml") {
                     file.dataUrl = reader.result;
                     _this4.$emit("thumbnail", file, reader.result);
-                    return callback();
+                    callback();
                 }
-                return _this4.createThumbnailFromUrl(file, reader.result, callback);
+                _this4.createThumbnailFromUrl(file, reader.result, callback);
             }, false);
             // FileReader requires a native File|Blob object
-            return reader.readAsDataURL(file.nativeFile);
+            reader.readAsDataURL(file.nativeFile);
         }
     }, {
         key: "createThumbnailFromUrl",
@@ -669,7 +678,7 @@ var VueTransmit = function (_Vue) {
             if (callback) {
                 imgEl.addEventListener("error", callback, false);
             }
-            return imgEl.src = imageUrl;
+            imgEl.src = imageUrl;
         }
     }, {
         key: "processQueue",

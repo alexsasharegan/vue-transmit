@@ -15,7 +15,7 @@ export interface ISpeedStats {
   mbps: number
 }
 
-export default class VTransmitFile {
+class VTransmitFile {
   private _nativeFile: File = null
   id: string = VTransmitFile.idFactory()
   accepted: boolean = undefined // Passed all validation.
@@ -120,3 +120,5 @@ export default class VTransmitFile {
     return uniqueId("v-transmit-file-")
   }
 }
+
+export default VTransmitFile

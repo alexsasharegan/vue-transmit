@@ -7,6 +7,8 @@
     "target": "esnext",
     "module": "es2015",
     "moduleResolution": "node",
+    "declaration": true,
+    "declarationDir": "./",
     "allowJs": false,
     "experimentalDecorators": true,
     "noImplicitAny": false,
@@ -16,8 +18,7 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "baseUrl": "./src/",
-    "declaration": true
+    "baseUrl": "./src/"
   },
   "include": ["./src"],
   "exclude": ["node_modules", "vendor"]

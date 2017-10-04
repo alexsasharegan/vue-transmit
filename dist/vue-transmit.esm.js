@@ -80,6 +80,9 @@ module.exports = require("vue");
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 exports.uniqueId = uniqueId;
 exports.copyOwnAndInheritedProps = copyOwnAndInheritedProps;
 exports.round = round;
@@ -89,6 +92,9 @@ exports.toKbps = toKbps;
 exports.toMbps = toMbps;
 exports.hbsReplacer = hbsReplacer;
 exports.objFactory = objFactory;
+exports.scaleH = scaleH;
+exports.scaleW = scaleW;
+exports.scaleDims = scaleDims;
 exports.resizeImg = resizeImg;
 var assign = exports.assign = Object.assign;
 var idCounter = 0;
@@ -143,12 +149,20 @@ var READY_STATES = exports.READY_STATES = undefined;
     READY_STATES[READY_STATES["LOADING"] = 3] = "LOADING";
     READY_STATES[READY_STATES["DONE"] = 4] = "DONE";
 })(READY_STATES || (exports.READY_STATES = READY_STATES = {}));
+function scaleH(ratio, width) {
+    return width / ratio;
+}
+function scaleW(ratio, height) {
+    return height * ratio;
+}
+function scaleDims(ratio, width, height) {
+    console.log(arguments);
+    return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height];
+}
 function resizeImg(file, dims) {
     // Extract the object's primitive values so we don't mutate the input
-    var oWidth = dims.width,
-        oHeight = dims.height;
-
     var sRatio = file.width / file.height;
+    var dRatio = dims.width / dims.height;
     var imgCoords = {
         sx: 0,
         sy: 0,
@@ -156,32 +170,34 @@ function resizeImg(file, dims) {
         sHeight: file.height,
         dx: 0,
         dy: 0,
-        dWidth: 0,
-        dHeight: 0
+        dWidth: dims.width,
+        dHeight: dims.height
     };
-    if (oWidth == null && oHeight == null) {
-        oWidth = imgCoords.sWidth;
-        oHeight = imgCoords.sHeight;
-    } else if (oWidth == null) {
-        oWidth = sRatio * oHeight;
-    } else if (oHeight == null) {
-        oHeight = 1 / sRatio * oWidth;
-    }
-    var dRatio = oWidth / oHeight;
-    if (file.height < oHeight || file.width < oWidth) {
-        imgCoords.dHeight = imgCoords.sHeight;
-        imgCoords.dWidth = imgCoords.sWidth;
+    var w = void 0,
+        h = void 0;
+    if (dRatio > sRatio) {
+        var _scaleDims = scaleDims(dRatio, file.width);
+
+        var _scaleDims2 = _slicedToArray(_scaleDims, 2);
+
+        w = _scaleDims2[0];
+        h = _scaleDims2[1];
     } else {
-        if (sRatio > dRatio) {
-            imgCoords.sHeight = file.height;
-            imgCoords.sWidth = imgCoords.sHeight * dRatio;
-        } else {
-            imgCoords.sWidth = file.width;
-            imgCoords.sHeight = imgCoords.sWidth / dRatio;
-        }
+        var _scaleDims3 = scaleDims(dRatio, undefined, file.height);
+
+        var _scaleDims4 = _slicedToArray(_scaleDims3, 2);
+
+        w = _scaleDims4[0];
+        h = _scaleDims4[1];
     }
-    imgCoords.sx = (file.width - imgCoords.sWidth) / 2;
-    imgCoords.sy = (file.height - imgCoords.sHeight) / 2;
+    if (w < file.width) {
+        imgCoords.sx = (file.width - w) / 2;
+        imgCoords.sWidth = w;
+    }
+    if (h < file.height) {
+        imgCoords.sy = (file.height - h) / 2;
+        imgCoords.sHeight = h;
+    }
     return imgCoords;
 }
 
@@ -191,11 +207,51 @@ function resizeImg(file, dims) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var src_namespaceObject = {};
-__webpack_require__.d(src_namespaceObject, "VueTransmit", function() { return src_components_VueTransmit; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__src__);
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  install(Vue, options) {
+    for (const component in __WEBPACK_IMPORTED_MODULE_0__src__) {
+      if (Object.prototype.hasOwnProperty.call(__WEBPACK_IMPORTED_MODULE_0__src__, component)) {
+        Vue.component(component, __WEBPACK_IMPORTED_MODULE_0__src__[component])
+      }
+    }
+  },
+  name: "vue-transmit"
+});
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.VueTransmit = undefined;
+
+var _VueTransmit = __webpack_require__(4);
+
+var _VueTransmit2 = _interopRequireDefault(_VueTransmit);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.VueTransmit = _VueTransmit2.default;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // EXTERNAL MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-ts-loader!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VueTransmit.vue
-var VueTransmit = __webpack_require__(5);
+var VueTransmit = __webpack_require__(7);
 var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-55f49822","hasScoped":false}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
@@ -205,9 +261,9 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ var components_VueTransmit = (esExports);
 // CONCATENATED MODULE: ./src/components/VueTransmit.vue
 function injectStyle (ssrContext) {
-  __webpack_require__(3)
+  __webpack_require__(5)
 }
-var normalizeComponent = __webpack_require__(4)
+var normalizeComponent = __webpack_require__(6)
 /* script */
 
 /* template */
@@ -226,35 +282,17 @@ var Component = normalizeComponent(
   __vue_module_identifier__
 )
 
-/* harmony default export */ var src_components_VueTransmit = (Component.exports);
+/* harmony default export */ var src_components_VueTransmit = __webpack_exports__["default"] = (Component.exports);
 
-// CONCATENATED MODULE: ./src/index.js
-
-
-
-// CONCATENATED MODULE: ./index.js
-
-
-/* harmony default export */ var index = __webpack_exports__["default"] = ({
-  install: function (Vue, options) {
-    for (const component in src_namespaceObject) {
-      if (Object.prototype.hasOwnProperty.call(src_namespaceObject, component)) {
-        Vue.component(component, src_namespaceObject[component]);
-      }
-    }
-  },
-
-  name: "vue-transmit"
-});
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -351,7 +389,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -369,19 +407,19 @@ var _vue = __webpack_require__(0);
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _vuePropertyDecorator = __webpack_require__(6);
+var _vuePropertyDecorator = __webpack_require__(8);
 
-var _noop = __webpack_require__(11);
+var _noop = __webpack_require__(13);
 
 var _noop2 = _interopRequireDefault(_noop);
 
-var _identity = __webpack_require__(12);
+var _identity = __webpack_require__(14);
 
 var _identity2 = _interopRequireDefault(_identity);
 
 var _utils = __webpack_require__(1);
 
-var _VTransmitFile = __webpack_require__(13);
+var _VTransmitFile = __webpack_require__(15);
 
 var _VTransmitFile2 = _interopRequireDefault(_VTransmitFile);
 
@@ -588,9 +626,9 @@ var VueTransmit = function (_Vue) {
                 return;
             }
             this.processingThumbnail = true;
-            return this.createThumbnail(this.thumbnailQueue.shift(), function () {
+            this.createThumbnail(this.thumbnailQueue.shift(), function () {
                 _this3.processingThumbnail = false;
-                return _this3.processThumbnailQueue();
+                _this3.processThumbnailQueue();
             });
         }
     }, {
@@ -605,12 +643,12 @@ var VueTransmit = function (_Vue) {
                 if (file.type === "image/svg+xml") {
                     file.dataUrl = reader.result;
                     _this4.$emit("thumbnail", file, reader.result);
-                    return callback();
+                    callback();
                 }
-                return _this4.createThumbnailFromUrl(file, reader.result, callback);
+                _this4.createThumbnailFromUrl(file, reader.result, callback);
             }, false);
             // FileReader requires a native File|Blob object
-            return reader.readAsDataURL(file.nativeFile);
+            reader.readAsDataURL(file.nativeFile);
         }
     }, {
         key: "createThumbnailFromUrl",
@@ -640,7 +678,7 @@ var VueTransmit = function (_Vue) {
             if (callback) {
                 imgEl.addEventListener("error", callback, false);
             }
-            return imgEl.src = imageUrl;
+            imgEl.src = imageUrl;
         }
     }, {
         key: "processQueue",
@@ -1460,11 +1498,11 @@ VueTransmit = __decorate([_vuePropertyDecorator.Component], VueTransmit);
 exports.default = VueTransmit;
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
-	 true ? factory(exports, __webpack_require__(0), __webpack_require__(7), __webpack_require__(8)) :
+	 true ? factory(exports, __webpack_require__(0), __webpack_require__(9), __webpack_require__(10)) :
 	typeof define === 'function' && define.amd ? define(['exports', 'vue', 'vue-class-component', 'reflect-metadata'], factory) :
 	(factory((global.VuePropertyDecorator = {}),global.Vue,global.VueClassComponent));
 }(this, (function (exports,vue,vueClassComponent) { 'use strict';
@@ -1566,7 +1604,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1711,7 +1749,7 @@ exports.createDecorator = createDecorator;
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, global) {/*! *****************************************************************************
@@ -2839,10 +2877,10 @@ var Reflect;
             Function("return this;")());
 })(Reflect || (Reflect = {}));
 //# sourceMappingURL=Reflect.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(12)))
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3032,7 +3070,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 var g;
@@ -3059,7 +3097,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3083,7 +3121,7 @@ function noop() {
 /* harmony default export */ __webpack_exports__["default"] = (noop);
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3111,7 +3149,7 @@ function identity(value) {
 /* harmony default export */ __webpack_exports__["default"] = (identity);
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

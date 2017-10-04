@@ -140,7 +140,7 @@ export default class VueTransmit extends Vue {
     enqueueThumbnail(file: VTransmitFile): void;
     processThumbnailQueue(): void;
     createThumbnail(file: VTransmitFile, callback?: any): void;
-    createThumbnailFromUrl(file: VTransmitFile, imageUrl: string, callback?: Function): string;
+    createThumbnailFromUrl(file: VTransmitFile, imageUrl: string, callback?: Function): void;
     processQueue(): void;
     processFile(file: VTransmitFile): void;
     processFiles(files: VTransmitFile[]): void;

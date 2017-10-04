@@ -15,7 +15,7 @@ const ENV = {
   NAME: JSON.stringify(pjson.name)
 }
 const SRC = path.resolve(__dirname, "src")
-const INDEX = path.resolve(__dirname, "index.js")
+const INDEX = path.resolve(__dirname, "index.ts")
 const DIST = path.resolve(__dirname, "dist")
 const LODASH = path.resolve(__dirname, "node_modules/lodash-es")
 const BABEL_PLUGINS = [
@@ -57,7 +57,7 @@ const BABEL = {
 function config(ctx) {
   const name = pjson.name + (ctx.ext ? `.${ctx.ext}` : "")
   const webpackConfig = {
-    entry: path.resolve(__dirname, "index.js"),
+    entry: path.resolve(__dirname, "index.ts"),
     output: {
       ...(ctx.output || {}),
       path: DIST,
@@ -97,7 +97,12 @@ function config(ctx) {
       })
       // new DashboardPlugin()
     ],
-    externals: "vue",
+    externals: ctx.externals || {
+      vue: {
+        root: "Vue",
+        commonjs2: "vue"
+      }
+    },
     performance: {
       hints: false
     },
@@ -200,7 +205,8 @@ module.exports = [
       libraryTarget: "window",
       libraryExport: "default"
     },
-    rules: [BABEL.ES5]
+    rules: [BABEL.ES5],
+    externals: "Vue"
   }),
   config({
     ext: "browser",
@@ -213,6 +219,7 @@ module.exports = [
       libraryTarget: "window",
       libraryExport: "default"
     },
-    rules: [BABEL.ES5]
+    rules: [BABEL.ES5],
+    externals: "Vue"
   })
 ]
