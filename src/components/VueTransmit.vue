@@ -77,7 +77,7 @@ const STATUSES = {
   SUCCESS: "success",
 }
 
-@Component
+@Component({ name: "VueTransmit" })
 export default class VueTransmit extends Vue {
   @Prop({ type: String, default: "div" })
   tag: string
