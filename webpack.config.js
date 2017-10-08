@@ -54,6 +54,13 @@ const BABEL = {
   }
 }
 
+const EXTERNALS = {
+  vue: {
+    root: "Vue",
+    commonjs2: "vue"
+  }
+}
+
 function config(ctx) {
   const name = pjson.name + (ctx.ext ? `.${ctx.ext}` : "")
   const webpackConfig = {
@@ -97,12 +104,7 @@ function config(ctx) {
       })
       // new DashboardPlugin()
     ],
-    externals: ctx.externals || {
-      vue: {
-        root: "Vue",
-        commonjs2: "vue"
-      }
-    },
+    externals: ctx.externals || EXTERNALS,
     performance: {
       hints: false
     },
@@ -206,7 +208,7 @@ module.exports = [
       libraryExport: "default"
     },
     rules: [BABEL.ES5],
-    externals: "Vue"
+    externals: { vue: "Vue" }
   }),
   config({
     ext: "browser",
@@ -220,6 +222,6 @@ module.exports = [
       libraryExport: "default"
     },
     rules: [BABEL.ES5],
-    externals: "Vue"
+    externals: { vue: "Vue" }
   })
 ]

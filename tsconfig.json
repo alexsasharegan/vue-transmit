@@ -20,6 +20,6 @@
     "skipLibCheck": true,
     "baseUrl": "./src/"
   },
-  "include": ["./src"],
+  "include": ["./src", "./index.ts"],
   "exclude": ["node_modules", "vendor"]
 }

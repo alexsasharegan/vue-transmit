@@ -212,7 +212,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  install(Vue, options) {
+  install(Vue, _options) {
     for (const component in __WEBPACK_IMPORTED_MODULE_0__src__) {
       if (Object.prototype.hasOwnProperty.call(__WEBPACK_IMPORTED_MODULE_0__src__, component)) {
         Vue.component(component, __WEBPACK_IMPORTED_MODULE_0__src__[component])
@@ -1494,7 +1494,7 @@ __decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: function 
     } })], VueTransmit.prototype, "accept", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: _utils.resizeImg })], VueTransmit.prototype, "resize", void 0);
 __decorate([(0, _vuePropertyDecorator.Watch)("acceptedFiles")], VueTransmit.prototype, "onAcceptedFilesChange", null);
-VueTransmit = __decorate([_vuePropertyDecorator.Component], VueTransmit);
+VueTransmit = __decorate([(0, _vuePropertyDecorator.Component)({ name: "VueTransmit" })], VueTransmit);
 exports.default = VueTransmit;
 
 /***/ }),
