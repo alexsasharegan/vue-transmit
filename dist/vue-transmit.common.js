@@ -1231,13 +1231,15 @@ var VueTransmit = function (_Vue) {
             this.$emit("drop", e);
             var files = Array.from(e.dataTransfer.files);
             this.$emit("added-files", files);
-            if (files.length) {
+            if (files.length && e.dataTransfer.items) {
                 var items = Array.from(e.dataTransfer.items);
                 if (items && items.length && items[0].webkitGetAsEntry) {
                     this.addFilesFromItems(items);
                 } else {
                     this.handleFiles(files);
                 }
+            } else {
+                this.handleFiles(files);
             }
         }
     }, {
@@ -1255,11 +1257,7 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "handleFiles",
         value: function handleFiles(files) {
-            var _this7 = this;
-
-            return files.map(function (file) {
-                return _this7.addFile(file);
-            });
+            return files.map(this.addFile);
         }
     }, {
         key: "addFilesFromItems",
@@ -1303,7 +1301,7 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "addFilesFromDirectory",
         value: function addFilesFromDirectory(directory, path) {
-            var _this8 = this;
+            var _this7 = this;
 
             directory.createReader().readEntries(function (entries) {
                 var _iteratorNormalCompletion13 = true;
@@ -1316,14 +1314,14 @@ var VueTransmit = function (_Vue) {
 
                         if (entry.isFile) {
                             entry.file(function (file) {
-                                if (_this8.ignoreHiddenFiles && /^\./.test(file.name)) {
+                                if (_this7.ignoreHiddenFiles && /^\./.test(file.name)) {
                                     return;
                                 }
                                 file.fullPath = path + "/" + file.name;
-                                _this8.addFile(file);
+                                _this7.addFile(file);
                             }, console.error);
                         } else if (entry.isDirectory) {
-                            _this8.addFilesFromDirectory(entry, path + "/" + entry.name);
+                            _this7.addFilesFromDirectory(entry, path + "/" + entry.name);
                         }
                     }
                 } catch (err) {
@@ -1345,17 +1343,17 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "mounted",
         value: function mounted() {
-            var _this9 = this;
+            var _this8 = this;
 
             this.$on("upload-progress", this.updateTotalUploadProgress);
             this.$on("removed-file", this.updateTotalUploadProgress);
             this.$on("canceled", function (file) {
-                return _this9.$emit("complete", file);
+                return _this8.$emit("complete", file);
             });
             this.$on("complete", function (file) {
-                if (_this9.addedFiles.length === 0 && _this9.uploadingFiles.length === 0 && _this9.queuedFiles.length === 0) {
+                if (_this8.addedFiles.length === 0 && _this8.uploadingFiles.length === 0 && _this8.queuedFiles.length === 0) {
                     setTimeout(function () {
-                        return _this9.$emit("queue-complete", file);
+                        return _this8.$emit("queue-complete", file);
                     }, 0);
                 }
             });

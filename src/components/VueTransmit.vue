@@ -787,14 +787,17 @@ export default class VueTransmit extends Vue {
     }
     this.$emit("drop", e)
     const files = Array.from(e.dataTransfer.files)
+
     this.$emit("added-files", files)
-    if (files.length) {
+    if (files.length && e.dataTransfer.items) {
       const items = Array.from(e.dataTransfer.items)
       if (items && items.length && items[0].webkitGetAsEntry) {
         this.addFilesFromItems(items)
       } else {
         this.handleFiles(files)
       }
+    } else {
+      this.handleFiles(files)
     }
   }
   paste(e) {
@@ -808,7 +811,7 @@ export default class VueTransmit extends Vue {
     }
   }
   handleFiles(files) {
-    return files.map(file => this.addFile(file))
+    return files.map(this.addFile)
   }
   addFilesFromItems(items) {
     for (const item of items) {
