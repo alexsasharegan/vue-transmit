@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.7"></a>
+## [6.0.7](https://github.com/alexsasharegan/vue-transmit/compare/v6.0.6...v6.0.7) (2017-10-09)
+
+
+### Bug Fixes
+
+* **drag+drop:** fix for webkit ([caa4683](https://github.com/alexsasharegan/vue-transmit/commit/caa4683))
+
+
+
 <a name="6.0.6"></a>
 ## [6.0.6](https://github.com/alexsasharegan/vue-transmit/compare/v6.0.5...v6.0.6) (2017-10-08)
 
