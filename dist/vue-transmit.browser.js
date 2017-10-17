@@ -548,7 +548,7 @@ var VueTransmit = function (_Vue) {
             if (~idxToRm) {
                 this.$emit("removed-file", this.files.splice(idxToRm, 1)[0]);
                 if (this.files.length === 0) {
-                    return this.$emit("reset");
+                    this.$emit("reset");
                 }
             }
         }
