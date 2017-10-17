@@ -254,7 +254,7 @@ export default class VueTransmit extends Vue {
   // Used to keep the createThumbnail calls processing async one-at-a-time
   private processingThumbnail: boolean = false
   public thumbnailQueue: any[] = []
-  public files: any[] = []
+  public files: VTransmitFile[] = []
   public defaultHeaders: object = {
     "Accept": "application/json",
     "Cache-Control": "no-cache",
@@ -339,13 +339,13 @@ export default class VueTransmit extends Vue {
     }
   }
 
-  getFilesWithStatus(...statuses: string[]) {
+  getFilesWithStatus(...statuses: string[]): VTransmitFile[] {
     return this.files.filter(f => statuses.includes(f.status))
   }
-  onFileInputChange() {
+  onFileInputChange(): void {
     this.$emit('added-files', Array.from(this.inputEl.files).map(this.addFile))
   }
-  addFile(file: File) {
+  addFile(file: File): VTransmitFile {
     const vTransmitFile = VTransmitFile.fromNativeFile(file)
     vTransmitFile.status = STATUSES.ADDED
     this.files.push(vTransmitFile)
@@ -368,7 +368,7 @@ export default class VueTransmit extends Vue {
 
     return vTransmitFile
   }
-  removeFile(file: VTransmitFile) {
+  removeFile(file: VTransmitFile): void {
     if (file.status === STATUSES.UPLOADING) {
       this.cancelUpload(file)
     }
@@ -376,21 +376,21 @@ export default class VueTransmit extends Vue {
     if (~idxToRm) {
       this.$emit("removed-file", this.files.splice(idxToRm, 1)[0])
       if (this.files.length === 0) {
-        return this.$emit("reset")
+        this.$emit("reset")
       }
     }
   }
-  removeAllFiles(cancelInProgressUploads = false) {
+  removeAllFiles(cancelInProgressUploads = false): void {
     for (const file of this.files) {
       if (file.status !== STATUSES.UPLOADING || cancelInProgressUploads) {
         this.removeFile(file)
       }
     }
   }
-  triggerBrowseFiles() {
+  triggerBrowseFiles(): void {
     this.inputEl.click()
   }
-  handleClickUploaderAction() {
+  handleClickUploaderAction(): void {
     if (this.clickable) {
       this.triggerBrowseFiles()
     }
