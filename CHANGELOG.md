@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.8"></a>
+## [6.0.8](https://github.com/alexsasharegan/vue-transmit/compare/v6.0.7...v6.0.8) (2017-10-17)
+
+
+### Bug Fixes
+
+* improve typings and ensure removeFile returns void ([0a3f686](https://github.com/alexsasharegan/vue-transmit/commit/0a3f686))
+
+
+
 <a name="6.0.7"></a>
 ## [6.0.7](https://github.com/alexsasharegan/vue-transmit/compare/v6.0.6...v6.0.7) (2017-10-09)
 
