@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/alexsasharegan/vue-transmit/compare/v6.0.8...v7.0.0) (2017-10-18)
+
+
+### Chores
+
+* update deps to Vue 2.5 compatibility ([5f891be](https://github.com/alexsasharegan/vue-transmit/commit/5f891be))
+
+
+### Features
+
+* **VTransmitFile:** make dataUrl prop non-enumerable ([9e51905](https://github.com/alexsasharegan/vue-transmit/commit/9e51905))
+
+
+### BREAKING CHANGES
+
+* dep updates are major semver upgrades.
+* **VTransmitFile:** a non-enumerable dataUrl prop will not serialize in JSON or appear in the result of Object.keys. This should be beneficial since dataUrl's are mostly expensive payloads that should be avoided.
+
+
+
 <a name="6.0.8"></a>
 ## [6.0.8](https://github.com/alexsasharegan/vue-transmit/compare/v6.0.7...v6.0.8) (2017-10-17)
 
