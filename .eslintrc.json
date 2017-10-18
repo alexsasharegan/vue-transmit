@@ -14,13 +14,11 @@
     "ecmaFeatures": {
       "impliedStrict": true,
       "experimentalObjectRestSpread": true,
-      "jsx": true
+      "jsx": true,
+      "modules": true
     }
   },
   "globals": {
-    "ajax": true,
-    "axios": true,
-    "Tether": true,
     "Promise": true
   },
   "extends": "eslint:recommended",
