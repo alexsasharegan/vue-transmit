@@ -1,6 +1,7 @@
 import VTransmitFile from "../classes/VTransmitFile"
 
 export const assign = Object.assign
+export const defineProperty = Object.defineProperty
 
 let idCounter = 0
 export function uniqueId(prefix: string): string {
@@ -69,8 +70,6 @@ export function scaleW(ratio: number, height: number): number {
 }
 
 export function scaleDims(ratio: number, width?: number, height?: number): number[] {
-  console.log(arguments);
-
   return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height]
 }
 
@@ -107,9 +106,9 @@ export function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArg
 
   let w, h
   if (dRatio > sRatio) {
-    [w, h] = scaleDims(dRatio, file.width)
+    ;[w, h] = scaleDims(dRatio, file.width)
   } else {
-    [w, h] = scaleDims(dRatio, undefined, file.height)
+    ;[w, h] = scaleDims(dRatio, undefined, file.height)
   }
 
   if (w < file.width) {

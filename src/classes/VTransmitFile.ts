@@ -1,4 +1,4 @@
-import { assign, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
+import { assign, defineProperty, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
 
 export interface IUploadStats {
   bytesSent: number
@@ -42,7 +42,7 @@ class VTransmitFile {
   width: number = undefined
   height: number = undefined
   xhr: XMLHttpRequest = undefined
-  dataUrl: string = undefined
+  private _dataUrl: string
   errorMessage: string = undefined
 
   constructor(...data: object[]) {
@@ -108,6 +108,19 @@ class VTransmitFile {
     }
     this._nativeFile = file
     this.upload.total = file.size
+  }
+
+  get dataUrl() {
+    return this._dataUrl || ""
+  }
+
+  set dataUrl(value) {
+    defineProperty(this, "_dataUrl", {
+      value,
+      enumerable: false,
+      configurable: true,
+      writable: true
+    })
   }
 
   static fromNativeFile(file: File, ...data) {

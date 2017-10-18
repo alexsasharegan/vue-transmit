@@ -27,7 +27,7 @@ declare class VTransmitFile {
     width: number;
     height: number;
     xhr: XMLHttpRequest;
-    dataUrl: string;
+    private _dataUrl;
     errorMessage: string;
     constructor(...data: object[]);
     set(...data: object[]): VTransmitFile;
@@ -37,6 +37,7 @@ declare class VTransmitFile {
     startProgress(): VTransmitFile;
     endProgress(): VTransmitFile;
     nativeFile: File;
+    dataUrl: string;
     static fromNativeFile(file: File, ...data: any[]): VTransmitFile;
     static idFactory(): string;
 }
