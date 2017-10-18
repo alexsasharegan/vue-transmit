@@ -114,8 +114,7 @@ export default class VueTransmit extends Vue {
     readonly maxFilesReached: boolean;
     readonly maxFilesReachedClass: string;
     readonly isDraggingClass: {
-        [x: string]: boolean;
-        "v-transmit__upload-area--is-dragging": boolean;
+        [key: string]: boolean;
     };
     readonly isUploading: boolean;
     readonly fileSlotBindings: {
@@ -148,15 +147,15 @@ export default class VueTransmit extends Vue {
     cancelUpload(file: VTransmitFile): void;
     uploadFile(file: VTransmitFile): void;
     uploadFiles(files: VTransmitFile[]): void;
-    handleUploadError(files: any, xhr: any, response: any): () => void;
-    handleTimeout(files: any, xhr: any): (e: any) => any;
+    handleUploadError(files: VTransmitFile[], xhr: XMLHttpRequest): () => void;
+    handleTimeout(files: VTransmitFile[], xhr: XMLHttpRequest): (e: Event) => void;
     handleUploadProgress(files: any): (e?: ProgressEvent) => void;
     updateTotalUploadProgress(): void;
     getParamName(index: any): string;
-    uploadFinished(files: any, responseText: any, e: any): void;
+    uploadFinished(files: VTransmitFile[], response: string | object | any[], e: Event): void;
     errorProcessing(files: VTransmitFile[], message: string, xhr?: XMLHttpRequest): void;
-    acceptFile(file: VTransmitFile, done: any): any;
-    isValidFileType(file: any, acceptedFiles: any): boolean;
+    acceptFile(file: VTransmitFile, done: Function): void;
+    isValidFileType(file: VTransmitFile, acceptedFileTypes: string[]): boolean;
     handleDragStart(e: DragEvent): void;
     handleDragOver(e: DragEvent): void;
     handleDragEnter(e: DragEvent): void;
@@ -164,7 +163,7 @@ export default class VueTransmit extends Vue {
     handleDragEnd(e: DragEvent): void;
     onDrop(e: DragEvent): void;
     paste(e: any): void;
-    handleFiles(files: any): any;
+    handleFiles(files: File[]): VTransmitFile[];
     addFilesFromItems(items: any): void;
     addFilesFromDirectory(directory: any, path: any): void;
     mounted(): void;

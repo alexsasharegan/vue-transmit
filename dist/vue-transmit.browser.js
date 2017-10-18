@@ -97,6 +97,7 @@ exports.scaleW = scaleW;
 exports.scaleDims = scaleDims;
 exports.resizeImg = resizeImg;
 var assign = exports.assign = Object.assign;
+var defineProperty = exports.defineProperty = Object.defineProperty;
 var idCounter = 0;
 function uniqueId(prefix) {
     var id = ++idCounter;
@@ -156,7 +157,6 @@ function scaleW(ratio, height) {
     return height * ratio;
 }
 function scaleDims(ratio, width, height) {
-    console.log(arguments);
     return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height];
 }
 function resizeImg(file, dims) {
@@ -176,6 +176,8 @@ function resizeImg(file, dims) {
     var w = void 0,
         h = void 0;
     if (dRatio > sRatio) {
+        ;
+
         var _scaleDims = scaleDims(dRatio, file.width);
 
         var _scaleDims2 = _slicedToArray(_scaleDims, 2);
@@ -183,6 +185,8 @@ function resizeImg(file, dims) {
         w = _scaleDims2[0];
         h = _scaleDims2[1];
     } else {
+        ;
+
         var _scaleDims3 = scaleDims(dRatio, undefined, file.height);
 
         var _scaleDims4 = _slicedToArray(_scaleDims3, 2);
@@ -254,7 +258,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var VueTransmit = __webpack_require__(7);
 var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-55f49822","hasScoped":false}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-55f49822","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.onDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
@@ -268,6 +272,8 @@ var normalizeComponent = __webpack_require__(6)
 
 /* template */
 
+/* template functional */
+  var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -277,6 +283,7 @@ var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   VueTransmit_default.a,
   components_VueTransmit,
+  __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
@@ -297,12 +304,14 @@ var Component = normalizeComponent(
 
 /* globals __VUE_SSR_CONTEXT__ */
 
-// this module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
 
 module.exports = function normalizeComponent (
   rawScriptExports,
   compiledTemplate,
+  functionalTemplate,
   injectStyles,
   scopeId,
   moduleIdentifier /* server only */
@@ -326,6 +335,12 @@ module.exports = function normalizeComponent (
   if (compiledTemplate) {
     options.render = compiledTemplate.render
     options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
   }
 
   // scopedId
@@ -366,12 +381,16 @@ module.exports = function normalizeComponent (
     var existing = functional
       ? options.render
       : options.beforeCreate
+
     if (!functional) {
       // inject component registration as beforeCreate hook
       options.beforeCreate = existing
         ? [].concat(existing, hook)
         : [hook]
     } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
       // register for functioal component in vue file
       options.render = function renderWithStyleInjection (h, context) {
         hook.call(context)
@@ -701,7 +720,7 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "processFile",
         value: function processFile(file) {
-            return this.processFiles([file]);
+            this.processFiles([file]);
         }
     }, {
         key: "processFiles",
@@ -757,10 +776,10 @@ var VueTransmit = function (_Vue) {
 
                 try {
                     for (var _iterator3 = groupedFiles[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                        var _file = _step3.value;
+                        var f = _step3.value;
 
-                        _file.status = STATUSES.CANCELED;
-                        this.$emit("canceled", _file);
+                        f.status = STATUSES.CANCELED;
+                        this.$emit("canceled", f);
                     }
                 } catch (err) {
                     _didIteratorError3 = true;
@@ -788,13 +807,13 @@ var VueTransmit = function (_Vue) {
                 }
             }
             if (this.autoProcessQueue) {
-                return this.processQueue();
+                this.processQueue();
             }
         }
     }, {
         key: "uploadFile",
         value: function uploadFile(file) {
-            return this.uploadFiles([file]);
+            this.uploadFiles([file]);
         }
     }, {
         key: "uploadFiles",
@@ -832,7 +851,7 @@ var VueTransmit = function (_Vue) {
 
             xhr.open(this.method, this.url, true);
             xhr.withCredentials = Boolean(this.withCredentials);
-            var handleError = this.handleUploadError(files, xhr, response);
+            var handleError = this.handleUploadError(files, xhr);
             var updateProgress = this.handleUploadProgress(files);
             xhr.addEventListener("error", handleError);
             xhr.upload.addEventListener("progress", updateProgress);
@@ -876,9 +895,9 @@ var VueTransmit = function (_Vue) {
 
             try {
                 for (var _iterator5 = files[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                    var _file2 = _step5.value;
+                    var _file = _step5.value;
 
-                    this.$emit("sending", _file2, xhr, formData);
+                    this.$emit("sending", _file, xhr, formData);
                 }
             } catch (err) {
                 _didIteratorError5 = true;
@@ -905,11 +924,12 @@ var VueTransmit = function (_Vue) {
         }
     }, {
         key: "handleUploadError",
-        value: function handleUploadError(files, xhr, response) {
+        value: function handleUploadError(files, xhr) {
             var vm = this;
             return function onUploadErrorFn() {
                 if (files[0].status !== STATUSES.CANCELED) {
-                    vm.errorProcessing(files, response || vm.dictResponseError.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ statusCode: xhr.status })), xhr);
+                    var message = vm.dictResponseError.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ statusCode: xhr.status }));
+                    vm.errorProcessing(files, message, xhr);
                 }
             };
         }
@@ -947,7 +967,7 @@ var VueTransmit = function (_Vue) {
 
                 vm.$emit("timeout-multiple", files, e, xhr);
                 if (this.autoProcessQueue) {
-                    return this.processQueue();
+                    this.processQueue();
                 }
             };
         }
@@ -989,14 +1009,14 @@ var VueTransmit = function (_Vue) {
 
                     try {
                         for (var _iterator8 = files[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-                            var _file3 = _step8.value;
+                            var _file2 = _step8.value;
 
-                            if (_file3.upload.progress !== 100 || _file3.upload.bytesSent !== _file3.upload.total) {
+                            if (_file2.upload.progress !== 100 || _file2.upload.bytesSent !== _file2.upload.total) {
                                 allFilesFinished = false;
                             }
-                            _file3.upload.progress = 100;
-                            _file3.upload.bytesSent = _file3.upload.total;
-                            _file3.endProgress();
+                            _file2.upload.progress = 100;
+                            _file2.upload.bytesSent = _file2.upload.total;
+                            _file2.endProgress();
                         }
                     } catch (err) {
                         _didIteratorError8 = true;
@@ -1023,9 +1043,9 @@ var VueTransmit = function (_Vue) {
 
                 try {
                     for (var _iterator9 = files[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-                        var _file4 = _step9.value;
+                        var _file3 = _step9.value;
 
-                        vm.$emit("upload-progress", _file4, _file4.upload.progress, _file4.upload.bytesSent);
+                        vm.$emit("upload-progress", _file3, _file3.upload.progress, _file3.upload.bytesSent);
                     }
                 } catch (err) {
                     _didIteratorError9 = true;
@@ -1063,7 +1083,7 @@ var VueTransmit = function (_Vue) {
         }
     }, {
         key: "uploadFinished",
-        value: function uploadFinished(files, responseText, e) {
+        value: function uploadFinished(files, response, e) {
             var _iteratorNormalCompletion10 = true;
             var _didIteratorError10 = false;
             var _iteratorError10 = undefined;
@@ -1074,7 +1094,7 @@ var VueTransmit = function (_Vue) {
 
                     file.status = STATUSES.SUCCESS;
                     file.endProgress();
-                    this.$emit("success", file, responseText, e);
+                    this.$emit("success", file, response, e);
                     this.$emit("complete", file);
                 }
             } catch (err) {
@@ -1093,11 +1113,11 @@ var VueTransmit = function (_Vue) {
             }
 
             if (this.uploadMultiple) {
-                this.$emit("success-multiple", files, responseText, e);
+                this.$emit("success-multiple", files, response, e);
                 this.$emit("complete-multiple", files);
             }
             if (this.autoProcessQueue) {
-                return this.processQueue();
+                this.processQueue();
             }
         }
     }, {
@@ -1143,32 +1163,32 @@ var VueTransmit = function (_Vue) {
         key: "acceptFile",
         value: function acceptFile(file, done) {
             if (file.size > this.maxFileSize * 1024 * 1024) {
-                return done(this.dictFileTooBig.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({
+                done(this.dictFileTooBig.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({
                     fileSize: Math.round(file.size / 1024 / 10.24) / 100,
                     maxFileSize: this.maxFileSize
                 })));
             } else if (!this.isValidFileType(file, this.acceptedFileTypes)) {
-                return done(this.dictInvalidFileType);
+                done(this.dictInvalidFileType);
             } else if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
                 done(this.dictMaxFilesExceeded.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ maxFiles: this.maxFiles })));
-                return this.$emit("max-files-exceeded", file);
+                this.$emit("max-files-exceeded", file);
             } else {
                 // Call the prop callback for the client to validate.
-                return this.accept(file, done);
+                this.accept(file, done);
             }
         }
     }, {
         key: "isValidFileType",
-        value: function isValidFileType(file, acceptedFiles) {
-            if (!acceptedFiles.length) {
+        value: function isValidFileType(file, acceptedFileTypes) {
+            if (!acceptedFileTypes.length) {
                 return true;
             }
             var mimeType = file.type;
             var baseMimeType = mimeType.replace(/\/.*$/, "");
             // Return true on the first condition match,
             // otherwise exhaust all conditions and return false.
-            for (var i = 0; i < acceptedFiles.length; i++) {
-                var validType = acceptedFiles[i];
+            for (var i = 0; i < acceptedFileTypes.length; i++) {
+                var validType = acceptedFileTypes[i];
                 if (validType.charAt(0) === ".") {
                     // Ensure extension exists at the end of the filename.
                     if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
@@ -1508,7 +1528,8 @@ exports.default = VueTransmit;
 vue = vue && vue.hasOwnProperty('default') ? vue['default'] : vue;
 var vueClassComponent__default = 'default' in vueClassComponent ? vueClassComponent['default'] : vueClassComponent;
 
-/** vue-property-decorator verson 5.3.0 MIT LICENSE copyright 2017 kaorun343 */
+/** vue-property-decorator verson 6.0.0 MIT LICENSE copyright 2017 kaorun343 */
+'use strict';
 /**
  * decorator of an inject
  * @param key key
@@ -1550,10 +1571,17 @@ function Provide(key) {
  * @param  event event name
  * @return PropertyDecorator
  */
-function Model(event) {
-    return vueClassComponent.createDecorator(function (componentOptions, prop) {
-        componentOptions.model = { prop: prop, event: event || prop };
-    });
+function Model(event, options) {
+    if (options === void 0) { options = {}; }
+    return function (target, key) {
+        if (!Array.isArray(options) && typeof options.type === 'undefined') {
+            options.type = Reflect.getMetadata('design:type', target, key);
+        }
+        vueClassComponent.createDecorator(function (componentOptions, k) {
+            (componentOptions.props || (componentOptions.props = {}))[k] = options;
+            componentOptions.model = { prop: k, event: event || k };
+        })(target, key);
+    };
 }
 /**
  * decorator of a prop
@@ -1587,14 +1615,37 @@ function Watch(path, options) {
         componentOptions.watch[path] = { handler: handler, deep: deep, immediate: immediate };
     });
 }
+// Code copied from Vue/src/shared/util.js
+var hyphenateRE = /\B([A-Z])/g;
+var hyphenate = function (str) { return str.replace(hyphenateRE, '-$1').toLowerCase(); };
+/**
+ * decorator of an event-emitter function
+ * @param  event The name of the event
+ * @return MethodDecorator
+ */
+function Emit(event) {
+    return function (target, key, descriptor) {
+        key = hyphenate(key);
+        var original = descriptor.value;
+        descriptor.value = function emitter() {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            if (original.apply(this, args) !== false)
+                this.$emit.apply(this, [event || key].concat(args));
+        };
+    };
+}
 
+exports.Component = vueClassComponent__default;
+exports.Vue = vue;
 exports.Inject = Inject;
 exports.Provide = Provide;
 exports.Model = Model;
 exports.Prop = Prop;
 exports.Watch = Watch;
-exports.Component = vueClassComponent__default;
-exports.Vue = vue;
+exports.Emit = Emit;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -1607,7 +1658,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 "use strict";
 /**
-  * vue-class-component v5.0.2
+  * vue-class-component v6.0.0
   * (c) 2015-2017 Evan You
   * @license MIT
   */
@@ -1621,7 +1672,9 @@ var Vue = _interopDefault(__webpack_require__(0));
 
 function createDecorator(factory) {
     return function (target, key, index) {
-        var Ctor = target.constructor;
+        var Ctor = typeof target === 'function'
+            ? target
+            : target.constructor;
         if (!Ctor.__decorators__) {
             Ctor.__decorators__ = [];
         }
@@ -1685,7 +1738,8 @@ var $internalHooks = [
     'updated',
     'activated',
     'deactivated',
-    'render'
+    'render',
+    'errorCaptured'
 ];
 function componentFactory(Component, options) {
     if (options === void 0) { options = {}; }
@@ -3203,7 +3257,6 @@ var VTransmitFile = function () {
         this.width = undefined;
         this.height = undefined;
         this.xhr = undefined;
-        this.dataUrl = undefined;
         this.errorMessage = undefined;
 
         for (var _len = arguments.length, data = Array(_len), _key = 0; _key < _len; _key++) {
@@ -3287,6 +3340,19 @@ var VTransmitFile = function () {
             }
             this._nativeFile = file;
             this.upload.total = file.size;
+        }
+    }, {
+        key: "dataUrl",
+        get: function get() {
+            return this._dataUrl || "";
+        },
+        set: function set(value) {
+            (0, _utils.defineProperty)(this, "_dataUrl", {
+                value: value,
+                enumerable: false,
+                configurable: true,
+                writable: true
+            });
         }
     }], [{
         key: "fromNativeFile",

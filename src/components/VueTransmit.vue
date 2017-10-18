@@ -276,44 +276,44 @@ export default class VueTransmit extends Vue {
     }
     return el
   }
-  get filesToAccept() {
+  get filesToAccept(): string {
     return this.acceptedFileTypes.join(",")
   }
-  get multiple() {
+  get multiple(): boolean {
     return this.maxFiles === null || this.maxFiles > 1
   }
-  get acceptedFiles() {
+  get acceptedFiles(): VTransmitFile[] {
     return this.files.filter(f => f.accepted)
   }
-  get rejectedFiles() {
+  get rejectedFiles(): VTransmitFile[] {
     return this.files.filter(f => !f.accepted)
   }
-  get addedFiles() {
+  get addedFiles(): VTransmitFile[] {
     return this.getFilesWithStatus(STATUSES.ADDED)
   }
-  get queuedFiles() {
+  get queuedFiles(): VTransmitFile[] {
     return this.getFilesWithStatus(STATUSES.QUEUED)
   }
-  get uploadingFiles() {
+  get uploadingFiles(): VTransmitFile[] {
     return this.getFilesWithStatus(STATUSES.UPLOADING)
   }
-  get activeFiles() {
+  get activeFiles(): VTransmitFile[] {
     return this.getFilesWithStatus(STATUSES.UPLOADING, STATUSES.QUEUED)
   }
-  get maxFilesReached() {
+  get maxFilesReached(): boolean {
     // Loose equality checks null && undefined
     return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles
   }
-  get maxFilesReachedClass() {
+  get maxFilesReachedClass(): string {
     return this.maxFilesReached ? "v-transmit__max-files--reached" : null
   }
-  get isDraggingClass() {
+  get isDraggingClass(): { [key: string]: boolean } {
     return {
       "v-transmit__upload-area--is-dragging": this.dragging,
       [this.dragClass]: this.dragging,
     }
   }
-  get isUploading() {
+  get isUploading(): boolean {
     return this.uploadingFiles.length > 0
   }
   get fileSlotBindings() {
@@ -476,7 +476,7 @@ export default class VueTransmit extends Vue {
 
     imgEl.src = imageUrl
   }
-  processQueue() {
+  processQueue(): void {
     const processingLength = this.uploadingFiles.length
     if (processingLength >= this.maxConcurrentUploads || this.queuedFiles.length === 0) {
       return
@@ -493,10 +493,10 @@ export default class VueTransmit extends Vue {
       }
     }
   }
-  processFile(file: VTransmitFile) {
-    return this.processFiles([file])
+  processFile(file: VTransmitFile): void {
+    this.processFiles([file])
   }
-  processFiles(files: VTransmitFile[]) {
+  processFiles(files: VTransmitFile[]): void {
     for (const file of files) {
       file.processing = true
       file.status = STATUSES.UPLOADING
@@ -508,16 +508,16 @@ export default class VueTransmit extends Vue {
 
     return this.uploadFiles(files)
   }
-  getFilesWithXhr(xhr: XMLHttpRequest) {
+  getFilesWithXhr(xhr: XMLHttpRequest): VTransmitFile[] {
     return this.files.filter(file => file.xhr === xhr)
   }
-  cancelUpload(file: VTransmitFile) {
+  cancelUpload(file: VTransmitFile): void {
     if (file.status === STATUSES.UPLOADING) {
       const groupedFiles = this.getFilesWithXhr(file.xhr)
       file.xhr.abort()
-      for (const _file of groupedFiles) {
-        _file.status = STATUSES.CANCELED
-        this.$emit("canceled", _file)
+      for (const f of groupedFiles) {
+        f.status = STATUSES.CANCELED
+        this.$emit("canceled", f)
       }
       if (this.uploadMultiple) {
         this.$emit("canceled-multiple", groupedFiles)
@@ -531,13 +531,13 @@ export default class VueTransmit extends Vue {
     }
 
     if (this.autoProcessQueue) {
-      return this.processQueue()
+      this.processQueue()
     }
   }
-  uploadFile(file: VTransmitFile) {
-    return this.uploadFiles([file])
+  uploadFile(file: VTransmitFile): void {
+    this.uploadFiles([file])
   }
-  uploadFiles(files: VTransmitFile[]) {
+  uploadFiles(files: VTransmitFile[]): void {
     let response = null
     const xhr = new XMLHttpRequest()
     xhr.timeout = this.timeout
@@ -548,7 +548,7 @@ export default class VueTransmit extends Vue {
     xhr.open(this.method, this.url, true)
     xhr.withCredentials = Boolean(this.withCredentials)
 
-    const handleError = this.handleUploadError(files, xhr, response)
+    const handleError = this.handleUploadError(files, xhr)
     const updateProgress = this.handleUploadProgress(files)
     xhr.addEventListener("error", handleError)
     xhr.upload.addEventListener("progress", updateProgress)
@@ -602,21 +602,18 @@ export default class VueTransmit extends Vue {
 
     return xhr.send(formData)
   }
-  handleUploadError(files, xhr, response) {
+  handleUploadError(files: VTransmitFile[], xhr: XMLHttpRequest): () => void {
     const vm = this
-    return function onUploadErrorFn() {
+    return function onUploadErrorFn(): void {
       if (files[0].status !== STATUSES.CANCELED) {
-        vm.errorProcessing(
-          files,
-          response || vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status })),
-          xhr
-        )
+        const message = vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
+        vm.errorProcessing(files, message, xhr)
       }
     }
   }
-  handleTimeout(files, xhr) {
+  handleTimeout(files: VTransmitFile[], xhr: XMLHttpRequest): (e: Event) => void {
     const vm = this
-    return function onTimeoutFn(e) {
+    return function onTimeoutFn(e: Event): void {
       for (const file of files) {
         file.status = STATUSES.TIMEOUT
         file.endProgress()
@@ -625,13 +622,13 @@ export default class VueTransmit extends Vue {
       vm.$emit("timeout-multiple", files, e, xhr)
 
       if (this.autoProcessQueue) {
-        return this.processQueue()
+        this.processQueue()
       }
     }
   }
-  handleUploadProgress(files) {
+  handleUploadProgress(files): (e?: ProgressEvent) => void {
     const vm = this
-    return function onProgressFn(e?: ProgressEvent) {
+    return function onProgressFn(e?: ProgressEvent): void {
       if (e instanceof ProgressEvent) {
         for (const file of files) {
           file.handleProgress(e)
@@ -656,7 +653,7 @@ export default class VueTransmit extends Vue {
       }
     }
   }
-  updateTotalUploadProgress() {
+  updateTotalUploadProgress(): void {
     const progress = this.activeFiles.reduce((memo, file) => {
       memo.totalBytesSent += file.upload.bytesSent
       memo.totalBytes += file.upload.total
@@ -669,26 +666,26 @@ export default class VueTransmit extends Vue {
 
     this.$emit("total-upload-progress", progress)
   }
-  getParamName(index) {
+  getParamName(index): string {
     return this.paramName + (
       this.uploadMultiple ? `[${index}]` : ''
     )
   }
-  uploadFinished(files, responseText, e) {
+  uploadFinished(files: VTransmitFile[], response: string | object | any[], e: Event): void {
     for (const file of files) {
       file.status = STATUSES.SUCCESS
       file.endProgress()
-      this.$emit("success", file, responseText, e)
+      this.$emit("success", file, response, e)
       this.$emit("complete", file)
     }
 
     if (this.uploadMultiple) {
-      this.$emit("success-multiple", files, responseText, e)
+      this.$emit("success-multiple", files, response, e)
       this.$emit("complete-multiple", files)
     }
 
     if (this.autoProcessQueue) {
-      return this.processQueue()
+      this.processQueue()
     }
   }
   errorProcessing(files: VTransmitFile[], message: string, xhr?: XMLHttpRequest) {
@@ -708,9 +705,9 @@ export default class VueTransmit extends Vue {
       return this.processQueue()
     }
   }
-  acceptFile(file: VTransmitFile, done) {
+  acceptFile(file: VTransmitFile, done: Function): void {
     if (file.size > this.maxFileSize * 1024 * 1024) {
-      return done(
+      done(
         this.dictFileTooBig
           .replace(hbsRegex, hbsReplacer({
             fileSize: Math.round(file.size / 1024 / 10.24) / 100,
@@ -718,25 +715,25 @@ export default class VueTransmit extends Vue {
           }))
       )
     } else if (!this.isValidFileType(file, this.acceptedFileTypes)) {
-      return done(this.dictInvalidFileType)
+      done(this.dictInvalidFileType)
     } else if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
       done(this.dictMaxFilesExceeded.replace(hbsRegex, hbsReplacer({ maxFiles: this.maxFiles })))
-      return this.$emit("max-files-exceeded", file)
+      this.$emit("max-files-exceeded", file)
     } else {
       // Call the prop callback for the client to validate.
-      return this.accept(file, done)
+      this.accept(file, done)
     }
   }
-  isValidFileType(file, acceptedFiles) {
-    if (!acceptedFiles.length) {
+  isValidFileType(file: VTransmitFile, acceptedFileTypes: string[]): boolean {
+    if (!acceptedFileTypes.length) {
       return true
     }
     const mimeType = file.type
     const baseMimeType = mimeType.replace(/\/.*$/, "")
     // Return true on the first condition match,
     // otherwise exhaust all conditions and return false.
-    for (let i = 0; i < acceptedFiles.length; i++) {
-      const validType = acceptedFiles[i]
+    for (let i = 0; i < acceptedFileTypes.length; i++) {
+      const validType = acceptedFileTypes[i]
       if (validType.charAt(0) === ".") { // Handle extension validation
         // Ensure extension exists at the end of the filename.
         if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
@@ -755,10 +752,10 @@ export default class VueTransmit extends Vue {
 
     return false
   }
-  handleDragStart(e: DragEvent) {
+  handleDragStart(e: DragEvent): void {
     this.$emit('drag-start', e)
   }
-  handleDragOver(e: DragEvent) {
+  handleDragOver(e: DragEvent): void {
     this.dragging = true
     let effect
     try {
@@ -768,19 +765,19 @@ export default class VueTransmit extends Vue {
     e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy'
     this.$emit('drag-over', e)
   }
-  handleDragEnter(e: DragEvent) {
+  handleDragEnter(e: DragEvent): void {
     this.dragging = true
     this.$emit('drag-enter', e)
   }
-  handleDragLeave(e: DragEvent) {
+  handleDragLeave(e: DragEvent): void {
     this.dragging = false
     this.$emit('drag-leave', e)
   }
-  handleDragEnd(e: DragEvent) {
+  handleDragEnd(e: DragEvent): void {
     this.dragging = false
     this.$emit('drag-end', e)
   }
-  onDrop(e: DragEvent) {
+  onDrop(e: DragEvent): void {
     this.dragging = false
     if (!e.dataTransfer) {
       return
@@ -800,7 +797,7 @@ export default class VueTransmit extends Vue {
       this.handleFiles(files)
     }
   }
-  paste(e) {
+  paste(e): void {
     if (!e || !e.clipboardData || !e.clipboardData.items) {
       return
     }
@@ -810,10 +807,10 @@ export default class VueTransmit extends Vue {
       this.addFilesFromItems(items)
     }
   }
-  handleFiles(files) {
+  handleFiles(files: File[]): VTransmitFile[] {
     return files.map(this.addFile)
   }
-  addFilesFromItems(items) {
+  addFilesFromItems(items): void {
     for (const item of items) {
       if (item.webkitGetAsEntry) {
         const entry = item.webkitGetAsEntry()
@@ -831,7 +828,7 @@ export default class VueTransmit extends Vue {
       }
     }
   }
-  addFilesFromDirectory(directory, path) {
+  addFilesFromDirectory(directory, path): void {
     directory.createReader().readEntries(entries => {
       for (const entry of entries) {
         if (entry.isFile) {
