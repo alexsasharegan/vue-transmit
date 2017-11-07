@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.2"></a>
+## [7.0.2](https://github.com/alexsasharegan/vue-transmit/compare/v7.0.1...v7.0.2) (2017-11-07)
+
+
+### Bug Fixes
+
+* avoid Array.prototype.includes altogether ([a1cbe9b](https://github.com/alexsasharegan/vue-transmit/commit/a1cbe9b))
+
+
+
 <a name="7.0.1"></a>
 ## [7.0.1](https://github.com/alexsasharegan/vue-transmit/compare/v7.0.0...v7.0.1) (2017-11-06)
 
