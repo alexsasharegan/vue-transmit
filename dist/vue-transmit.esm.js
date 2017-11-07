@@ -488,7 +488,7 @@ var VueTransmit = function (_Vue) {
         _this.thumbnailQueue = [];
         _this.files = [];
         _this.defaultHeaders = {
-            "Accept": "application/json",
+            Accept: "application/json",
             "Cache-Control": "no-cache",
             "X-Requested-With": "XMLHttpRequest"
         };
@@ -510,7 +510,7 @@ var VueTransmit = function (_Vue) {
                 return;
             }
             if (acceptedFiles.length >= this.maxFiles) {
-                this.$emit('max-files-reached', this.files);
+                this.$emit("max-files-reached", this.files);
             }
         }
     }, {
@@ -521,13 +521,13 @@ var VueTransmit = function (_Vue) {
             }
 
             return this.files.filter(function (f) {
-                return statuses.includes(f.status);
+                return statuses.indexOf(f.status) > -1;
             });
         }
     }, {
         key: "onFileInputChange",
         value: function onFileInputChange() {
-            this.$emit('added-files', Array.from(this.inputEl.files).map(this.addFile));
+            this.$emit("added-files", Array.from(this.inputEl.files).map(this.addFile));
         }
     }, {
         key: "addFile",
@@ -1079,7 +1079,7 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "getParamName",
         value: function getParamName(index) {
-            return this.paramName + (this.uploadMultiple ? "[" + index + "]" : '');
+            return this.paramName + (this.uploadMultiple ? "[" + index + "]" : "");
         }
     }, {
         key: "uploadFinished",
@@ -1190,11 +1190,13 @@ var VueTransmit = function (_Vue) {
             for (var i = 0; i < acceptedFileTypes.length; i++) {
                 var validType = acceptedFileTypes[i];
                 if (validType.charAt(0) === ".") {
+                    // Handle extension validation
                     // Ensure extension exists at the end of the filename.
                     if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
                         return true;
                     }
                 } else if (/\/\*$/.test(validType)) {
+                    // Handle globbed mimetype validation ("image/*")
                     if (baseMimeType === validType.replace(/\/.*$/, "")) {
                         return true;
                     }
@@ -1209,7 +1211,7 @@ var VueTransmit = function (_Vue) {
     }, {
         key: "handleDragStart",
         value: function handleDragStart(e) {
-            this.$emit('drag-start', e);
+            this.$emit("drag-start", e);
         }
     }, {
         key: "handleDragOver",
@@ -1220,26 +1222,26 @@ var VueTransmit = function (_Vue) {
                 // Handle browser bug
                 effect = e.dataTransfer.effectAllowed;
             } catch (error) {}
-            e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy';
-            this.$emit('drag-over', e);
+            e.dataTransfer.dropEffect = effect === "move" || effect === "linkMove" ? "move" : "copy";
+            this.$emit("drag-over", e);
         }
     }, {
         key: "handleDragEnter",
         value: function handleDragEnter(e) {
             this.dragging = true;
-            this.$emit('drag-enter', e);
+            this.$emit("drag-enter", e);
         }
     }, {
         key: "handleDragLeave",
         value: function handleDragLeave(e) {
             this.dragging = false;
-            this.$emit('drag-leave', e);
+            this.$emit("drag-leave", e);
         }
     }, {
         key: "handleDragEnd",
         value: function handleDragEnd(e) {
             this.dragging = false;
-            this.$emit('drag-end', e);
+            this.$emit("drag-end", e);
         }
     }, {
         key: "onDrop",
@@ -1377,7 +1379,7 @@ var VueTransmit = function (_Vue) {
                     }, 0);
                 }
             });
-            this.$emit('initialize', this);
+            this.$emit("initialize", this);
         }
     }, {
         key: "inputEl",

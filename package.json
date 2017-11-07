@@ -35,6 +35,7 @@
     "ajv-keywords": "^2.1.0",
     "autoprefixer": "^7.1.5",
     "av-ts": "^0.9.1",
+    "awesome-typescript-loader": "^3.3.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",

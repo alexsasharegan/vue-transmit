@@ -28,9 +28,9 @@
 </template>
 
 <style lang="scss">
-  $border-color:#bdbdbd;
-  $drop-color:#e1f5fe;
-  $drop-color-alt:#fafafa;
+  $border-color: #bdbdbd;
+  $drop-color: #e1f5fe;
+  $drop-color-alt: #fafafa;
 
   .v-transmit__upload-area {
     width: 100%;
@@ -44,7 +44,17 @@
   }
 
   .v-transmit__upload-area--is-dragging {
-    background: $drop-color linear-gradient(-45deg, $drop-color-alt 25%, transparent 25%, transparent 50%, $drop-color-alt 50%, $drop-color-alt 75%, transparent 75%, transparent);
+    background: $drop-color
+      linear-gradient(
+        -45deg,
+        $drop-color-alt 25%,
+        transparent 25%,
+        transparent 50%,
+        $drop-color-alt 50%,
+        $drop-color-alt 75%,
+        transparent 75%,
+        transparent
+      );
     background-size: 40px 40px;
   }
 </style>
@@ -54,15 +64,7 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import noop from "lodash-es/noop"
 import identity from "lodash-es/identity"
-import {
-  READY_STATES,
-  hbsRegex,
-  hbsReplacer,
-  objFactory,
-  resizeImg,
-  IDrawImageArgs,
-  IDimensions,
-} from "../core/utils"
+import { READY_STATES, hbsRegex, hbsReplacer, objFactory, resizeImg, IDrawImageArgs, IDimensions } from "../core/utils"
 import VTransmitFile from "../classes/VTransmitFile"
 
 const STATUSES = {
@@ -74,7 +76,7 @@ const STATUSES = {
   CANCELED: "canceled",
   ERROR: "error",
   TIMEOUT: "timeout",
-  SUCCESS: "success",
+  SUCCESS: "success"
 }
 
 @Component({ name: "VueTransmit" })
@@ -256,7 +258,7 @@ export default class VueTransmit extends Vue {
   public thumbnailQueue: any[] = []
   public files: VTransmitFile[] = []
   public defaultHeaders: object = {
-    "Accept": "application/json",
+    Accept: "application/json",
     "Cache-Control": "no-cache",
     "X-Requested-With": "XMLHttpRequest"
   }
@@ -266,7 +268,7 @@ export default class VueTransmit extends Vue {
     top: "0 !important",
     left: "0 !important",
     height: "0px !important",
-    width: "0px !important",
+    width: "0px !important"
   }
 
   get inputEl(): HTMLInputElement {
@@ -310,7 +312,7 @@ export default class VueTransmit extends Vue {
   get isDraggingClass(): { [key: string]: boolean } {
     return {
       "v-transmit__upload-area--is-dragging": this.dragging,
-      [this.dragClass]: this.dragging,
+      [this.dragClass]: this.dragging
     }
   }
   get isUploading(): boolean {
@@ -325,7 +327,7 @@ export default class VueTransmit extends Vue {
       queuedFiles: this.queuedFiles,
       uploadingFiles: this.uploadingFiles,
       activeFiles: this.activeFiles,
-      isUploading: this.isUploading,
+      isUploading: this.isUploading
     }
   }
 
@@ -335,7 +337,7 @@ export default class VueTransmit extends Vue {
       return
     }
     if (acceptedFiles.length >= this.maxFiles) {
-      this.$emit('max-files-reached', this.files)
+      this.$emit("max-files-reached", this.files)
     }
   }
 
@@ -343,7 +345,7 @@ export default class VueTransmit extends Vue {
     return this.files.filter(f => statuses.indexOf(f.status) > -1)
   }
   onFileInputChange(): void {
-    this.$emit('added-files', Array.from(this.inputEl.files).map(this.addFile))
+    this.$emit("added-files", Array.from(this.inputEl.files).map(this.addFile))
   }
   addFile(file: File): VTransmitFile {
     const vTransmitFile = VTransmitFile.fromNativeFile(file)
@@ -406,7 +408,11 @@ export default class VueTransmit extends Vue {
     }
   }
   enqueueThumbnail(file: VTransmitFile): void {
-    if (this.createImageThumbnails && file.type.match(/image.*/) && file.size <= this.maxThumbnailFileSize * 1024 * 1024) {
+    if (
+      this.createImageThumbnails &&
+      file.type.match(/image.*/) &&
+      file.size <= this.maxThumbnailFileSize * 1024 * 1024
+    ) {
       this.thumbnailQueue.push(file)
       setTimeout(this.processThumbnailQueue, 0)
     }
@@ -425,14 +431,18 @@ export default class VueTransmit extends Vue {
   }
   createThumbnail(file: VTransmitFile, callback = noop): void {
     const reader = new FileReader()
-    reader.addEventListener("load", () => {
-      if (file.type === "image/svg+xml") {
-        file.dataUrl = reader.result
-        this.$emit("thumbnail", file, reader.result)
-        callback()
-      }
-      this.createThumbnailFromUrl(file, reader.result, callback)
-    }, false)
+    reader.addEventListener(
+      "load",
+      () => {
+        if (file.type === "image/svg+xml") {
+          file.dataUrl = reader.result
+          this.$emit("thumbnail", file, reader.result)
+          callback()
+        }
+        this.createThumbnailFromUrl(file, reader.result, callback)
+      },
+      false
+    )
 
     // FileReader requires a native File|Blob object
     reader.readAsDataURL(file.nativeFile)
@@ -440,38 +450,42 @@ export default class VueTransmit extends Vue {
   createThumbnailFromUrl(file: VTransmitFile, imageUrl: string, callback?: Function): void {
     const imgEl = document.createElement("img")
 
-    imgEl.addEventListener("load", () => {
-      file.width = imgEl.width
-      file.height = imgEl.height
-      const resizeInfo = this.resize(file, {
-        width: this.thumbnailWidth,
-        height: this.thumbnailHeight
-      })
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
-      canvas.width = resizeInfo.dWidth
-      canvas.height = resizeInfo.dHeight
-      ctx.drawImage(
-        imgEl,
-        resizeInfo.sx,
-        resizeInfo.sy,
-        resizeInfo.sWidth,
-        resizeInfo.sHeight,
-        resizeInfo.dx,
-        resizeInfo.dy,
-        resizeInfo.dWidth,
-        resizeInfo.dHeight
-      )
-      const thumbnail = canvas.toDataURL("image/png")
-      file.dataUrl = thumbnail
-      this.$emit("thumbnail", file, thumbnail)
+    imgEl.addEventListener(
+      "load",
+      () => {
+        file.width = imgEl.width
+        file.height = imgEl.height
+        const resizeInfo = this.resize(file, {
+          width: this.thumbnailWidth,
+          height: this.thumbnailHeight
+        })
+        const canvas = document.createElement("canvas")
+        const ctx = canvas.getContext("2d")
+        canvas.width = resizeInfo.dWidth
+        canvas.height = resizeInfo.dHeight
+        ctx.drawImage(
+          imgEl,
+          resizeInfo.sx,
+          resizeInfo.sy,
+          resizeInfo.sWidth,
+          resizeInfo.sHeight,
+          resizeInfo.dx,
+          resizeInfo.dy,
+          resizeInfo.dWidth,
+          resizeInfo.dHeight
+        )
+        const thumbnail = canvas.toDataURL("image/png")
+        file.dataUrl = thumbnail
+        this.$emit("thumbnail", file, thumbnail)
 
-      if (callback) {
-        return callback()
-      }
-    }, false)
+        if (callback) {
+          return callback()
+        }
+      },
+      false
+    )
     if (callback) {
-      imgEl.addEventListener("error", (callback as EventListenerOrEventListenerObject), false)
+      imgEl.addEventListener("error", callback as EventListenerOrEventListenerObject, false)
     }
 
     imgEl.src = imageUrl
@@ -559,7 +573,10 @@ export default class VueTransmit extends Vue {
       }
       response = xhr.responseText
       if (xhr.responseType !== "arraybuffer" && xhr.responseType !== "blob") {
-        if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
+        if (
+          xhr.getResponseHeader("content-type") &&
+          ~xhr.getResponseHeader("content-type").indexOf("application/json")
+        ) {
           try {
             response = JSON.parse(response)
           } catch (err) {
@@ -654,11 +671,14 @@ export default class VueTransmit extends Vue {
     }
   }
   updateTotalUploadProgress(): void {
-    const progress = this.activeFiles.reduce((memo, file) => {
-      memo.totalBytesSent += file.upload.bytesSent
-      memo.totalBytes += file.upload.total
-      return memo
-    }, { totalBytesSent: 0, totalBytes: 0, totalProgress: 100 })
+    const progress = this.activeFiles.reduce(
+      (memo, file) => {
+        memo.totalBytesSent += file.upload.bytesSent
+        memo.totalBytes += file.upload.total
+        return memo
+      },
+      { totalBytesSent: 0, totalBytes: 0, totalProgress: 100 }
+    )
 
     if (this.activeFiles.length) {
       progress.totalProgress = 100 * progress.totalBytesSent / progress.totalBytes
@@ -667,9 +687,7 @@ export default class VueTransmit extends Vue {
     this.$emit("total-upload-progress", progress)
   }
   getParamName(index): string {
-    return this.paramName + (
-      this.uploadMultiple ? `[${index}]` : ''
-    )
+    return this.paramName + (this.uploadMultiple ? `[${index}]` : "")
   }
   uploadFinished(files: VTransmitFile[], response: string | object | any[], e: Event): void {
     for (const file of files) {
@@ -708,11 +726,13 @@ export default class VueTransmit extends Vue {
   acceptFile(file: VTransmitFile, done: Function): void {
     if (file.size > this.maxFileSize * 1024 * 1024) {
       done(
-        this.dictFileTooBig
-          .replace(hbsRegex, hbsReplacer({
+        this.dictFileTooBig.replace(
+          hbsRegex,
+          hbsReplacer({
             fileSize: Math.round(file.size / 1024 / 10.24) / 100,
             maxFileSize: this.maxFileSize
-          }))
+          })
+        )
       )
     } else if (!this.isValidFileType(file, this.acceptedFileTypes)) {
       done(this.dictInvalidFileType)
@@ -734,12 +754,14 @@ export default class VueTransmit extends Vue {
     // otherwise exhaust all conditions and return false.
     for (let i = 0; i < acceptedFileTypes.length; i++) {
       const validType = acceptedFileTypes[i]
-      if (validType.charAt(0) === ".") { // Handle extension validation
+      if (validType.charAt(0) === ".") {
+        // Handle extension validation
         // Ensure extension exists at the end of the filename.
         if (file.name.toLowerCase().indexOf(validType.toLowerCase(), file.name.length - validType.length) !== -1) {
           return true
         }
-      } else if (/\/\*$/.test(validType)) { // Handle globbed mimetype validation ("image/*")
+      } else if (/\/\*$/.test(validType)) {
+        // Handle globbed mimetype validation ("image/*")
         if (baseMimeType === validType.replace(/\/.*$/, "")) {
           return true
         }
@@ -753,7 +775,7 @@ export default class VueTransmit extends Vue {
     return false
   }
   handleDragStart(e: DragEvent): void {
-    this.$emit('drag-start', e)
+    this.$emit("drag-start", e)
   }
   handleDragOver(e: DragEvent): void {
     this.dragging = true
@@ -761,21 +783,21 @@ export default class VueTransmit extends Vue {
     try {
       // Handle browser bug
       effect = e.dataTransfer.effectAllowed
-    } catch (error) { }
-    e.dataTransfer.dropEffect = effect === 'move' || effect === 'linkMove' ? 'move' : 'copy'
-    this.$emit('drag-over', e)
+    } catch (error) {}
+    e.dataTransfer.dropEffect = effect === "move" || effect === "linkMove" ? "move" : "copy"
+    this.$emit("drag-over", e)
   }
   handleDragEnter(e: DragEvent): void {
     this.dragging = true
-    this.$emit('drag-enter', e)
+    this.$emit("drag-enter", e)
   }
   handleDragLeave(e: DragEvent): void {
     this.dragging = false
-    this.$emit('drag-leave', e)
+    this.$emit("drag-leave", e)
   }
   handleDragEnd(e: DragEvent): void {
     this.dragging = false
-    this.$emit('drag-end', e)
+    this.$emit("drag-end", e)
   }
   onDrop(e: DragEvent): void {
     this.dragging = false
@@ -820,7 +842,6 @@ export default class VueTransmit extends Vue {
         } else if (entry.isDirectory) {
           this.addFilesFromDirectory(entry, entry.name)
         }
-
       } else if (item.getAsFile) {
         if (item.kind === "file") {
           this.addFile(item.getAsFile())
@@ -856,7 +877,7 @@ export default class VueTransmit extends Vue {
       }
     })
 
-    this.$emit('initialize', this)
+    this.$emit("initialize", this)
   }
 }
 </script>

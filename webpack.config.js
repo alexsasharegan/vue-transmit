@@ -93,7 +93,8 @@ function config(ctx) {
         {
           test: /\.ts(x?)$/,
           include: path.resolve(__dirname, "src"),
-          use: [{ loader: "babel-loader" }, { loader: "ts-loader" }]
+          // use: [{ loader: "babel-loader" }, { loader: "ts-loader" }]
+          use: [{ loader: "babel-loader" }, { loader: "awesome-typescript-loader" }]
         },
         ...(ctx.rules || [])
       ]
