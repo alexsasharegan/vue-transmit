@@ -340,7 +340,7 @@ export default class VueTransmit extends Vue {
   }
 
   getFilesWithStatus(...statuses: string[]): VTransmitFile[] {
-    return this.files.filter(f => statuses.includes(f.status))
+    return this.files.filter(f => statuses.indexOf(f.status) > -1)
   }
   onFileInputChange(): void {
     this.$emit('added-files', Array.from(this.inputEl.files).map(this.addFile))
