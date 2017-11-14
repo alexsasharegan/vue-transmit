@@ -64,8 +64,20 @@ import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import noop from "lodash-es/noop"
 import identity from "lodash-es/identity"
-import { READY_STATES, hbsRegex, hbsReplacer, objFactory, resizeImg, IDrawImageArgs, IDimensions } from "../core/utils"
+import {
+  READY_STATES,
+  hbsRegex,
+  hbsReplacer,
+  objFactory,
+  resizeImg,
+  IDrawImageArgs,
+  IDimensions,
+  webkitIsFile,
+  webkitIsDir
+} from "../core/utils"
 import VTransmitFile from "../classes/VTransmitFile"
+
+type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry
 
 const STATUSES = {
   ADDED: "added",
@@ -819,7 +831,7 @@ export default class VueTransmit extends Vue {
       this.handleFiles(files)
     }
   }
-  paste(e): void {
+  paste(e: ClipboardEvent): void {
     if (!e || !e.clipboardData || !e.clipboardData.items) {
       return
     }
@@ -832,14 +844,17 @@ export default class VueTransmit extends Vue {
   handleFiles(files: File[]): VTransmitFile[] {
     return files.map(this.addFile)
   }
-  addFilesFromItems(items): void {
+  addFilesFromItems(items: DataTransferItem[]): void {
     for (const item of items) {
       if (item.webkitGetAsEntry) {
-        const entry = item.webkitGetAsEntry()
+        const entry: FileSystemEntry = item.webkitGetAsEntry()
+        if (entry == null) {
+          continue
+        }
 
-        if (entry.isFile) {
-          entry.file(this.addFile)
-        } else if (entry.isDirectory) {
+        if (webkitIsFile(entry)) {
+          entry.file(this.addFile as any)
+        } else if (webkitIsDir(entry)) {
           this.addFilesFromDirectory(entry, entry.name)
         }
       } else if (item.getAsFile) {
@@ -849,22 +864,33 @@ export default class VueTransmit extends Vue {
       }
     }
   }
-  addFilesFromDirectory(directory, path): void {
-    directory.createReader().readEntries(entries => {
-      for (const entry of entries) {
-        if (entry.isFile) {
-          entry.file(file => {
-            if (this.ignoreHiddenFiles && /^\./.test(file.name)) {
-              return
-            }
-            file.fullPath = `${path}/${file.name}`
-            this.addFile(file)
-          }, console.error)
-        } else if (entry.isDirectory) {
-          this.addFilesFromDirectory(entry, `${path}/${entry.name}`)
+  addFilesFromDirectory(directory: WebKitDirectoryEntry, path): void {
+    directory.createReader().readEntries(
+      <any>((entries: FileSystemEntry[]) => {
+        for (const entry of entries) {
+          if (entry == null) {
+            continue
+          }
+          if (webkitIsDir(entry)) {
+            this.addFilesFromDirectory(entry, `${path}/${entry.name}`)
+            continue
+          }
+          if (webkitIsFile(entry)) {
+            entry.file(
+              <any>((file: File) => {
+                if (this.ignoreHiddenFiles && /^\./.test(file.name)) {
+                  return
+                }
+                ;(file as any).fullPath = `${path}/${file.name}`
+                this.addFile(file)
+              }),
+              console.error
+            )
+          }
         }
-      }
-    }, console.error)
+      }),
+      console.error
+    )
   }
 
   mounted() {

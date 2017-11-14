@@ -96,6 +96,8 @@ exports.scaleH = scaleH;
 exports.scaleW = scaleW;
 exports.scaleDims = scaleDims;
 exports.resizeImg = resizeImg;
+exports.webkitIsFile = webkitIsFile;
+exports.webkitIsDir = webkitIsDir;
 var assign = exports.assign = Object.assign;
 var defineProperty = exports.defineProperty = Object.defineProperty;
 var idCounter = 0;
@@ -203,6 +205,12 @@ function resizeImg(file, dims) {
         imgCoords.sHeight = h;
     }
     return imgCoords;
+}
+function webkitIsFile(entry) {
+    return entry.isFile;
+}
+function webkitIsDir(entry) {
+    return entry.isDirectory;
 }
 
 /***/ }),
@@ -1294,9 +1302,12 @@ var VueTransmit = function (_Vue) {
 
                     if (item.webkitGetAsEntry) {
                         var entry = item.webkitGetAsEntry();
-                        if (entry.isFile) {
+                        if (entry == null) {
+                            continue;
+                        }
+                        if ((0, _utils.webkitIsFile)(entry)) {
                             entry.file(this.addFile);
-                        } else if (entry.isDirectory) {
+                        } else if ((0, _utils.webkitIsDir)(entry)) {
                             this.addFilesFromDirectory(entry, entry.name);
                         }
                     } else if (item.getAsFile) {
@@ -1334,16 +1345,22 @@ var VueTransmit = function (_Vue) {
                     for (var _iterator13 = entries[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
                         var entry = _step13.value;
 
-                        if (entry.isFile) {
+                        if (entry == null) {
+                            continue;
+                        }
+                        if ((0, _utils.webkitIsDir)(entry)) {
+                            _this7.addFilesFromDirectory(entry, path + "/" + entry.name);
+                            continue;
+                        }
+                        if ((0, _utils.webkitIsFile)(entry)) {
                             entry.file(function (file) {
                                 if (_this7.ignoreHiddenFiles && /^\./.test(file.name)) {
                                     return;
                                 }
+                                ;
                                 file.fullPath = path + "/" + file.name;
                                 _this7.addFile(file);
                             }, console.error);
-                        } else if (entry.isDirectory) {
-                            _this7.addFilesFromDirectory(entry, path + "/" + entry.name);
                         }
                     }
                 } catch (err) {

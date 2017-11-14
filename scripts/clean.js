@@ -21,7 +21,10 @@ async function rmDirContents(dirPath) {
 
 async function main() {
   try {
-    return await rmDirContents(resolve(__dirname, "../dist"))
+    return await Promise.all([
+      rmDirContents(resolve(__dirname, "../dist")),
+      rmDirContents(resolve(__dirname, "../types"))
+    ])
   } catch (err) {
     console.error(err)
   }

@@ -162,9 +162,9 @@ export default class VueTransmit extends Vue {
     handleDragLeave(e: DragEvent): void;
     handleDragEnd(e: DragEvent): void;
     onDrop(e: DragEvent): void;
-    paste(e: any): void;
+    paste(e: ClipboardEvent): void;
     handleFiles(files: File[]): VTransmitFile[];
-    addFilesFromItems(items: any): void;
-    addFilesFromDirectory(directory: any, path: any): void;
+    addFilesFromItems(items: DataTransferItem[]): void;
+    addFilesFromDirectory(directory: WebKitDirectoryEntry, path: any): void;
     mounted(): void;
 }

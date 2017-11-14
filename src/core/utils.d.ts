@@ -45,3 +45,5 @@ export interface IDimensions {
     height: number;
 }
 export declare function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArgs;
+export declare function webkitIsFile(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitFileEntry;
+export declare function webkitIsDir(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitDirectoryEntry;

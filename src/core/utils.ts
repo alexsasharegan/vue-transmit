@@ -122,3 +122,11 @@ export function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArg
 
   return imgCoords
 }
+
+export function webkitIsFile(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitFileEntry {
+  return entry.isFile
+}
+
+export function webkitIsDir(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitDirectoryEntry {
+  return entry.isDirectory
+}
