@@ -266,8 +266,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var VueTransmit = __webpack_require__(7);
 var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-55f49822","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.onDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-040ef0f0","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ var components_VueTransmit = (esExports);
@@ -281,7 +281,7 @@ var normalizeComponent = __webpack_require__(6)
 /* template */
 
 /* template functional */
-  var __vue_template_functional__ = false
+var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
@@ -1252,8 +1252,8 @@ var VueTransmit = function (_Vue) {
             this.$emit("drag-end", e);
         }
     }, {
-        key: "onDrop",
-        value: function onDrop(e) {
+        key: "handleDrop",
+        value: function handleDrop(e) {
             this.dragging = false;
             if (!e.dataTransfer) {
                 return;
@@ -1677,7 +1677,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 "use strict";
 /**
-  * vue-class-component v6.0.0
+  * vue-class-component v6.1.0
   * (c) 2015-2017 Evan You
   * @license MIT
   */
@@ -1724,7 +1724,8 @@ function collectDataFromConstructor(vm, Component) {
             if (key.charAt(0) !== '_') {
                 Object.defineProperty(_this, key, {
                     get: function () { return vm[key]; },
-                    set: function (value) { return vm[key] = value; }
+                    set: function (value) { return vm[key] = value; },
+                    configurable: true
                 });
             }
         });
@@ -1796,7 +1797,13 @@ function componentFactory(Component, options) {
     var Super = superProto instanceof Vue
         ? superProto.constructor
         : Vue;
-    return Super.extend(options);
+    var Extended = Super.extend(options);
+    for (var staticKey in Component) {
+        if (Component.hasOwnProperty(staticKey)) {
+            Extended[staticKey] = Component[staticKey];
+        }
+    }
+    return Extended;
 }
 
 function Component(options) {

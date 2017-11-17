@@ -11,7 +11,7 @@
          @dragenter.prevent.stop="handleDragEnter"
          @dragover.prevent.stop="handleDragOver"
          @dragleave="handleDragLeave"
-         @drop.prevent.stop="onDrop">
+         @drop.prevent.stop="handleDrop">
       <slot></slot>
     </div>
     <slot name="files"
@@ -811,7 +811,7 @@ export default class VueTransmit extends Vue {
     this.dragging = false
     this.$emit("drag-end", e)
   }
-  onDrop(e: DragEvent): void {
+  handleDrop(e: DragEvent): void {
     this.dragging = false
     if (!e.dataTransfer) {
       return

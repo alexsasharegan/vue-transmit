@@ -161,7 +161,7 @@ export default class VueTransmit extends Vue {
     handleDragEnter(e: DragEvent): void;
     handleDragLeave(e: DragEvent): void;
     handleDragEnd(e: DragEvent): void;
-    onDrop(e: DragEvent): void;
+    handleDrop(e: DragEvent): void;
     paste(e: ClipboardEvent): void;
     handleFiles(files: File[]): VTransmitFile[];
     addFilesFromItems(items: DataTransferItem[]): void;

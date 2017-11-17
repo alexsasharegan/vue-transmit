@@ -61,6 +61,8 @@ try
         $ext
     );
 
+    mkdir('./uploads');
+
     if ( ! move_uploaded_file( $_FILES['file']['tmp_name'], $path ) )
     {
         throw new RuntimeException( 'Failed to move uploaded file.' );

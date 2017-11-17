@@ -163,7 +163,7 @@
     </b-modal>
   </b-container>
 
-  <script src="https://unpkg.com/bootstrap-vue@1.0.0-beta.9/dist/bootstrap-vue.js"></script>
+  <script src="https://unpkg.com/bootstrap-vue@1.0.0-beta.8/dist/bootstrap-vue.js"></script>
   <script src="https://unpkg.com/vue-flex@2.0.2/dist/vue-flex.js"></script>
   <script>
     Vue.use(VueTransmit)
