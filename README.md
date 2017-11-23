@@ -32,6 +32,10 @@ _\* Note: this library uses some built-ins (`Array.from`) that require a polyfil
 
 ![upload-example](./docs/vue-transmit-10fps.gif)
 
+## Installation
+
+`npm install vue-transmit`
+
 ## Builds
 
 The default build for ESM loaders (webpack) is indicated in the `module` and/or `jsnext:main` fields of the package. This build is a more modern build with slightly less transpilation. For the commonjs and browser build, a full ES5 transpilation is performed.
