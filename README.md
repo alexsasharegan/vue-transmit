@@ -79,7 +79,7 @@ Vue.use(VueTransmit)
 |timeout|Number|0|
 |maxConcurrentUploads|Number|2|
 |uploadMultiple|Boolean|false|
-|maxFileSize|Number|256|
+|maxFileSize|Number|256 _(in MiB)_|
 |paramName|String|"file"|
 |createImageThumbnails|Boolean|true|
 |maxThumbnailFileSize|Number|10|
