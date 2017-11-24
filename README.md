@@ -35,7 +35,7 @@ _\* Note: this library uses some built-ins (`Array.from`) that require a polyfil
 ## Installation
 
 ```shell
-$ npm install vue-transmit`
+npm install vue-transmit
 ```
 
 ## Builds
