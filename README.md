@@ -230,7 +230,7 @@ interface FilesSlotProps {
         <vue-transmit class="col-12"
                       tag="section"
                       v-bind="options"
-                      drop-zone-classes="bg-faded"
+                      upload-area-classes="bg-faded"
                       ref="uploader">
           <div class="d-flex align-items-center justify-content-center w-100"
                 style="height:50vh; border-radius: 1rem;">
