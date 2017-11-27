@@ -12,7 +12,7 @@
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
         integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
         crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/vue-flex@2.0.2/dist/vue-flex.css">
+  <link rel="stylesheet" href="https://unpkg.com/vue-flex/dist/vue-flex.css">
   <script>
     <?= file_get_contents(__DIR__. "/../dist/vue-transmit.browser.js" ); ?>
   </script>
@@ -163,8 +163,8 @@
     </b-modal>
   </b-container>
 
-  <script src="https://unpkg.com/bootstrap-vue@1.0.0-beta.8/dist/bootstrap-vue.js"></script>
-  <script src="https://unpkg.com/vue-flex@2.0.2/dist/vue-flex.js"></script>
+  <script src="https://unpkg.com/bootstrap-vue/dist/bootstrap-vue.js"></script>
+  <script src="https://unpkg.com/vue-flex/dist/vue-flex.js"></script>
   <script>
     Vue.use(VueTransmit)
     Vue.use(vueFlex)

@@ -61,7 +61,9 @@ try
         $ext
     );
 
-    mkdir('./uploads');
+    if (!file_exists('./uploads')) {
+      mkdir('./uploads');
+    }
 
     if ( ! move_uploaded_file( $_FILES['file']['tmp_name'], $path ) )
     {
