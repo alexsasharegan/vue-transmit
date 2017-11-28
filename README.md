@@ -79,11 +79,7 @@ Vue.use(VueTransmit)
 | Browser   | `vue-transmit/dist/vue-transmit.browser.js`     | false    |
 | Browser   | `vue-transmit/dist/vue-transmit.browser.min.js` | true     |
 
-## Props:
-
-<code>&lt;vue-transmit&gt;
-
-</code>
+## Props: <code>&lt;vue-transmit&gt;</code>
 
 | Property              | Type                  | Default                                                                     |
 | --------------------- | --------------------- | --------------------------------------------------------------------------- |
@@ -172,14 +168,14 @@ This slot receives a number of props:
 
 ```ts
 interface FilesSlotProps {
-  files: VTransmitFile[],
-  acceptedFiles: VTransmitFile[],
-  rejectedFiles: VTransmitFile[],
-  addedFiles: VTransmitFile[],
-  queuedFiles: VTransmitFile[],
-  uploadingFiles: VTransmitFile[],
-  activeFiles: VTransmitFile[],
-  isUploading: Boolean
+	files: VTransmitFile[]
+	acceptedFiles: VTransmitFile[]
+	rejectedFiles: VTransmitFile[]
+	addedFiles: VTransmitFile[]
+	queuedFiles: VTransmitFile[]
+	uploadingFiles: VTransmitFile[]
+	activeFiles: VTransmitFile[]
+	isUploading: Boolean
 }
 ```
 
