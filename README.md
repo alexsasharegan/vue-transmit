@@ -6,7 +6,6 @@
 [![npm downloads](https://img.shields.io/npm/dt/vue-transmit.svg?style=for-the-badge)](https://www.npmjs.com/package/vue-transmit)
 [![GitHub issues](https://img.shields.io/github/issues/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/issues)
 [![GitHub stars](https://img.shields.io/github/stars/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/network)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=for-the-badge)](https://conventionalcommits.org)
 
 A Vue.js drag & drop uploader based on Dropzone.js (`~42kB`, `~12.5kB` gzipped). Many thanks to
