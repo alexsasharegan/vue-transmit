@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/alexsasharegan/vue-transmit/compare/v7.0.6...v7.1.0) (2017-11-28)
+
+
+### Features
+
+* added responseType prop to set on XHR ([d205128](https://github.com/alexsasharegan/vue-transmit/commit/d205128))
+
+
+
 <a name="7.0.6"></a>
 ## [7.0.6](https://github.com/alexsasharegan/vue-transmit/compare/v7.0.5...v7.0.6) (2017-11-28)
 
