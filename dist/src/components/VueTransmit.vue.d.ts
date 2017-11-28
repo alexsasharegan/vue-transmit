@@ -20,80 +20,80 @@ export default class VueTransmit extends Vue {
     thumbnailWidth: number;
     thumbnailHeight: number;
     /**
-     * The base that is used to calculate the file size. You can change this to
-     * 1024 if you would rather display kibibytes, mebibytes, etc...
-     * 1024 is technically incorrect,
-     * because `1024 bytes` are `1 kibibyte` not `1 kilobyte`.
-     * You can change this to `1024` if you don't care about validity.
-     */
+   * The base that is used to calculate the file size. You can change this to
+   * 1024 if you would rather display kibibytes, mebibytes, etc...
+   * 1024 is technically incorrect,
+   * because `1024 bytes` are `1 kibibyte` not `1 kilobyte`.
+   * You can change this to `1024` if you don't care about validity.
+   */
     fileSizeBase: number;
     /**
-     * Can be used to limit the maximum number of files that will be handled
-     * by this Dropzone
-     */
+   * Can be used to limit the maximum number of files that will be handled
+   * by this Dropzone
+   */
     maxFiles: number;
     /**
-     * Can be an object of additional parameters to transfer to the server.
-     * This is the same as adding hidden input fields in the form element.
-     */
+   * Can be an object of additional parameters to transfer to the server.
+   * This is the same as adding hidden input fields in the form element.
+   */
     params: object;
     headers: object;
     clickable: boolean;
     ignoreHiddenFiles: boolean;
     /**
-     * You can set accepted mime types here.
-     *
-     * The default implementation of the `accept()` function will check this
-     * property, and if the Dropzone is clickable this will be used as
-     * `accept` attribute.
-     *
-     * This is a comma separated list of mime types or extensions. E.g.:
-     * - audio/*,video/*,image/png,.pdf
-     *
-     * See https://developer.mozilla.org/en-US/docs/HTML/Element/input#attr-accept
-     * for a reference.
-     */
+   * You can set accepted mime types here.
+   *
+   * The default implementation of the `accept()` function will check this
+   * property, and if the Dropzone is clickable this will be used as
+   * `accept` attribute.
+   *
+   * This is a comma separated list of mime types or extensions. E.g.:
+   * - audio/*,video/*,image/png,.pdf
+   *
+   * See https://developer.mozilla.org/en-US/docs/HTML/Element/input#attr-accept
+   * for a reference.
+   */
     acceptedFileTypes: string[];
     /**
-     * If false, files will be added to the queue but the queue will not be
-     * processed automatically.
-     * This can be useful if you need some additional user input before sending
-     * files (or if you want want all files sent at once).
-     * If you're ready to send the file simply call myDropzone.processQueue()
-     */
+   * If false, files will be added to the queue but the queue will not be
+   * processed automatically.
+   * This can be useful if you need some additional user input before sending
+   * files (or if you want want all files sent at once).
+   * If you're ready to send the file simply call myDropzone.processQueue()
+   */
     autoProcessQueue: boolean;
     /**
-     * If false, files added to the dropzone will not be queued by default.
-     * You'll have to call `enqueueFile(file)` manually.
-     */
+   * If false, files added to the dropzone will not be queued by default.
+   * You'll have to call `enqueueFile(file)` manually.
+   */
     autoQueue: boolean;
     /**
-     * If null, no capture type will be specified
-     * If camera, mobile devices will skip the file selection and choose camera
-     * If microphone, mobile devices will skip the file selection and choose the microphone
-     * If camcorder, mobile devices will skip the file selection and choose the camera in video mode
-     * On apple devices multiple must be set to false.  AcceptedFiles may need to
-     * be set to an appropriate mime type (e.g. "image/*", "audio/*", or "video/*").
-     */
+   * If null, no capture type will be specified
+   * If camera, mobile devices will skip the file selection and choose camera
+   * If microphone, mobile devices will skip the file selection and choose the microphone
+   * If camcorder, mobile devices will skip the file selection and choose the camera in video mode
+   * On apple devices multiple must be set to false.  AcceptedFiles may need to
+   * be set to an appropriate mime type (e.g. "image/*", "audio/*", or "video/*").
+   */
     capture: string;
     /**
-     * Before the file is appended to the formData, the function _renameFilename is performed for file.name, file
-     * which executes the function defined in renameFilename
-     */
+   * Before the file is appended to the formData, the function _renameFilename is performed for file.name, file
+   * which executes the function defined in renameFilename
+   */
     renameFile: (name: string) => string;
     dictFileTooBig: string;
     dictInvalidFileType: string;
     dictResponseError: string;
     /**
-     * Displayed when the maxFiles have been exceeded
-     * You can use {{maxFiles}} here, which will be replaced by the option.
-     */
+   * Displayed when the maxFiles have been exceeded
+   * You can use {{maxFiles}} here, which will be replaced by the option.
+   */
     dictMaxFilesExceeded: string;
     /**
-     * If `done()` is called without argument the file is accepted
-     * If you call it with an error message, the file is rejected
-     * (This allows for asynchronous validation).
-     */
+   * If `done()` is called without argument the file is accepted
+   * If you call it with an error message, the file is rejected
+   * (This allows for asynchronous validation).
+   */
     accept: (file: VTransmitFile, done: Function) => void;
     resize: (file: VTransmitFile, dims: IDimensions) => IDrawImageArgs;
     dragging: boolean;
