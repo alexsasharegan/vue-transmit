@@ -38,6 +38,7 @@ export default class VueTransmit extends Vue {
    */
     params: object;
     headers: object;
+    responseType: XMLHttpRequestResponseType;
     clickable: boolean;
     ignoreHiddenFiles: boolean;
     /**

@@ -266,7 +266,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var VueTransmit = __webpack_require__(7);
 var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-c3c1899a","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-24315fb6","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
@@ -859,6 +859,7 @@ var VueTransmit = function (_Vue) {
 
             xhr.open(this.method, this.url, true);
             xhr.withCredentials = Boolean(this.withCredentials);
+            xhr.responseType = this.responseType;
             var handleError = this.handleUploadError(files, xhr);
             var updateProgress = this.handleUploadProgress(files);
             xhr.addEventListener("error", handleError);
@@ -1513,6 +1514,7 @@ __decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: 1000 })], V
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Number, default: null })], VueTransmit.prototype, "maxFiles", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Object, default: _utils.objFactory })], VueTransmit.prototype, "params", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Object, default: _utils.objFactory })], VueTransmit.prototype, "headers", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "" })], VueTransmit.prototype, "responseType", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "clickable", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "ignoreHiddenFiles", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Array, default: function _default() {
