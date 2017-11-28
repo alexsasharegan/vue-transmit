@@ -65,7 +65,6 @@ import { Component, Prop, Watch } from "vue-property-decorator"
 import noop from "lodash-es/noop"
 import identity from "lodash-es/identity"
 import {
-	READY_STATES,
 	hbsRegex,
 	hbsReplacer,
 	objFactory,
@@ -567,7 +566,6 @@ export default class VueTransmit extends Vue {
 		this.uploadFiles([file])
 	}
 	uploadFiles(files: VTransmitFile[]): void {
-		let response = null
 		const xhr = new XMLHttpRequest()
 		xhr.timeout = this.timeout
 		for (const file of files) {
@@ -584,15 +582,16 @@ export default class VueTransmit extends Vue {
 		xhr.upload.addEventListener("progress", updateProgress)
 		xhr.addEventListener("timeout", this.handleTimeout(files, xhr))
 		xhr.addEventListener("load", e => {
-			if (files[0].status === STATUSES.CANCELED || xhr.readyState !== READY_STATES.DONE) {
+			if (files[0].status === STATUSES.CANCELED || xhr.readyState !== XMLHttpRequest.DONE) {
 				return
 			}
-			response = xhr.responseText
-			if (xhr.responseType !== "arraybuffer" && xhr.responseType !== "blob") {
-				if (
-					xhr.getResponseHeader("content-type") &&
-					~xhr.getResponseHeader("content-type").indexOf("application/json")
-				) {
+			let response = xhr.response
+
+			if (!xhr.responseType) {
+				let contentType = xhr.getResponseHeader("content-type")
+				response = xhr.responseText
+
+				if (contentType && contentType.indexOf("application/json") > -1) {
 					try {
 						response = JSON.parse(response)
 					} catch (err) {
@@ -600,6 +599,7 @@ export default class VueTransmit extends Vue {
 					}
 				}
 			}
+
 			// Called at load (when complete) will enable all the progress done logic.
 			updateProgress()
 			if (xhr.status < 200 || xhr.status >= 300) {
