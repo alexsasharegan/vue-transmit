@@ -26,8 +26,7 @@
   },
   "dependencies": {
     "lodash-es": "^4.17.4",
-    "vue": "^2.5.9",
-    "vue-functional-data-merge": "^1.0.7"
+    "vue": "^2.5.9"
   },
   "devDependencies": {
     "ajv": "^5.5.0",
