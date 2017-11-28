@@ -175,6 +175,9 @@ export default class VueTransmit extends Vue {
 	@Prop({ type: Object, default: objFactory })
 	headers: object
 
+	@Prop({ type: String, default: "" })
+	responseType: XMLHttpRequestResponseType
+
 	// If true, the dropzone will present a file selector when clicked.
 	@Prop({ type: Boolean, default: true })
 	clickable: boolean
@@ -573,6 +576,7 @@ export default class VueTransmit extends Vue {
 		}
 		xhr.open(this.method, this.url, true)
 		xhr.withCredentials = Boolean(this.withCredentials)
+		xhr.responseType = this.responseType
 
 		const handleError = this.handleUploadError(files, xhr)
 		const updateProgress = this.handleUploadProgress(files)

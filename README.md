@@ -2,13 +2,12 @@
 
 <img src="./docs/vt-logo.svg" width="200">
 
-[![npm version](https://badge.fury.io/js/vue-transmit.svg)](https://badge.fury.io/js/vue-transmit)
-[![npm downloads](https://img.shields.io/npm/dt/vue-transmit.svg)](https://www.npmjs.com/package/vue-transmit)
-[![GitHub issues](https://img.shields.io/github/issues/alexsasharegan/vue-transmit.svg?style=flat)](https://github.com/alexsasharegan/vue-transmit/issues)
-[![GitHub stars](https://img.shields.io/github/stars/alexsasharegan/vue-transmit.svg)](https://github.com/alexsasharegan/vue-transmit/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/alexsasharegan/vue-transmit.svg)](https://github.com/alexsasharegan/vue-transmit/network)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/alexsasharegan/vue-transmit.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Falexsasharegan%2Fvue-transmit)
+[![npm](https://img.shields.io/npm/v/vue-transmit.svg?style=for-the-badge)](https://img.shields.io/npm/v/vue-transmit)
+[![npm downloads](https://img.shields.io/npm/dt/vue-transmit.svg?style=for-the-badge)](https://www.npmjs.com/package/vue-transmit)
+[![GitHub issues](https://img.shields.io/github/issues/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/issues)
+[![GitHub stars](https://img.shields.io/github/stars/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/network)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=for-the-badge)](https://conventionalcommits.org)
 
 A Vue.js drag & drop uploader based on Dropzone.js (`~42kB`, `~12.5kB` gzipped). Many thanks to
 [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original Dropzone.js!
@@ -103,6 +102,7 @@ Vue.use(VueTransmit)
 | maxFiles              | Number                | null                                                                        |
 | params                | Object                | default                                                                     |
 | headers               | Object                | default                                                                     |
+| responseType          | String                | ""                                                                          |
 | clickable             | Boolean               | true                                                                        |
 | ignoreHiddenFiles     | Boolean               | true                                                                        |
 | acceptedFileTypes     | Array                 | default                                                                     |
