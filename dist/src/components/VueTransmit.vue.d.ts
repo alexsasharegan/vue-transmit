@@ -77,8 +77,8 @@ export default class VueTransmit extends Vue {
    */
     capture: string;
     /**
-   * Before the file is appended to the formData, the function _renameFilename is performed for file.name, file
-   * which executes the function defined in renameFilename
+   * Before the file is appended to the formData, the function renameFile is performed for file.name, file
+   * which executes the function defined in renameFile
    */
     renameFile: (name: string) => string;
     dictFileTooBig: string;
