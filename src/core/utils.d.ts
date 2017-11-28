@@ -20,13 +20,6 @@ export declare function toMbps(bytes: number, seconds: number): number;
 export declare const hbsRegex: RegExp;
 export declare function hbsReplacer(context?: object): (match: string, capture: string) => any;
 export declare function objFactory(): {};
-export declare enum READY_STATES {
-    UNSENT = 0,
-    OPENED = 1,
-    HEADERS_RECEIVED = 2,
-    LOADING = 3,
-    DONE = 4,
-}
 export declare function scaleH(ratio: number, width: number): number;
 export declare function scaleW(ratio: number, height: number): number;
 export declare function scaleDims(ratio: number, width?: number, height?: number): number[];

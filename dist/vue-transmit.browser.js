@@ -144,14 +144,6 @@ function hbsReplacer() {
 function objFactory() {
     return {};
 }
-var READY_STATES = exports.READY_STATES = undefined;
-(function (READY_STATES) {
-    READY_STATES[READY_STATES["UNSENT"] = 0] = "UNSENT";
-    READY_STATES[READY_STATES["OPENED"] = 1] = "OPENED";
-    READY_STATES[READY_STATES["HEADERS_RECEIVED"] = 2] = "HEADERS_RECEIVED";
-    READY_STATES[READY_STATES["LOADING"] = 3] = "LOADING";
-    READY_STATES[READY_STATES["DONE"] = 4] = "DONE";
-})(READY_STATES || (exports.READY_STATES = READY_STATES = {}));
 function scaleH(ratio, width) {
     return width / ratio;
 }
@@ -266,7 +258,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var VueTransmit = __webpack_require__(7);
 var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-24315fb6","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-0a77512e","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
@@ -828,7 +820,6 @@ var VueTransmit = function (_Vue) {
         value: function uploadFiles(files) {
             var _this6 = this;
 
-            var response = null;
             var xhr = new XMLHttpRequest();
             xhr.timeout = this.timeout;
             var _iteratorNormalCompletion4 = true;
@@ -866,12 +857,14 @@ var VueTransmit = function (_Vue) {
             xhr.upload.addEventListener("progress", updateProgress);
             xhr.addEventListener("timeout", this.handleTimeout(files, xhr));
             xhr.addEventListener("load", function (e) {
-                if (files[0].status === STATUSES.CANCELED || xhr.readyState !== _utils.READY_STATES.DONE) {
+                if (files[0].status === STATUSES.CANCELED || xhr.readyState !== XMLHttpRequest.DONE) {
                     return;
                 }
-                response = xhr.responseText;
-                if (xhr.responseType !== "arraybuffer" && xhr.responseType !== "blob") {
-                    if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
+                var response = xhr.response;
+                if (!xhr.responseType) {
+                    var contentType = xhr.getResponseHeader("content-type");
+                    response = xhr.responseText;
+                    if (contentType && contentType.indexOf("application/json") > -1) {
                         try {
                             response = JSON.parse(response);
                         } catch (err) {
