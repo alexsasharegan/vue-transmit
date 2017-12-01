@@ -1,12 +1,8 @@
-import * as components from "./src"
+import { VueTransmit } from "./src"
 
 export default {
-  install(Vue, _options) {
-    for (const component in components) {
-      if (Object.prototype.hasOwnProperty.call(components, component)) {
-        Vue.component(component, components[component])
-      }
-    }
-  },
-  name: "vue-transmit"
+	install(Vue, _options) {
+		Vue.component("VueTransmit", VueTransmit)
+	},
+	name: "vue-transmit",
 }

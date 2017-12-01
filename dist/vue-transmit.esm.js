@@ -207,25 +207,24 @@ function webkitIsDir(entry) {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__src__);
 
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-  install(Vue, _options) {
-    for (const component in __WEBPACK_IMPORTED_MODULE_0__src__) {
-      if (Object.prototype.hasOwnProperty.call(__WEBPACK_IMPORTED_MODULE_0__src__, component)) {
-        Vue.component(component, __WEBPACK_IMPORTED_MODULE_0__src__[component])
-      }
-    }
-  },
-  name: "vue-transmit"
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
 
+var _src = __webpack_require__(3);
+
+exports.default = {
+    install: function install(Vue, _options) {
+        Vue.component("VueTransmit", _src.VueTransmit);
+    },
+
+    name: "vue-transmit"
+};
 
 /***/ }),
 /* 3 */
