@@ -1,62 +1,62 @@
 <template>
-  <component :is="tag">
-    <div class="v-transmit__upload-area"
-         :class="[isDraggingClass, uploadAreaClasses]"
-         draggable="true"
-         v-bind="uploadAreaAttrs"
-         v-on="uploadAreaListeners"
-         @click="handleClickUploaderAction"
-         @dragstart="handleDragStart"
-         @dragend="handleDragEnd"
-         @dragenter.prevent.stop="handleDragEnter"
-         @dragover.prevent.stop="handleDragOver"
-         @dragleave="handleDragLeave"
-         @drop.prevent.stop="handleDrop">
-      <slot></slot>
-    </div>
-    <slot name="files"
-          v-bind="fileSlotBindings"></slot>
-    <input type="file"
-           ref="hiddenFileInput"
-           :multiple="multiple"
-           :style="fileInputStyles"
-           :class="[maxFilesReachedClass]"
-           :accept="filesToAccept"
-           :capture="capture"
-           @change="onFileInputChange">
-  </component :is="tag">
+	<component :is="tag">
+		<div class="v-transmit__upload-area"
+		     :class="[isDraggingClass, uploadAreaClasses]"
+		     draggable="true"
+		     v-bind="uploadAreaAttrs"
+		     v-on="uploadAreaListeners"
+		     @click="handleClickUploaderAction"
+		     @dragstart="handleDragStart"
+		     @dragend="handleDragEnd"
+		     @dragenter.prevent.stop="handleDragEnter"
+		     @dragover.prevent.stop="handleDragOver"
+		     @dragleave="handleDragLeave"
+		     @drop.prevent.stop="handleDrop">
+			<slot></slot>
+		</div>
+		<slot name="files"
+		      v-bind="fileSlotBindings"></slot>
+		<input type="file"
+		       ref="hiddenFileInput"
+		       :multiple="multiple"
+		       :style="fileInputStyles"
+		       :class="[maxFilesReachedClass]"
+		       :accept="filesToAccept"
+		       :capture="capture"
+		       @change="onFileInputChange">
+	</component :is="tag">
 </template>
 
 <style lang="scss">
-  $border-color: #bdbdbd;
-  $drop-color: #e1f5fe;
-  $drop-color-alt: #fafafa;
+	$border-color: #bdbdbd;
+	$drop-color: #e1f5fe;
+	$drop-color-alt: #fafafa;
 
-  .v-transmit__upload-area {
-  	width: 100%;
-  	border-radius: 1rem;
-  	border: 2px dashed $border-color;
-  	min-height: 30vh;
+	.v-transmit__upload-area {
+		width: 100%;
+		border-radius: 1rem;
+		border: 2px dashed $border-color;
+		min-height: 30vh;
 
-  	@media (min-height: 1000px) {
-  		min-height: 300px;
-  	}
-  }
+		@media (min-height: 1000px) {
+			min-height: 300px;
+		}
+	}
 
-  .v-transmit__upload-area--is-dragging {
-  	background: $drop-color
-  		linear-gradient(
-  			-45deg,
-  			$drop-color-alt 25%,
-  			transparent 25%,
-  			transparent 50%,
-  			$drop-color-alt 50%,
-  			$drop-color-alt 75%,
-  			transparent 75%,
-  			transparent
-  		);
-  	background-size: 40px 40px;
-  }
+	.v-transmit__upload-area--is-dragging {
+		background: $drop-color
+			linear-gradient(
+				-45deg,
+				$drop-color-alt 25%,
+				transparent 25%,
+				transparent 50%,
+				$drop-color-alt 50%,
+				$drop-color-alt 75%,
+				transparent 75%,
+				transparent
+			);
+		background-size: 40px 40px;
+	}
 </style>
 
 <script lang="ts">
