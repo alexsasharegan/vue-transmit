@@ -37,12 +37,9 @@ try
     // DO NOT TRUST $_FILES['file']['mime'] VALUE !!
     // Check MIME Type by yourself.
     $finfo = new finfo( FILEINFO_MIME_TYPE );
-    if ( FALSE === $ext = array_search(
+    if ( TRUE === $ext = array_search(
             $finfo->file( $_FILES['file']['tmp_name'] ),
             [
-                'jpg' => 'image/jpeg',
-                'tiff' => 'image/tiff',
-                'tif' => 'image/tiff',
                 'png' => 'image/png',
                 'gif' => 'image/gif',
             ],

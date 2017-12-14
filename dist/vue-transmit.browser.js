@@ -257,7 +257,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var VueTransmit = __webpack_require__(7);
 var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-0a77512e","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-13b7cc36","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
@@ -1293,19 +1293,24 @@ var VueTransmit = function (_Vue) {
                 for (var _iterator12 = items[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
                     var item = _step12.value;
 
+                    // Newer API on standards track
+                    if (item.getAsFile && item.kind == "file") {
+                        this.addFile(item.getAsFile());
+                        continue;
+                    }
+                    // Vendor prefixed experimental API
                     if (item.webkitGetAsEntry) {
                         var entry = item.webkitGetAsEntry();
                         if (entry == null) {
                             continue;
                         }
                         if ((0, _utils.webkitIsFile)(entry)) {
-                            entry.file(this.addFile);
-                        } else if ((0, _utils.webkitIsDir)(entry)) {
-                            this.addFilesFromDirectory(entry, entry.name);
+                            entry.file(this.addFile, console.error);
+                            continue;
                         }
-                    } else if (item.getAsFile) {
-                        if (item.kind === "file") {
-                            this.addFile(item.getAsFile());
+                        if ((0, _utils.webkitIsDir)(entry)) {
+                            this.addFilesFromDirectory(entry, entry.name);
+                            continue;
                         }
                     }
                 }
@@ -1671,7 +1676,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 "use strict";
 /**
-  * vue-class-component v6.1.0
+  * vue-class-component v6.1.1
   * (c) 2015-2017 Evan You
   * @license MIT
   */
@@ -1683,6 +1688,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var Vue = _interopDefault(__webpack_require__(0));
 
+var hasProto = { __proto__: [] } instanceof Array;
 function createDecorator(factory) {
     return function (target, key, index) {
         var Ctor = typeof target === 'function'
@@ -1696,6 +1702,10 @@ function createDecorator(factory) {
         }
         Ctor.__decorators__.push(function (options) { return factory(options, key, index); });
     };
+}
+function isPrimitive(value) {
+    var type = typeof value;
+    return value == null || (type !== "object" && type !== "function");
 }
 function warn(message) {
     if (typeof console !== 'undefined') {
@@ -1786,18 +1796,55 @@ function componentFactory(Component, options) {
     var decorators = Component.__decorators__;
     if (decorators) {
         decorators.forEach(function (fn) { return fn(options); });
+        delete Component.__decorators__;
     }
     var superProto = Object.getPrototypeOf(Component.prototype);
     var Super = superProto instanceof Vue
         ? superProto.constructor
         : Vue;
     var Extended = Super.extend(options);
-    for (var staticKey in Component) {
-        if (Component.hasOwnProperty(staticKey)) {
-            Extended[staticKey] = Component[staticKey];
-        }
-    }
+    forwardStaticMembers(Extended, Component, Super);
     return Extended;
+}
+var reservedPropertyNames = [
+    'cid',
+    'super',
+    'options',
+    'superOptions',
+    'extendOptions',
+    'sealedOptions',
+    'component',
+    'directive',
+    'filter'
+];
+function forwardStaticMembers(Extended, Original, Super) {
+    Object.getOwnPropertyNames(Original).forEach(function (key) {
+        if (key === 'prototype') {
+            return;
+        }
+        var extendedDescriptor = Object.getOwnPropertyDescriptor(Extended, key);
+        if (extendedDescriptor && !extendedDescriptor.configurable) {
+            return;
+        }
+        var descriptor = Object.getOwnPropertyDescriptor(Original, key);
+        if (!hasProto) {
+            if (key === 'cid') {
+                return;
+            }
+            var superDescriptor = Object.getOwnPropertyDescriptor(Super, key);
+            if (!isPrimitive(descriptor.value)
+                && superDescriptor
+                && superDescriptor.value === descriptor.value) {
+                return;
+            }
+        }
+        if (false) {
+            warn("Static property name '" + key + "' declared on class '" + Original.name + "' " +
+                'conflicts with reserved property name of Vue internal. ' +
+                'It may cause unexpected behavior of the component. Consider renaming the property.');
+        }
+        Object.defineProperty(Extended, key, descriptor);
+    });
 }
 
 function Component(options) {

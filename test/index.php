@@ -57,13 +57,13 @@
       <b-navbar-brand href="#">NavBar</b-navbar-brand>
       <b-collapse is-nav
                   id="nav_collapse">
-        <b-nav is-nav-bar>
+        <b-navbar-nav>
           <b-nav-item href="#">Link</b-nav-item>
           <b-nav-item href="#"
                       disabled>Disabled</b-nav-item>
-        </b-nav>
+        </b-navbar-n>
         <!-- Right aligned nav items -->
-        <b-nav is-nav-bar
+        <b-navbar-nav
               class="ml-auto">
           <b-nav-form>
             <b-form-input size="sm"
@@ -107,19 +107,20 @@
           <vue-transmit ref="uploader"
                         upload-area-classes="vh-20"
                         drag-class="dragging"
-                        url="/upload.php"
+                        v-bind="options"
                         @success="onUploadSuccess"
                         @error="onError">
             <flex-col align-v="center"
                       class="h-100">
               <flex-row align-h="center">
                 <b-btn variant="primary"
+                       @click="triggerBrowse"
                        class="w-50">
                   Upload Files
                 </b-btn>
               </flex-row>
             </flex-col>
-            <template scope="{ uploadingFiles }"
+            <template slot-scope="{ uploadingFiles }"
                       slot="files">
               <flex-row v-for="file in uploadingFiles"
                         :key="file.id"
@@ -164,21 +165,26 @@
   </b-container>
 
   <script src="https://unpkg.com/bootstrap-vue/dist/bootstrap-vue.js"></script>
-  <script src="https://unpkg.com/vue-flex/dist/vue-flex.js"></script>
+  <script src="js/vue-flex.js"></script>
   <script>
+    Vue.config.debug = true
+    Vue.config.strict = true
     Vue.use(VueTransmit)
     Vue.use(vueFlex)
     window.app = new Vue({
       el: '#app',
-      data: {
-        options: {
-          acceptedFileTypes: ['image/*'],
-          url: './upload.php',
-          clickable: false,
-        },
-        files: [],
-        showModal: false,
-        error: ""
+      data() {
+        return {
+          options: {
+            acceptedFileTypes: ['text/csv'],
+            url: './upload.php',
+            clickable: false,
+            accept: this.accept
+          },
+          files: [],
+          showModal: false,
+          error: ""
+        }
       },
       methods: {
         triggerBrowse() {
@@ -198,6 +204,10 @@
             console.log(event, ...arguments)
           })
         },
+        accept(file, done) {
+          console.log(JSON.stringify(file, undefined, 2))
+          done()
+        }
       },
       filters: {
         json(value) {

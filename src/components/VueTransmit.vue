@@ -850,20 +850,26 @@ export default class VueTransmit extends Vue {
 	}
 	addFilesFromItems(items: DataTransferItem[]): void {
 		for (const item of items) {
+			// Newer API on standards track
+			if (item.getAsFile && item.kind == "file") {
+				this.addFile(item.getAsFile())
+				continue
+			}
+
+			// Vendor prefixed experimental API
 			if (item.webkitGetAsEntry) {
 				const entry: FileSystemEntry = item.webkitGetAsEntry()
+
 				if (entry == null) {
 					continue
 				}
-
 				if (webkitIsFile(entry)) {
-					entry.file(this.addFile as any)
-				} else if (webkitIsDir(entry)) {
-					this.addFilesFromDirectory(entry, entry.name)
+					entry.file(this.addFile as any, console.error)
+					continue
 				}
-			} else if (item.getAsFile) {
-				if (item.kind === "file") {
-					this.addFile(item.getAsFile())
+				if (webkitIsDir(entry)) {
+					this.addFilesFromDirectory(entry, entry.name)
+					continue
 				}
 			}
 		}
