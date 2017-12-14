@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.1.3"></a>
+## [7.1.3](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.2...v7.1.3) (2017-12-14)
+
+
+### Bug Fixes
+
+* **#17:** prefer `DataTransferItem.getAsFile` so file type is populated ([f1105e5](https://github.com/alexsasharegan/vue-transmit/commit/f1105e5)), closes [#17](https://github.com/alexsasharegan/vue-transmit/issues/17)
+
+
+
 <a name="7.1.2"></a>
 ## [7.1.2](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.1...v7.1.2) (2017-12-01)
 
