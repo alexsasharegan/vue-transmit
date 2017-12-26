@@ -567,12 +567,13 @@ export default class VueTransmit extends Vue {
 	}
 	uploadFiles(files: VTransmitFile[]): void {
 		const xhr = new XMLHttpRequest()
-		xhr.timeout = this.timeout
 		for (const file of files) {
 			file.xhr = xhr
 			file.startProgress()
 		}
 		xhr.open(this.method, this.url, true)
+		// Setting the timeout after open because of IE11 issue: https://gitlab.com/meno/dropzone/issues/8
+		xhr.timeout = this.timeout
 		xhr.withCredentials = Boolean(this.withCredentials)
 		xhr.responseType = this.responseType
 
