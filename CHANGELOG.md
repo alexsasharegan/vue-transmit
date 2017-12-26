@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.1.4"></a>
+## [7.1.4](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.3...v7.1.4) (2017-12-26)
+
+
+### Bug Fixes
+
+* **xhr:** corrects IE11 "InvalidState" issue. ([#18](https://github.com/alexsasharegan/vue-transmit/issues/18)) ([6c05941](https://github.com/alexsasharegan/vue-transmit/commit/6c05941))
+
+
+
 <a name="7.1.3"></a>
 ## [7.1.3](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.2...v7.1.3) (2017-12-14)
 
