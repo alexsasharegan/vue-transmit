@@ -61,7 +61,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -72,342 +72,6 @@ module.exports = require("vue");
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-exports.uniqueId = uniqueId;
-exports.copyOwnAndInheritedProps = copyOwnAndInheritedProps;
-exports.round = round;
-exports.fromBytesToKbit = fromBytesToKbit;
-exports.fromBytesToMbit = fromBytesToMbit;
-exports.toKbps = toKbps;
-exports.toMbps = toMbps;
-exports.hbsReplacer = hbsReplacer;
-exports.objFactory = objFactory;
-exports.scaleH = scaleH;
-exports.scaleW = scaleW;
-exports.scaleDims = scaleDims;
-exports.resizeImg = resizeImg;
-exports.webkitIsFile = webkitIsFile;
-exports.webkitIsDir = webkitIsDir;
-var assign = exports.assign = Object.assign;
-var defineProperty = exports.defineProperty = Object.defineProperty;
-var idCounter = 0;
-function uniqueId(prefix) {
-    var id = ++idCounter;
-    return prefix + id;
-}
-function copyOwnAndInheritedProps(obj) {
-    var newData = {};
-    for (var prop in obj) {
-        if (typeof obj[prop] !== "function") {
-            newData[prop] = obj[prop];
-        }
-    }
-    return newData;
-}
-function round(number) {
-    var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-    var roundStyle = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "round";
-
-    var roundingFactor = Math.pow(10, decimals);
-    return Math[roundStyle](number * roundingFactor) / roundingFactor;
-}
-function fromBytesToKbit(bytes) {
-    return bytes / 125;
-}
-function fromBytesToMbit(bytes) {
-    return bytes / 125000;
-}
-function toKbps(bytes, seconds) {
-    return fromBytesToKbit(bytes) / seconds;
-}
-function toMbps(bytes, seconds) {
-    return fromBytesToMbit(bytes) / seconds;
-}
-var hbsRegex = exports.hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g;
-function hbsReplacer() {
-    var context = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    return function hbsReplacerFn(match, capture) {
-        return context[capture] !== undefined ? context[capture] : match;
-    };
-}
-function objFactory() {
-    return {};
-}
-function scaleH(ratio, width) {
-    return width / ratio;
-}
-function scaleW(ratio, height) {
-    return height * ratio;
-}
-function scaleDims(ratio, width, height) {
-    return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height];
-}
-function resizeImg(file, dims) {
-    // Extract the object's primitive values so we don't mutate the input
-    var sRatio = file.width / file.height;
-    var dRatio = dims.width / dims.height;
-    var imgCoords = {
-        sx: 0,
-        sy: 0,
-        sWidth: file.width,
-        sHeight: file.height,
-        dx: 0,
-        dy: 0,
-        dWidth: dims.width,
-        dHeight: dims.height
-    };
-    var w = void 0,
-        h = void 0;
-    if (dRatio > sRatio) {
-        ;
-
-        var _scaleDims = scaleDims(dRatio, file.width);
-
-        var _scaleDims2 = _slicedToArray(_scaleDims, 2);
-
-        w = _scaleDims2[0];
-        h = _scaleDims2[1];
-    } else {
-        ;
-
-        var _scaleDims3 = scaleDims(dRatio, undefined, file.height);
-
-        var _scaleDims4 = _slicedToArray(_scaleDims3, 2);
-
-        w = _scaleDims4[0];
-        h = _scaleDims4[1];
-    }
-    if (w < file.width) {
-        imgCoords.sx = (file.width - w) / 2;
-        imgCoords.sWidth = w;
-    }
-    if (h < file.height) {
-        imgCoords.sy = (file.height - h) / 2;
-        imgCoords.sHeight = h;
-    }
-    return imgCoords;
-}
-function webkitIsFile(entry) {
-    return entry.isFile;
-}
-function webkitIsDir(entry) {
-    return entry.isDirectory;
-}
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _src = __webpack_require__(3);
-
-exports.default = {
-    install: function install(Vue, _options) {
-        Vue.component("VueTransmit", _src.VueTransmit);
-    },
-
-    name: "vue-transmit"
-};
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.VueTransmit = undefined;
-
-var _VueTransmit = __webpack_require__(4);
-
-var _VueTransmit2 = _interopRequireDefault(_VueTransmit);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.VueTransmit = _VueTransmit2.default;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-
-// EXTERNAL MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-ts-loader!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/VueTransmit.vue
-var VueTransmit = __webpack_require__(7);
-var VueTransmit_default = /*#__PURE__*/__webpack_require__.n(VueTransmit);
-
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-13b7cc36","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/components/VueTransmit.vue
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
-var staticRenderFns = []
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ var components_VueTransmit = (esExports);
-// CONCATENATED MODULE: ./src/components/VueTransmit.vue
-function injectStyle (ssrContext) {
-  __webpack_require__(5)
-}
-var normalizeComponent = __webpack_require__(6)
-/* script */
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  VueTransmit_default.a,
-  components_VueTransmit,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-
-/* harmony default export */ var src_components_VueTransmit = __webpack_exports__["default"] = (Component.exports);
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -435,7 +99,7 @@ var _identity = __webpack_require__(14);
 
 var _identity2 = _interopRequireDefault(_identity);
 
-var _utils = __webpack_require__(1);
+var _utils = __webpack_require__(2);
 
 var _VTransmitFile = __webpack_require__(15);
 
@@ -820,7 +484,6 @@ var VueTransmit = function (_Vue) {
             var _this6 = this;
 
             var xhr = new XMLHttpRequest();
-            xhr.timeout = this.timeout;
             var _iteratorNormalCompletion4 = true;
             var _didIteratorError4 = false;
             var _iteratorError4 = undefined;
@@ -848,6 +511,8 @@ var VueTransmit = function (_Vue) {
             }
 
             xhr.open(this.method, this.url, true);
+            // Setting the timeout after open because of IE11 issue: https://gitlab.com/meno/dropzone/issues/8
+            xhr.timeout = this.timeout;
             xhr.withCredentials = Boolean(this.withCredentials);
             xhr.responseType = this.responseType;
             var handleError = this.handleUploadError(files, xhr);
@@ -1534,6 +1199,336 @@ VueTransmit = __decorate([(0, _vuePropertyDecorator.Component)({ name: "VueTrans
 exports.default = VueTransmit;
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.uniqueId = uniqueId;
+exports.copyOwnAndInheritedProps = copyOwnAndInheritedProps;
+exports.round = round;
+exports.fromBytesToKbit = fromBytesToKbit;
+exports.fromBytesToMbit = fromBytesToMbit;
+exports.toKbps = toKbps;
+exports.toMbps = toMbps;
+exports.hbsReplacer = hbsReplacer;
+exports.objFactory = objFactory;
+exports.scaleH = scaleH;
+exports.scaleW = scaleW;
+exports.scaleDims = scaleDims;
+exports.resizeImg = resizeImg;
+exports.webkitIsFile = webkitIsFile;
+exports.webkitIsDir = webkitIsDir;
+var assign = exports.assign = Object.assign;
+var defineProperty = exports.defineProperty = Object.defineProperty;
+var idCounter = 0;
+function uniqueId(prefix) {
+    var id = ++idCounter;
+    return prefix + id;
+}
+function copyOwnAndInheritedProps(obj) {
+    var newData = {};
+    for (var prop in obj) {
+        if (typeof obj[prop] !== "function") {
+            newData[prop] = obj[prop];
+        }
+    }
+    return newData;
+}
+function round(number) {
+    var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+    var roundStyle = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "round";
+
+    var roundingFactor = Math.pow(10, decimals);
+    return Math[roundStyle](number * roundingFactor) / roundingFactor;
+}
+function fromBytesToKbit(bytes) {
+    return bytes / 125;
+}
+function fromBytesToMbit(bytes) {
+    return bytes / 125000;
+}
+function toKbps(bytes, seconds) {
+    return fromBytesToKbit(bytes) / seconds;
+}
+function toMbps(bytes, seconds) {
+    return fromBytesToMbit(bytes) / seconds;
+}
+var hbsRegex = exports.hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g;
+function hbsReplacer() {
+    var context = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    return function hbsReplacerFn(match, capture) {
+        return context[capture] !== undefined ? context[capture] : match;
+    };
+}
+function objFactory() {
+    return {};
+}
+function scaleH(ratio, width) {
+    return width / ratio;
+}
+function scaleW(ratio, height) {
+    return height * ratio;
+}
+function scaleDims(ratio, width, height) {
+    return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height];
+}
+function resizeImg(file, dims) {
+    // Extract the object's primitive values so we don't mutate the input
+    var sRatio = file.width / file.height;
+    var dRatio = dims.width / dims.height;
+    var imgCoords = {
+        sx: 0,
+        sy: 0,
+        sWidth: file.width,
+        sHeight: file.height,
+        dx: 0,
+        dy: 0,
+        dWidth: dims.width,
+        dHeight: dims.height
+    };
+    var w = void 0,
+        h = void 0;
+    if (dRatio > sRatio) {
+        ;
+
+        var _scaleDims = scaleDims(dRatio, file.width);
+
+        var _scaleDims2 = _slicedToArray(_scaleDims, 2);
+
+        w = _scaleDims2[0];
+        h = _scaleDims2[1];
+    } else {
+        ;
+
+        var _scaleDims3 = scaleDims(dRatio, undefined, file.height);
+
+        var _scaleDims4 = _slicedToArray(_scaleDims3, 2);
+
+        w = _scaleDims4[0];
+        h = _scaleDims4[1];
+    }
+    if (w < file.width) {
+        imgCoords.sx = (file.width - w) / 2;
+        imgCoords.sWidth = w;
+    }
+    if (h < file.height) {
+        imgCoords.sy = (file.height - h) / 2;
+        imgCoords.sHeight = h;
+    }
+    return imgCoords;
+}
+function webkitIsFile(entry) {
+    return entry.isFile;
+}
+function webkitIsDir(entry) {
+    return entry.isDirectory;
+}
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _src = __webpack_require__(4);
+
+exports.default = {
+    install: function install(Vue, _options) {
+        Vue.component("VueTransmit", _src.VueTransmit);
+    },
+
+    name: "vue-transmit"
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.VueTransmit = undefined;
+
+var _VueTransmit = __webpack_require__(5);
+
+var _VueTransmit2 = _interopRequireDefault(_VueTransmit);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.VueTransmit = _VueTransmit2.default;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__);
+/* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_25b0f28c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__ = __webpack_require__(16);
+function injectStyle (ssrContext) {
+  __webpack_require__(6)
+}
+var normalizeComponent = __webpack_require__(7)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue___default.a,
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_25b0f28c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1676,7 +1671,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 "use strict";
 /**
-  * vue-class-component v6.1.1
+  * vue-class-component v6.1.2
   * (c) 2015-2017 Evan You
   * @license MIT
   */
@@ -1714,6 +1709,7 @@ function warn(message) {
 }
 
 function collectDataFromConstructor(vm, Component) {
+    var originalInit = Component.prototype._init;
     Component.prototype._init = function () {
         var _this = this;
         var keys = Object.getOwnPropertyNames(vm);
@@ -1735,6 +1731,7 @@ function collectDataFromConstructor(vm, Component) {
         });
     };
     var data = new Component();
+    Component.prototype._init = originalInit;
     var plainData = {};
     Object.keys(data).forEach(function (key) {
         if (data[key] !== undefined) {
@@ -3280,7 +3277,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _utils = __webpack_require__(1);
+var _utils = __webpack_require__(2);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -3435,6 +3432,16 @@ var VTransmitFile = function () {
 }();
 
 exports.default = VTransmitFile;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
+var staticRenderFns = []
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
 
 /***/ })
 /******/ ]);

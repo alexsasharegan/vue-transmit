@@ -176,7 +176,7 @@
       data() {
         return {
           options: {
-            acceptedFileTypes: ['text/csv'],
+            acceptedFileTypes: ['image/*'],
             url: './upload.php',
             clickable: false,
             accept: this.accept
