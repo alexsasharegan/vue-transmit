@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.1.6"></a>
+## [7.1.6](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.5...v7.1.6) (2018-01-08)
+
+
+
 <a name="7.1.5"></a>
 ## [7.1.5](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.4...v7.1.5) (2017-12-26)
 
