@@ -176,7 +176,7 @@
       data() {
         return {
           options: {
-            acceptedFileTypes: ['image/*'],
+            acceptedFileTypes: ['text/csv'],
             url: './upload.php',
             clickable: false,
             accept: this.accept
@@ -201,7 +201,8 @@
         },
         listen(event) {
           this.$refs.uploader.$on(event, function() {
-            console.log(event, ...arguments)
+            // console.log(event, ...arguments)
+            console.log(event, Array.from(arguments).forEach(arg => JSON.stringify(arg, undefined, 2)))
           })
         },
         accept(file, done) {
