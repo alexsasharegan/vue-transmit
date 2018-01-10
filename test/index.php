@@ -176,14 +176,15 @@
       data() {
         return {
           options: {
-            acceptedFileTypes: ['text/csv'],
+            acceptedFileTypes: ['image/*'],
             url: './upload.php',
             clickable: false,
             accept: this.accept
           },
           files: [],
           showModal: false,
-          error: ""
+					error: "",
+					count: 0
         }
       },
       methods: {
@@ -206,8 +207,9 @@
           })
         },
         accept(file, done) {
+					this.count++
           console.log(JSON.stringify(file, undefined, 2))
-          done()
+          done(this.count == 1)
         }
       },
       filters: {
