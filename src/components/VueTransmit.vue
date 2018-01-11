@@ -89,10 +89,10 @@ export default class VueTransmit extends Vue {
 	uploadAreaClasses: any[] | object | string
 
 	@Prop({ type: Object, default: objFactory })
-	uploadAreaAttrs: object
+	uploadAreaAttrs: { [key: string]: any }
 
 	@Prop({ type: Object, default: objFactory })
-	uploadAreaListeners: object
+	uploadAreaListeners: { [key: string]: any }
 
 	@Prop({ type: String, default: null })
 	dragClass: string
@@ -159,10 +159,10 @@ export default class VueTransmit extends Vue {
    * This is the same as adding hidden input fields in the form element.
    */
 	@Prop({ type: Object, default: objFactory })
-	params: object
+	params: { [key: string]: any }
 
 	@Prop({ type: Object, default: objFactory })
-	headers: object
+	headers: { [key: string]: any }
 
 	@Prop({ type: String, default: "" })
 	responseType: XMLHttpRequestResponseType
@@ -255,6 +255,9 @@ export default class VueTransmit extends Vue {
 
 	@Prop({ type: Function, default: resizeImg })
 	resize: (file: VTransmitFile, dims: Dimensions) => DrawImageArgs
+
+	@Prop({ type: Object, default: objFactory })
+	adapterOptions: { [key: string]: any }
 
 	public dragging: boolean = false
 	// Used to keep the createThumbnail calls processing async one-at-a-time
@@ -600,7 +603,7 @@ export default class VueTransmit extends Vue {
 			}
 		})
 
-		// Use null proto obj for the following 'for in' loop
+		// Use null proto obj for the following 'for in' loop without hasOwnProperty check
 		const headers = Object.assign(Object.create(null), this.defaultHeaders, this.headers)
 		for (const headerName in headers) {
 			if (headers[headerName]) {

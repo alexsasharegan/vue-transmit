@@ -1,12 +1,8 @@
 import { VTransmitFile } from "../classes/VTransmitFile"
 
-export const assign = Object.assign
-export const defineProperty = Object.defineProperty
-
 let idCounter = 0
 export function uniqueId(prefix: string): string {
-	var id = ++idCounter
-	return prefix + id
+	return prefix + ++idCounter
 }
 
 export function copyOwnAndInheritedProps(obj: object): object {

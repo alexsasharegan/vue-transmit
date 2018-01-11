@@ -1,5 +1,5 @@
-import { assign, defineProperty, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
-import { UploadStatuses } from "../core/utils";
+import { copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
+import { UploadStatuses } from "../core/utils"
 
 export interface UploadStats {
 	bytesSent: number
@@ -47,12 +47,11 @@ export class VTransmitFile {
 	errorMessage: string = undefined
 
 	constructor(...data: object[]) {
-		assign(this, ...data)
+		Object.assign(this, ...data)
 	}
 
 	set(...data: object[]): VTransmitFile {
-		assign(this, ...data)
-		return this
+		return Object.assign(this, ...data)
 	}
 
 	copyNativeFile(file: File): VTransmitFile {
@@ -116,7 +115,8 @@ export class VTransmitFile {
 	}
 
 	set dataUrl(value) {
-		defineProperty(this, "_dataUrl", {
+		// Use non-enumerable data url to avoid copying around large datasets
+		Object.defineProperty(this, "_dataUrl", {
 			value,
 			enumerable: false,
 			configurable: true,
