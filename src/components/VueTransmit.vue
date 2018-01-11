@@ -74,7 +74,7 @@ import {
 	webkitIsFile,
 	webkitIsDir,
 } from "../core/utils"
-import VTransmitFile from "../classes/VTransmitFile"
+import { VTransmitFile } from "../classes/VTransmitFile"
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry
 
