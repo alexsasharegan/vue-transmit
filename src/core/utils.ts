@@ -76,6 +76,43 @@ export enum UploadStatuses {
 	Success = "success"
 }
 
+export enum VTransmitEvents {
+	Initialize = "initialize",
+	AddedFile = "added-file",
+	AddedFiles = "added-files",
+	RemovedFile = "removed-file",
+	AcceptedFile = "accepted-file",
+	RejectedFile = "rejected-file",
+	AcceptComplete = "accept-complete",
+	Thumbnail = "thumbnail",
+	Processing = "processing",
+	ProcessingMultiple = "processing-multiple",
+	Canceled = "canceled",
+	CanceledMultiple = "canceled-multiple",
+	Sending = "sending",
+	SendingMultiple = "sending-multiple",
+	Timeout = "timeout",
+	TimeoutMultiple = "timeout-multiple",
+	UploadProgress = "upload-progress",
+	TotalUploadProgress = "total-upload-progress",
+	Success = "success",
+	SuccessMultiple = "success-multiple",
+	QueueComplete = "queue-complete",
+	Complete = "complete",
+	CompleteMultiple = "complete-multiple",
+	Error = "error",
+	ErrorMultiple = "error-multiple",
+	MaxFilesReached = "max-files-reached",
+	MaxFilesExceeded = "max-files-exceeded",
+	Reset = "reset",
+	DragOver = "drag-over",
+	DragEnter = "drag-enter",
+	DragLeave = "drag-leave",
+	DragEnd = "drag-end",
+	Drop = "drop",
+	Paste = "paste"
+}
+
 export interface DrawImageArgs {
 	sx: number
 	sy: number

@@ -74,6 +74,7 @@ import {
 	webkitIsFile,
 	webkitIsDir,
 	UploadStatuses,
+	VTransmitEvents as VTEvents,
 } from "../core/utils"
 import { VTransmitFile } from "../classes/VTransmitFile"
 
@@ -340,54 +341,54 @@ export default class VueTransmit extends Vue {
 			return
 		}
 		if (acceptedFiles.length >= this.maxFiles) {
-			this.$emit("max-files-reached", this.files)
+			this.$emit(VTEvents.MaxFilesReached, this.files)
 		}
 	}
 
-	getFilesWithStatus(...statuses: string[]): VTransmitFile[] {
+	getFilesWithStatus(...statuses: UploadStatuses[]): VTransmitFile[] {
 		return this.files.filter(f => statuses.indexOf(f.status) > -1)
 	}
 	onFileInputChange(): void {
-		this.$emit("added-files", Array.from(this.inputEl.files).map(this.addFile))
+		this.$emit(VTEvents.AddedFiles, Array.from(this.inputEl.files).map(this.addFile))
 	}
 	addFile(file: File): VTransmitFile {
-		const vTransmitFile = VTransmitFile.fromNativeFile(file)
-		vTransmitFile.status = STATUSES.ADDED
-		this.files.push(vTransmitFile)
-		this.$emit("added-file", vTransmitFile)
-		this.enqueueThumbnail(vTransmitFile)
-		this.acceptFile(vTransmitFile, error => {
+		const vtFile = VTransmitFile.fromNativeFile(file)
+		vtFile.status = UploadStatuses.Added
+		this.files.push(vtFile)
+		this.$emit(VTEvents.AddedFile, vtFile)
+		this.enqueueThumbnail(vtFile)
+		this.acceptFile(vtFile, error => {
 			if (error) {
-				vTransmitFile.accepted = false
-				this.errorProcessing([vTransmitFile], error)
-				this.$emit("rejected-file", vTransmitFile)
+				vtFile.accepted = false
+				this.errorProcessing([vtFile], error)
+				this.$emit(VTEvents.RejectedFile, vtFile)
 			} else {
-				vTransmitFile.accepted = true
-				this.$emit("accepted-file", vTransmitFile)
+				vtFile.accepted = true
+				this.$emit(VTEvents.AcceptedFile, vtFile)
 				if (this.autoQueue) {
-					this.enqueueFile(vTransmitFile)
+					this.enqueueFile(vtFile)
 				}
 			}
-			this.$emit("accept-complete", vTransmitFile)
+			this.$emit(VTEvents.AcceptComplete, vtFile)
 		})
 
-		return vTransmitFile
+		return vtFile
 	}
 	removeFile(file: VTransmitFile): void {
-		if (file.status === STATUSES.UPLOADING) {
+		if (file.status === UploadStatuses.Uploading) {
 			this.cancelUpload(file)
 		}
 		const idxToRm = this.files.findIndex(f => f.id === file.id)
 		if (~idxToRm) {
-			this.$emit("removed-file", this.files.splice(idxToRm, 1)[0])
+			this.$emit(VTEvents.RemovedFile, this.files.splice(idxToRm, 1)[0])
 			if (this.files.length === 0) {
-				this.$emit("reset")
+				this.$emit(VTEvents.Reset)
 			}
 		}
 	}
 	removeAllFiles(cancelInProgressUploads = false): void {
 		for (const file of this.files) {
-			if (file.status !== STATUSES.UPLOADING || cancelInProgressUploads) {
+			if (file.status !== UploadStatuses.Uploading || cancelInProgressUploads) {
 				this.removeFile(file)
 			}
 		}
@@ -401,8 +402,8 @@ export default class VueTransmit extends Vue {
 		}
 	}
 	enqueueFile(file: VTransmitFile): void {
-		if (file.status === STATUSES.ADDED && file.accepted === true) {
-			file.status = STATUSES.QUEUED
+		if (file.status === UploadStatuses.Added && file.accepted === true) {
+			file.status = UploadStatuses.Queued
 			if (this.autoProcessQueue) {
 				setTimeout(this.processQueue, 0)
 			}
@@ -439,7 +440,7 @@ export default class VueTransmit extends Vue {
 			() => {
 				if (file.type === "image/svg+xml") {
 					file.dataUrl = reader.result
-					this.$emit("thumbnail", file, reader.result)
+					this.$emit(VTEvents.Thumbnail, file, reader.result)
 					callback()
 				}
 				this.createThumbnailFromUrl(file, reader.result, callback)
@@ -479,7 +480,7 @@ export default class VueTransmit extends Vue {
 				)
 				const thumbnail = canvas.toDataURL("image/png")
 				file.dataUrl = thumbnail
-				this.$emit("thumbnail", file, thumbnail)
+				this.$emit(VTEvents.Thumbnail, file, thumbnail)
 
 				if (callback) {
 					return callback()
@@ -516,11 +517,11 @@ export default class VueTransmit extends Vue {
 	processFiles(files: VTransmitFile[]): void {
 		for (const file of files) {
 			file.processing = true
-			file.status = STATUSES.UPLOADING
-			this.$emit("processing", file)
+			file.status = UploadStatuses.Uploading
+			this.$emit(VTEvents.Processing, file)
 		}
 		if (this.uploadMultiple) {
-			this.$emit("processing-multiple", files)
+			this.$emit(VTEvents.ProcessingMultiple, files)
 		}
 
 		return this.uploadFiles(files)
@@ -529,21 +530,21 @@ export default class VueTransmit extends Vue {
 		return this.files.filter(file => file.xhr === xhr)
 	}
 	cancelUpload(file: VTransmitFile): void {
-		if (file.status === STATUSES.UPLOADING) {
+		if (file.status === UploadStatuses.Uploading) {
 			const groupedFiles = this.getFilesWithXhr(file.xhr)
 			file.xhr.abort()
 			for (const f of groupedFiles) {
-				f.status = STATUSES.CANCELED
-				this.$emit("canceled", f)
+				f.status = UploadStatuses.Canceled
+				this.$emit(VTEvents.Canceled, f)
 			}
 			if (this.uploadMultiple) {
-				this.$emit("canceled-multiple", groupedFiles)
+				this.$emit(VTEvents.CanceledMultiple, groupedFiles)
 			}
-		} else if (file.status === STATUSES.ADDED || file.status === STATUSES.QUEUED) {
-			file.status = STATUSES.CANCELED
-			this.$emit("canceled", file)
+		} else if (file.status === UploadStatuses.Added || file.status === UploadStatuses.Queued) {
+			file.status = UploadStatuses.Canceled
+			this.$emit(VTEvents.Canceled, file)
 			if (this.uploadMultiple) {
-				this.$emit("canceled-multiple", [file])
+				this.$emit(VTEvents.CanceledMultiple, [file])
 			}
 		}
 
@@ -572,7 +573,7 @@ export default class VueTransmit extends Vue {
 		xhr.upload.addEventListener("progress", updateProgress)
 		xhr.addEventListener("timeout", this.handleTimeout(files, xhr))
 		xhr.addEventListener("load", e => {
-			if (files[0].status === STATUSES.CANCELED || xhr.readyState !== XMLHttpRequest.DONE) {
+			if (files[0].status === UploadStatuses.Canceled || xhr.readyState !== XMLHttpRequest.DONE) {
 				return
 			}
 			let response = xhr.response
@@ -613,10 +614,10 @@ export default class VueTransmit extends Vue {
 		}
 
 		for (const file of files) {
-			this.$emit("sending", file, xhr, formData)
+			this.$emit(VTEvents.Sending, file, xhr, formData)
 		}
 		if (this.uploadMultiple) {
-			this.$emit("sending-multiple", files, xhr, formData)
+			this.$emit(VTEvents.SendingMultiple, files, xhr, formData)
 		}
 
 		for (let i = 0; i < files.length; i++) {
@@ -628,7 +629,7 @@ export default class VueTransmit extends Vue {
 	handleUploadError(files: VTransmitFile[], xhr: XMLHttpRequest): () => void {
 		const vm = this
 		return function onUploadErrorFn(): void {
-			if (files[0].status !== STATUSES.CANCELED) {
+			if (files[0].status !== UploadStatuses.Canceled) {
 				const message = vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
 				vm.errorProcessing(files, message, xhr)
 			}
@@ -638,11 +639,11 @@ export default class VueTransmit extends Vue {
 		const vm = this
 		return function onTimeoutFn(e: Event): void {
 			for (const file of files) {
-				file.status = STATUSES.TIMEOUT
+				file.status = UploadStatuses.Timeout
 				file.endProgress()
-				vm.$emit("timeout", file, e, xhr)
+				vm.$emit(VTEvents.Timeout, file, e, xhr)
 			}
-			vm.$emit("timeout-multiple", files, e, xhr)
+			vm.$emit(VTEvents.TimeoutMultiple, files, e, xhr)
 
 			if (this.autoProcessQueue) {
 				this.processQueue()
@@ -672,7 +673,7 @@ export default class VueTransmit extends Vue {
 			}
 
 			for (const file of files) {
-				vm.$emit("upload-progress", file, file.upload.progress, file.upload.bytesSent)
+				vm.$emit(VTEvents.UploadProgress, file, file.upload.progress, file.upload.bytesSent)
 			}
 		}
 	}
@@ -690,22 +691,22 @@ export default class VueTransmit extends Vue {
 			progress.totalProgress = 100 * progress.totalBytesSent / progress.totalBytes
 		}
 
-		this.$emit("total-upload-progress", progress)
+		this.$emit(VTEvents.TotalUploadProgress, progress)
 	}
 	getParamName(index): string {
 		return this.paramName + (this.uploadMultiple ? `[${index}]` : "")
 	}
 	uploadFinished(files: VTransmitFile[], response: string | object | any[], e: Event): void {
 		for (const file of files) {
-			file.status = STATUSES.SUCCESS
+			file.status = UploadStatuses.Success
 			file.endProgress()
-			this.$emit("success", file, response, e)
-			this.$emit("complete", file)
+			this.$emit(VTEvents.Success, file, response, e)
+			this.$emit(VTEvents.Complete, file)
 		}
 
 		if (this.uploadMultiple) {
-			this.$emit("success-multiple", files, response, e)
-			this.$emit("complete-multiple", files)
+			this.$emit(VTEvents.SuccessMultiple, files, response, e)
+			this.$emit(VTEvents.CompleteMultiple, files)
 		}
 
 		if (this.autoProcessQueue) {
@@ -714,15 +715,15 @@ export default class VueTransmit extends Vue {
 	}
 	errorProcessing(files: VTransmitFile[], message: string, xhr?: XMLHttpRequest) {
 		for (const file of files) {
-			file.status = STATUSES.ERROR
+			file.status = UploadStatuses.Error
 			file.endProgress()
-			this.$emit("error", file, message, xhr)
-			this.$emit("complete", file)
+			this.$emit(VTEvents.Error, file, message, xhr)
+			this.$emit(VTEvents.Complete, file)
 		}
 
 		if (this.uploadMultiple) {
-			this.$emit("error-multiple", files, message, xhr)
-			this.$emit("complete-multiple", files)
+			this.$emit(VTEvents.ErrorMultiple, files, message, xhr)
+			this.$emit(VTEvents.CompleteMultiple, files)
 		}
 
 		if (this.autoProcessQueue) {
@@ -744,7 +745,7 @@ export default class VueTransmit extends Vue {
 			done(this.dictInvalidFileType)
 		} else if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
 			done(this.dictMaxFilesExceeded.replace(hbsRegex, hbsReplacer({ maxFiles: this.maxFiles })))
-			this.$emit("max-files-exceeded", file)
+			this.$emit(VTEvents.MaxFilesExceeded, file)
 		} else {
 			// Call the prop callback for the client to validate.
 			this.accept(file, done)
@@ -791,29 +792,29 @@ export default class VueTransmit extends Vue {
 			effect = e.dataTransfer.effectAllowed
 		} catch (error) {}
 		e.dataTransfer.dropEffect = effect === "move" || effect === "linkMove" ? "move" : "copy"
-		this.$emit("drag-over", e)
+		this.$emit(VTEvents.DragOver, e)
 	}
 	handleDragEnter(e: DragEvent): void {
 		this.dragging = true
-		this.$emit("drag-enter", e)
+		this.$emit(VTEvents.DragEnter, e)
 	}
 	handleDragLeave(e: DragEvent): void {
 		this.dragging = false
-		this.$emit("drag-leave", e)
+		this.$emit(VTEvents.DragLeave, e)
 	}
 	handleDragEnd(e: DragEvent): void {
 		this.dragging = false
-		this.$emit("drag-end", e)
+		this.$emit(VTEvents.DragEnd, e)
 	}
 	handleDrop(e: DragEvent): void {
 		this.dragging = false
 		if (!e.dataTransfer) {
 			return
 		}
-		this.$emit("drop", e)
+		this.$emit(VTEvents.Drop, e)
 		const files = Array.from(e.dataTransfer.files)
 
-		this.$emit("added-files", files)
+		this.$emit(VTEvents.AddedFiles, files)
 		if (files.length && e.dataTransfer.items) {
 			const items = Array.from(e.dataTransfer.items)
 			if (items && items.length && items[0].webkitGetAsEntry) {
@@ -829,7 +830,7 @@ export default class VueTransmit extends Vue {
 		if (!e || !e.clipboardData || !e.clipboardData.items) {
 			return
 		}
-		this.$emit("paste", e)
+		this.$emit(VTEvents.Paste, e)
 		const items = Array.from(e.clipboardData.items)
 		if (items.length) {
 			this.addFilesFromItems(items)
@@ -894,16 +895,16 @@ export default class VueTransmit extends Vue {
 	}
 
 	mounted() {
-		this.$on("upload-progress", this.updateTotalUploadProgress)
-		this.$on("removed-file", this.updateTotalUploadProgress)
-		this.$on("canceled", file => this.$emit("complete", file))
-		this.$on("complete", file => {
+		this.$on(VTEvents.UploadProgress, this.updateTotalUploadProgress)
+		this.$on(VTEvents.RemovedFile, this.updateTotalUploadProgress)
+		this.$on(VTEvents.Canceled, file => this.$emit(VTEvents.Complete, file))
+		this.$on(VTEvents.Complete, file => {
 			if (this.addedFiles.length === 0 && this.uploadingFiles.length === 0 && this.queuedFiles.length === 0) {
-				setTimeout(() => this.$emit("queue-complete", file), 0)
+				setTimeout(() => this.$emit(VTEvents.QueueComplete, file), 0)
 			}
 		})
 
-		this.$emit("initialize", this)
+		this.$emit(VTEvents.Initialize, this)
 	}
 }
 </script>
