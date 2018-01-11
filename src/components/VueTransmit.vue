@@ -506,11 +506,10 @@ export default class VueTransmit extends Vue {
 		const queuedFiles = [...this.queuedFiles]
 		if (this.uploadMultiple) {
 			return this.processFiles(queuedFiles.slice(0, this.maxConcurrentUploads - processingLength))
-		} else {
-			for (let i = processingLength; i < this.maxConcurrentUploads; i++) {
-				if (queuedFiles.length) {
-					this.processFile(queuedFiles.shift())
-				}
+		}
+		for (let i = processingLength; i < this.maxConcurrentUploads; i++) {
+			if (queuedFiles.length) {
+				this.processFile(queuedFiles.shift())
 			}
 		}
 	}
