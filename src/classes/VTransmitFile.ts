@@ -1,16 +1,17 @@
 import { assign, defineProperty, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
+import { UploadStatuses } from "../core/utils";
 
-export interface IUploadStats {
+export interface UploadStats {
 	bytesSent: number
 	progress: number
 	total: number
-	speed: ISpeedStats
+	speed: SpeedStats
 	start: number
 	end: number
 	time: number
 }
 
-export interface ISpeedStats {
+export interface SpeedStats {
 	kbps: number
 	mbps: number
 }
@@ -24,19 +25,19 @@ export class VTransmitFile {
 	name: string = undefined
 	processing: boolean = undefined
 	size: number = undefined
-	status: string = undefined
+	status: UploadStatuses = undefined
 	type: string = undefined
-	upload: IUploadStats = {
+	upload: UploadStats = {
 		bytesSent: 0,
 		progress: 0,
 		total: 0,
 		speed: {
 			kbps: undefined,
-			mbps: undefined,
+			mbps: undefined
 		},
 		start: undefined,
 		end: undefined,
-		time: undefined,
+		time: undefined
 	}
 	webkitRelativePath: USVString = undefined
 	width: number = undefined
@@ -119,7 +120,7 @@ export class VTransmitFile {
 			value,
 			enumerable: false,
 			configurable: true,
-			writable: true,
+			writable: true
 		})
 	}
 

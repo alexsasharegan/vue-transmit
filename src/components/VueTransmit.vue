@@ -69,26 +69,15 @@ import {
 	hbsReplacer,
 	objFactory,
 	resizeImg,
-	IDrawImageArgs,
-	IDimensions,
+	DrawImageArgs,
+	Dimensions,
 	webkitIsFile,
 	webkitIsDir,
+	UploadStatuses,
 } from "../core/utils"
 import { VTransmitFile } from "../classes/VTransmitFile"
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry
-
-const STATUSES = {
-	ADDED: "added",
-	QUEUED: "queued",
-	ACCEPTED: "queued",
-	UPLOADING: "uploading",
-	PROCESSING: "uploading",
-	CANCELED: "canceled",
-	ERROR: "error",
-	TIMEOUT: "timeout",
-	SUCCESS: "success",
-}
 
 @Component({ name: "VueTransmit" })
 export default class VueTransmit extends Vue {
@@ -264,7 +253,7 @@ export default class VueTransmit extends Vue {
 	accept: (file: VTransmitFile, done: Function) => void
 
 	@Prop({ type: Function, default: resizeImg })
-	resize: (file: VTransmitFile, dims: IDimensions) => IDrawImageArgs
+	resize: (file: VTransmitFile, dims: Dimensions) => DrawImageArgs
 
 	public dragging: boolean = false
 	// Used to keep the createThumbnail calls processing async one-at-a-time
@@ -305,16 +294,16 @@ export default class VueTransmit extends Vue {
 		return this.files.filter(f => !f.accepted)
 	}
 	get addedFiles(): VTransmitFile[] {
-		return this.getFilesWithStatus(STATUSES.ADDED)
+		return this.getFilesWithStatus(UploadStatuses.Added)
 	}
 	get queuedFiles(): VTransmitFile[] {
-		return this.getFilesWithStatus(STATUSES.QUEUED)
+		return this.getFilesWithStatus(UploadStatuses.Queued)
 	}
 	get uploadingFiles(): VTransmitFile[] {
-		return this.getFilesWithStatus(STATUSES.UPLOADING)
+		return this.getFilesWithStatus(UploadStatuses.Uploading)
 	}
 	get activeFiles(): VTransmitFile[] {
-		return this.getFilesWithStatus(STATUSES.UPLOADING, STATUSES.QUEUED)
+		return this.getFilesWithStatus(UploadStatuses.Uploading, UploadStatuses.Queued)
 	}
 	get maxFilesReached(): boolean {
 		// Loose equality checks null && undefined

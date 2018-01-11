@@ -1,4 +1,4 @@
-import VTransmitFile from "../classes/VTransmitFile"
+import { VTransmitFile } from "../classes/VTransmitFile"
 
 export const assign = Object.assign
 export const defineProperty = Object.defineProperty
@@ -65,7 +65,18 @@ export function scaleDims(ratio: number, width?: number, height?: number): numbe
 	return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height]
 }
 
-export interface IDrawImageArgs {
+export enum UploadStatuses {
+	Added = "added",
+	Queued = "queued",
+	Accepted = "queued",
+	Uploading = "uploading",
+	Canceled = "canceled",
+	Error = "error",
+	Timeout = "timeout",
+	Success = "success"
+}
+
+export interface DrawImageArgs {
 	sx: number
 	sy: number
 	sWidth: number
@@ -76,12 +87,12 @@ export interface IDrawImageArgs {
 	dHeight: number
 }
 
-export interface IDimensions {
+export interface Dimensions {
 	width: number
 	height: number
 }
 
-export function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArgs {
+export function resizeImg(file: VTransmitFile, dims: Dimensions): DrawImageArgs {
 	// Extract the object's primitive values so we don't mutate the input
 	const sRatio = file.width / file.height
 	const dRatio = dims.width / dims.height
@@ -93,7 +104,7 @@ export function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArg
 		dx: 0,
 		dy: 0,
 		dWidth: dims.width,
-		dHeight: dims.height,
+		dHeight: dims.height
 	}
 
 	let w, h
