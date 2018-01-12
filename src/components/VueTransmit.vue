@@ -16,14 +16,16 @@
 		</div>
 		<slot name="files"
 		      v-bind="fileSlotBindings"></slot>
-		<input type="file"
-		       ref="hiddenFileInput"
-		       :multiple="multiple"
-		       :style="fileInputStyles"
-		       :class="[maxFilesReachedClass]"
-		       :accept="filesToAccept"
-		       :capture="capture"
-		       @change="onFileInputChange">
+		<form :style="formStyles"
+		      ref="uploadForm">
+			<input type="file"
+			       ref="hiddenFileInput"
+			       :multiple="multiple"
+			       :class="[maxFilesReachedClass]"
+			       :accept="filesToAccept"
+			       :capture="capture"
+			       @change="onFileInputChange">
+		</form>
 	</component :is="tag">
 </template>
 
@@ -245,7 +247,7 @@ export default class VueTransmit extends Vue {
 	dictInvalidFileType: string
 
 	// If the server response was invalid.
-	@Prop({ type: String, default: "Server responded with {{ statusCode }} code." })
+	@Prop({ type: String, default: "Error during upload: {{ statusText }} [{{ statusCode }}]" })
 	dictResponseError: string
 
 	/**
@@ -276,7 +278,7 @@ export default class VueTransmit extends Vue {
 		"Cache-Control": "no-cache",
 		"X-Requested-With": "XMLHttpRequest",
 	}
-	public fileInputStyles: object = {
+	public formStyles: object = {
 		visibility: "hidden !important",
 		position: "absolute !important",
 		top: "0 !important",
@@ -289,6 +291,13 @@ export default class VueTransmit extends Vue {
 		let el = null
 		if (this.$refs.hiddenFileInput instanceof HTMLInputElement) {
 			el = this.$refs.hiddenFileInput
+		}
+		return el
+	}
+	get formEl(): HTMLFormElement {
+		let el = null
+		if (this.$refs.uploadForm instanceof HTMLFormElement) {
+			el = this.$refs.uploadForm
 		}
 		return el
 	}
@@ -360,6 +369,7 @@ export default class VueTransmit extends Vue {
 	}
 	onFileInputChange(): void {
 		this.$emit("added-files", Array.from(this.inputEl.files).map(this.addFile))
+		this.formEl.reset()
 	}
 	addFile(file: File): VTransmitFile {
 		const vTransmitFile = VTransmitFile.fromNativeFile(file)
@@ -640,7 +650,10 @@ export default class VueTransmit extends Vue {
 		const vm = this
 		return function onUploadErrorFn(): void {
 			if (files[0].status !== STATUSES.CANCELED) {
-				const message = vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
+				const message = vm.dictResponseError.replace(
+					hbsRegex,
+					hbsReplacer({ statusText: xhr.statusText, statusCode: xhr.status })
+				)
 				vm.errorProcessing(files, message, xhr)
 			}
 		}
