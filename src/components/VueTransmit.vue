@@ -16,14 +16,16 @@
 		</div>
 		<slot name="files"
 		      v-bind="fileSlotBindings"></slot>
+		<form :style="formStyles"
+		      ref="uploadForm">
 		<input type="file"
 		       ref="hiddenFileInput"
 		       :multiple="multiple"
-		       :style="fileInputStyles"
 		       :class="[maxFilesReachedClass]"
 		       :accept="filesToAccept"
 		       :capture="capture"
 		       @change="onFileInputChange">
+		</form>
 	</component :is="tag">
 </template>
 
@@ -276,7 +278,7 @@ export default class VueTransmit extends Vue {
 		"Cache-Control": "no-cache",
 		"X-Requested-With": "XMLHttpRequest",
 	}
-	public fileInputStyles: object = {
+	public formStyles: object = {
 		visibility: "hidden !important",
 		position: "absolute !important",
 		top: "0 !important",
@@ -289,6 +291,13 @@ export default class VueTransmit extends Vue {
 		let el = null
 		if (this.$refs.hiddenFileInput instanceof HTMLInputElement) {
 			el = this.$refs.hiddenFileInput
+		}
+		return el
+	}
+	get formEl(): HTMLFormElement {
+		let el = null
+		if (this.$refs.uploadForm instanceof HTMLFormElement) {
+			el = this.$refs.uploadForm
 		}
 		return el
 	}
@@ -360,6 +369,7 @@ export default class VueTransmit extends Vue {
 	}
 	onFileInputChange(): void {
 		this.$emit("added-files", Array.from(this.inputEl.files).map(this.addFile))
+		this.formEl.reset()
 	}
 	addFile(file: File): VTransmitFile {
 		const vTransmitFile = VTransmitFile.fromNativeFile(file)
