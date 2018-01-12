@@ -278,3 +278,34 @@ interface FilesSlotProps {
   })
 </script>
 ```
+
+## Lifecycle
+
+The upload process has many stages, each with different possible outcomes. Here is an overview of the lifecycle of an upload with Vue Transmit:
+
+* Trigger event
+  * input on `change`: value of `input.files` is read and passed to `vm.addFile`
+  * target on `drop`: value of `event.dataTransfer["files" || "items"]` is read/traversed and passed to `vm.addFile`
+* Add File
+  * instantiate `VTransmitFile` from native file object (for reactivity & extra info)
+  * status `added`
+  * pushed onto `vm.files`
+  * thumbnail is enqueued
+* Accept File
+  * check size, type, upload limit
+  * invoke `accept` function for consumer validation
+  * `accept` or `reject` complete
+  * if `autoQueue`, enqueue file
+* Enqueue file
+  * check that file status is `added` & has been accepted
+  * status = `queued`
+  * if `autoProcessQueue`, invoke `processQueue` async _(like node `setImmediate`)_
+* Process queue
+  * check number of uploading files against upload limit
+  * invoke `processFiles` with max amount of queued files options allow
+* Process files
+  * do upload
+* Progress updates
+* Complete upload
+  * status = `success || error`
+  * process queue to handle buffered files
