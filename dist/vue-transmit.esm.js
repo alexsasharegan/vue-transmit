@@ -155,7 +155,7 @@ var VueTransmit = function (_Vue) {
             "Cache-Control": "no-cache",
             "X-Requested-With": "XMLHttpRequest"
         };
-        _this.fileInputStyles = {
+        _this.formStyles = {
             visibility: "hidden !important",
             position: "absolute !important",
             top: "0 !important",
@@ -191,6 +191,7 @@ var VueTransmit = function (_Vue) {
         key: "onFileInputChange",
         value: function onFileInputChange() {
             this.$emit("added-files", Array.from(this.inputEl.files).map(this.addFile));
+            this.formEl.reset();
         }
     }, {
         key: "addFile",
@@ -594,7 +595,7 @@ var VueTransmit = function (_Vue) {
             var vm = this;
             return function onUploadErrorFn() {
                 if (files[0].status !== STATUSES.CANCELED) {
-                    var message = vm.dictResponseError.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ statusCode: xhr.status }));
+                    var message = vm.dictResponseError.replace(_utils.hbsRegex, (0, _utils.hbsReplacer)({ statusText: xhr.statusText, statusCode: xhr.status }));
                     vm.errorProcessing(files, message, xhr);
                 }
             };
@@ -1071,6 +1072,15 @@ var VueTransmit = function (_Vue) {
             return el;
         }
     }, {
+        key: "formEl",
+        get: function get() {
+            var el = null;
+            if (this.$refs.uploadForm instanceof HTMLFormElement) {
+                el = this.$refs.uploadForm;
+            }
+            return el;
+        }
+    }, {
         key: "filesToAccept",
         get: function get() {
             return this.acceptedFileTypes.join(",");
@@ -1188,7 +1198,7 @@ __decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: null })], V
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: _identity2.default })], VueTransmit.prototype, "renameFile", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MB." })], VueTransmit.prototype, "dictFileTooBig", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "You can't upload files of this type." })], VueTransmit.prototype, "dictInvalidFileType", void 0);
-__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "Server responded with {{ statusCode }} code." })], VueTransmit.prototype, "dictResponseError", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "Error during upload: {{ statusText }} [{{ statusCode }}]" })], VueTransmit.prototype, "dictResponseError", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "You can not upload any more files." })], VueTransmit.prototype, "dictMaxFilesExceeded", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: function _default(_, done) {
         return done();
@@ -1383,7 +1393,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_25b0f28c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_61e675b9_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__ = __webpack_require__(16);
 function injectStyle (ssrContext) {
   __webpack_require__(6)
 }
@@ -1403,7 +1413,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue___default.a,
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_25b0f28c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_61e675b9_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -3438,7 +3448,7 @@ exports.default = VTransmitFile;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],style:(_vm.fileInputStyles),attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})],2)}
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c(_vm.tag,{tag:"component"},[_c('div',_vm._g(_vm._b({staticClass:"v-transmit__upload-area",class:[_vm.isDraggingClass, _vm.uploadAreaClasses],attrs:{"draggable":"true"},on:{"click":_vm.handleClickUploaderAction,"dragstart":_vm.handleDragStart,"dragend":_vm.handleDragEnd,"dragenter":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragEnter($event)},"dragover":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDragOver($event)},"dragleave":_vm.handleDragLeave,"drop":function($event){$event.preventDefault();$event.stopPropagation();_vm.handleDrop($event)}}},'div',_vm.uploadAreaAttrs,false),_vm.uploadAreaListeners),[_vm._t("default")],2),_vm._v(" "),_vm._t("files",null,null,_vm.fileSlotBindings),_vm._v(" "),_c('form',{ref:"uploadForm",style:(_vm.formStyles)},[_c('input',{ref:"hiddenFileInput",class:[_vm.maxFilesReachedClass],attrs:{"type":"file","multiple":_vm.multiple,"accept":_vm.filesToAccept,"capture":_vm.capture},on:{"change":_vm.onFileInputChange}})])],2)}
 var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
