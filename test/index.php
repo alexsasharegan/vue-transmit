@@ -108,6 +108,7 @@
                         upload-area-classes="vh-20"
                         drag-class="dragging"
                         v-bind="options"
+												@added-file="onAddedFile"
                         @success="onUploadSuccess"
                         @error="onError">
             <flex-col align-v="center"
@@ -176,7 +177,7 @@
       data() {
         return {
           options: {
-            acceptedFileTypes: ['text/csv'],
+            acceptedFileTypes: ['image/*'],
             url: './upload.php',
             clickable: false,
             accept: this.accept
@@ -189,7 +190,13 @@
       methods: {
         triggerBrowse() {
           this.$refs.uploader.triggerBrowseFiles()
-        },
+				},
+				onAddedFile(file) {
+					console.log(
+						this.$refs.uploader.inputEl.value,
+						this.$refs.uploader.inputEl.files
+					)
+				},
         onUploadSuccess(file, res) {
           console.log(res)
           file.src = res.url
@@ -200,9 +207,8 @@
           this.showModal = true
         },
         listen(event) {
-          this.$refs.uploader.$on(event, function() {
-            // console.log(event, ...arguments)
-            console.log(event, Array.from(arguments).forEach(arg => JSON.stringify(arg, undefined, 2)))
+          this.$refs.uploader.$on(event, function(...args) {
+            console.log(event, ...args.map(arg => `${typeof arg}: ${JSON.stringify(arg, undefined, 2)}`))
           })
         },
         accept(file, done) {
