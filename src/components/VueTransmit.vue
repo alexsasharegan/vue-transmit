@@ -18,13 +18,13 @@
 		      v-bind="fileSlotBindings"></slot>
 		<form :style="formStyles"
 		      ref="uploadForm">
-		<input type="file"
-		       ref="hiddenFileInput"
-		       :multiple="multiple"
-		       :class="[maxFilesReachedClass]"
-		       :accept="filesToAccept"
-		       :capture="capture"
-		       @change="onFileInputChange">
+			<input type="file"
+			       ref="hiddenFileInput"
+			       :multiple="multiple"
+			       :class="[maxFilesReachedClass]"
+			       :accept="filesToAccept"
+			       :capture="capture"
+			       @change="onFileInputChange">
 		</form>
 	</component :is="tag">
 </template>
@@ -247,7 +247,7 @@ export default class VueTransmit extends Vue {
 	dictInvalidFileType: string
 
 	// If the server response was invalid.
-	@Prop({ type: String, default: "Server responded with {{ statusCode }} code." })
+	@Prop({ type: String, default: "Error during upload: {{ statusText }} [{{ statusCode }}]" })
 	dictResponseError: string
 
 	/**
@@ -650,7 +650,10 @@ export default class VueTransmit extends Vue {
 		const vm = this
 		return function onUploadErrorFn(): void {
 			if (files[0].status !== STATUSES.CANCELED) {
-				const message = vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
+				const message = vm.dictResponseError.replace(
+					hbsRegex,
+					hbsReplacer({ statusText: xhr.statusText, statusCode: xhr.status })
+				)
 				vm.errorProcessing(files, message, xhr)
 			}
 		}
