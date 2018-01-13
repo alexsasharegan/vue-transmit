@@ -102,8 +102,9 @@ export default class VueTransmit extends Vue {
     thumbnailQueue: any[];
     files: VTransmitFile[];
     defaultHeaders: object;
-    fileInputStyles: object;
+    formStyles: object;
     readonly inputEl: HTMLInputElement;
+    readonly formEl: HTMLFormElement;
     readonly filesToAccept: string;
     readonly multiple: boolean;
     readonly acceptedFiles: VTransmitFile[];

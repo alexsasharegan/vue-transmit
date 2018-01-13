@@ -1,6 +1,6 @@
 {
   "name": "vue-transmit",
-  "version": "7.1.7",
+  "version": "8.0.0",
   "description": "Vue.js drag & drop uploader based on Dropzone.js",
   "module": "dist/vue-transmit.esm.min.js",
   "jsnext:main": "dist/vue-transmit.esm.min.js",
@@ -28,9 +28,9 @@
     "lodash-es": "^4.17.4"
   },
   "devDependencies": {
-    "ajv": "^6.0.0",
+    "ajv": "^6.0.1",
     "ajv-keywords": "^3.0.0",
-    "autoprefixer": "^7.2.4",
+    "autoprefixer": "^7.2.5",
     "av-ts": "^0.9.2",
     "awesome-typescript-loader": "^3.4.1",
     "babel-cli": "^6.26.0",

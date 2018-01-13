@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.7...v8.0.0) (2018-01-12)
+
+
+### Bug Fixes
+
+* **#25:** use form element to reset input after files added to vue-transmit ([#28](https://github.com/alexsasharegan/vue-transmit/issues/28)) ([bee472e](https://github.com/alexsasharegan/vue-transmit/commit/bee472e)), closes [#25](https://github.com/alexsasharegan/vue-transmit/issues/25) [#25](https://github.com/alexsasharegan/vue-transmit/issues/25)
+
+
+### BREAKING CHANGES
+
+* **#25:** The hidden file input is now wrapped in a form element (potentially breaking some more custom layouts if the file input was used in a way apart from the default). The `fileInputStyles` data attr is renamed to `formStyles` and placed on the form wrapper element instead of the file input.
+- Use a form wrapper element to reliably reset the file input after adding files. This will allow browsers to upload the same file twice, where previously the `change` event would not fire due to the filename not changing.
+
+* feat: enhanced xhr response error
+
+"Error during upload: {{ statusText }} [{{ statusCode }}]"
+
+* chore(docs): add info on using test app
+
+* chore(test): updates to test app
+
+* chore: build
+
+
+
 <a name="7.1.7"></a>
 ## [7.1.7](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.6...v7.1.7) (2018-01-08)
 

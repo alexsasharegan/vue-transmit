@@ -214,6 +214,14 @@ interface FilesSlotProps {
 
 ## Usage
 
+If you have PHP installed on your machine, you can clone this repo and open up a working test app by running:
+
+```sh
+npm test
+```
+
+Now navigate to [http://localhost:3030/](http://localhost:3030/).
+
 ```html
 <template>
   <main id="root" class="mt-5">
