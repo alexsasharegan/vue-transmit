@@ -191,8 +191,12 @@ export default class VueTransmit extends Vue {
 	})
 	errMaxFileSizeExceeded: (fileSize: number, maxFileSize: number, units: string) => string
 	// If the file doesn't match the file type.
-	@Prop({ type: Function, default: (file: VTransmitFile) => `You can't upload files of this type: ${file.type}` })
-	errInvalidFileType: (file: VTransmitFile) => string
+	@Prop({
+		type: Function,
+		default: (type: string, _acceptedTypes: string[], _file: VTransmitFile) =>
+			`You can't upload files of this type: ${type}`,
+	})
+	errInvalidFileType: (type: string, acceptedTypes: string[], file: VTransmitFile) => string
 	/**
    * Displayed when the maxFiles have been exceeded
    * You can use {{maxFiles}} here, which will be replaced by the option.
@@ -366,7 +370,7 @@ export default class VueTransmit extends Vue {
 
 		// File type check
 		if (!this.isValidFileType(file, this.acceptedFileTypes)) {
-			return done(this.errInvalidFileType(file))
+			return done(this.errInvalidFileType(file.type, this.acceptedFileTypes, file))
 		}
 
 		// Upload limit check
