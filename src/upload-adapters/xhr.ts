@@ -65,6 +65,14 @@ export type XHRUploadOptions = {
 	renameFile?: (name: string) => string
 }
 
+export type UploadGroup = {
+	id: number
+	files: VTransmitFile[]
+	xhr: XMLHttpRequest
+}
+
+let GroupID = 0
+
 export class XHRUploadAdapter implements UploaderInterface {
 	public url: string
 	public method: string = "post"
@@ -82,6 +90,7 @@ export class XHRUploadAdapter implements UploaderInterface {
 		`Error during upload: ${xhr.statusText} [${xhr.status}]`
 	public errUploadTimeout: (xhr: XMLHttpRequest) => string = _xhr => `Error during upload: the server timed out.`
 	public renameFile: (name: string) => string = name => name
+	private uploadGroups: UploadGroup[] = []
 
 	constructor(public context: VTransmitUploadContext, options: XHRUploadOptions) {
 		Object.assign(this, options)
@@ -92,15 +101,17 @@ export class XHRUploadAdapter implements UploaderInterface {
 			throw new Error(`[Vue-Transmit] Missing upload URL.`)
 		}
 
-		let resolve, reject
-		let p = new Promise<UploadResolve>(($resolve, $reject) => {
-			resolve = $resolve
-			reject = $reject
-		})
 		const xhr = new XMLHttpRequest()
+		let resolve, reject
+		let p: Promise<UploadResolve> = new Promise((res, rej) => {
+			resolve = res
+			reject = rej
+		})
+		let groupID = ++GroupID
+		this.uploadGroups.push({ id: groupID, xhr, files })
 
 		for (const file of files) {
-			file.xhr = xhr
+			file.adapterData.groupID = groupID
 			file.startProgress()
 		}
 
@@ -112,25 +123,29 @@ export class XHRUploadAdapter implements UploaderInterface {
 
 		const updateProgress = this.handleUploadProgress(files)
 
-		xhr.addEventListener("error", () =>
+		xhr.addEventListener("error", () => {
+			this.rmGroup(groupID)
 			reject({
 				type: this.context.Events.Error,
 				message: `The server responded with code ${xhr.status} (${xhr.statusText}).`,
 				xhr
 			})
-		)
+		})
 		xhr.upload.addEventListener("progress", updateProgress)
-		xhr.addEventListener("timeout", () =>
+		xhr.addEventListener("timeout", () => {
+			this.rmGroup(groupID)
 			reject({
 				type: this.context.Events.Timeout,
-				message: `The upload encountered a timeout error.`
+				message: `The upload encountered a timeout error.`,
+				xhr
 			})
-		)
+		})
 		xhr.addEventListener("load", e => {
 			if (files[0].status === this.context.Statuses.Canceled || xhr.readyState !== XMLHttpRequest.DONE) {
 				return
 			}
 			let response = xhr.response
+			this.rmGroup(groupID)
 
 			if (!xhr.responseType) {
 				let contentType = xhr.getResponseHeader("content-type")
@@ -148,8 +163,11 @@ export class XHRUploadAdapter implements UploaderInterface {
 			// Called at load (when complete) will enable all the progress done logic.
 			updateProgress()
 			if (xhr.status < 200 || xhr.status >= 300) {
-				handleError()
-				return reject()
+				return reject({
+					type: this.context.Events.Error,
+					message: `The server responded with code ${xhr.status} (${xhr.statusText}).`,
+					xhr
+				})
 			}
 
 			return resolve(files, response, e)
@@ -213,34 +231,28 @@ export class XHRUploadAdapter implements UploaderInterface {
 	}
 
 	getParamName(index): string {
-		return this.paramName + (this.uploadMultiple ? `[${index}]` : "")
+		return this.paramName + (this.context.props.uploadMultiple ? `[${index}]` : "")
 	}
 
-	cancelUpload(file: VTransmitFile): void {
-		if (file.status === UploadStatuses.Uploading) {
-			const groupedFiles = this.getFilesWithXhr(file.xhr)
-			file.xhr.abort()
-			for (const f of groupedFiles) {
-				f.status = UploadStatuses.Canceled
-				this.$emit(VTEvents.Canceled, f)
-			}
-			if (this.uploadMultiple) {
-				this.$emit(VTEvents.CanceledMultiple, groupedFiles)
-			}
-		} else if (file.status === UploadStatuses.Added || file.status === UploadStatuses.Queued) {
-			file.status = UploadStatuses.Canceled
-			this.$emit(VTEvents.Canceled, file)
-			if (this.uploadMultiple) {
-				this.$emit(VTEvents.CanceledMultiple, [file])
-			}
+	cancelUpload(file: VTransmitFile): VTransmitFile[] {
+		let group = this.uploadGroups.find(g => g.id === file.adapterData.groupID)
+		if (!group) {
+			return []
 		}
 
-		if (this.autoProcessQueue) {
-			this.processQueue()
-		}
+		group.xhr.abort()
+		this.rmGroup(file.adapterData.groupID)
+		return group.files
 	}
 
 	getFilesWithXhr(xhr: XMLHttpRequest): VTransmitFile[] {
 		return this.files.filter(file => file.xhr === xhr)
+	}
+
+	rmGroup(id: number) {
+		let idx = this.uploadGroups.findIndex(g => g.id === id)
+		if (idx > -1) {
+			this.uploadGroups.splice(idx, 1)
+		}
 	}
 }

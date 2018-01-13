@@ -18,16 +18,17 @@ export interface SpeedStats {
 
 export class VTransmitFile {
 	private _nativeFile: File = null
-	id: string = VTransmitFile.idFactory()
-	accepted: boolean = undefined // Passed all validation.
-	lastModified: number = undefined
-	lastModifiedDate: Date = undefined
-	name: string = undefined
-	processing: boolean = undefined
-	size: number = undefined
-	status: UploadStatuses = undefined
-	type: string = undefined
-	upload: UploadStats = {
+	private _dataUrl: string
+	public id: string = VTransmitFile.idFactory()
+	public accepted: boolean = undefined // Passed all validation.
+	public lastModified: number = undefined
+	public lastModifiedDate: Date = undefined
+	public name: string = undefined
+	public processing: boolean = undefined
+	public size: number = undefined
+	public status: UploadStatuses = undefined
+	public type: string = undefined
+	public upload: UploadStats = {
 		bytesSent: 0,
 		progress: 0,
 		total: 0,
@@ -39,12 +40,11 @@ export class VTransmitFile {
 		end: undefined,
 		time: undefined
 	}
-	webkitRelativePath: USVString = undefined
-	width: number = undefined
-	height: number = undefined
-	xhr: XMLHttpRequest = undefined
-	private _dataUrl: string
-	errorMessage: string = undefined
+	public webkitRelativePath: USVString = undefined
+	public width: number = undefined
+	public height: number = undefined
+	public errorMessage: string = undefined
+	public adapterData: { [key: string]: any } = {}
 
 	constructor(...data: object[]) {
 		Object.assign(this, ...data)

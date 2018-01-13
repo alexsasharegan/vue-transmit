@@ -7,12 +7,15 @@ export interface UploaderConstructor {
 }
 
 export interface UploaderInterface {
-	cancelUpload(file: VTransmitFile): void
-	uploadFiles(files: VTransmitFile[]): Promise<any>
+	/**
+	 * Given a file, cancel it's underlying transport
+	 * and return a list of affected files (since files can be grouped in transport).
+	 */
+	cancelUpload(file: VTransmitFile): VTransmitFile[]
+	uploadFiles(files: VTransmitFile[]): Promise<UploadResolve>
 }
 
 export type UploadResolve = {
-	response: { [key: string]: any }
 	[key: string]: any
 }
 export type UploadReject = {

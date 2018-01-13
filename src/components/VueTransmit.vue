@@ -65,10 +65,7 @@
 import Vue from "vue"
 import { Component, Prop, Watch } from "vue-property-decorator"
 import noop from "lodash-es/noop"
-import identity from "lodash-es/identity"
 import {
-	hbsRegex,
-	hbsReplacer,
 	objFactory,
 	resizeImg,
 	DrawImageArgs,
@@ -186,12 +183,6 @@ export default class VueTransmit extends Vue {
    */
 	@Prop({ type: String, default: null })
 	capture: string
-	/**
-   * Before the file is appended to the formData, the function renameFile is performed for file.name, file
-   * which executes the function defined in renameFile
-   */
-	@Prop({ type: Function, default: identity })
-	renameFile: (name: string) => string
 	// If the file size is too big.
 	@Prop({
 		type: Function,
@@ -545,11 +536,33 @@ export default class VueTransmit extends Vue {
 
 		return this.uploadFiles(files)
 	}
-	getFilesWithXhr(xhr: XMLHttpRequest): VTransmitFile[] {
-		return this.files.filter(file => file.xhr === xhr)
-	}
 	cancelUpload(file: VTransmitFile): void {
-		this.uploader.cancelUpload(file)
+		// Cancel a file before uploading
+		if (file.status === UploadStatuses.Added || file.status === UploadStatuses.Queued) {
+			file.status = UploadStatuses.Canceled
+			this.$emit(Events.Canceled, file)
+			if (this.uploadMultiple) {
+				this.$emit(Events.CanceledMultiple, [file])
+			}
+		}
+
+		// Cancel an in-progress upload
+		if (file.status === UploadStatuses.Uploading) {
+			let canceledFiles = this.uploader.cancelUpload(file)
+			let f: VTransmitFile
+			for (f of canceledFiles) {
+				f.status = UploadStatuses.Canceled
+				this.$emit(Events.Canceled, f)
+			}
+
+			if (this.uploadMultiple) {
+				this.$emit(Events.CanceledMultiple, canceledFiles)
+			}
+		}
+
+		if (this.autoProcessQueue) {
+			this.processQueue()
+		}
 	}
 	uploadFile(file: VTransmitFile): void {
 		this.uploadFiles([file])
@@ -557,40 +570,23 @@ export default class VueTransmit extends Vue {
 	uploadFiles(files: VTransmitFile[]): void {
 		this.uploader
 			.uploadFiles(files)
-			.then((response, ...args: any[]) => this.uploadFinished(files, response, ...args))
-			.catch((evt: Events, message: string, ...args: any[]) => {
-				switch (evt) {
-					case Events.Timeout:
-						this.handleTimeout(files, message, ...args)
-						break
-					case Events.Error:
-					default:
-						this.errorProcessing(files, message, ...args)
-						break
-				}
+			.then(response => this.uploadFinished(files, response))
+			.catch(err => {
+				this.errorProcessing(files, err)
 			})
 	}
-	handleUploadError(files: VTransmitFile[], xhr: XMLHttpRequest): () => void {
-		const vm = this
-		return function onUploadErrorFn(): void {
-			if (files[0].status !== UploadStatuses.Canceled) {
-				const message = vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
-				vm.errorProcessing(files, message, xhr)
-			}
-		}
-	}
-	handleTimeout(files: VTransmitFile[], message: string, ...args: any[]): void {
-		for (const file of files) {
-			file.status = UploadStatuses.Timeout
-			file.endProgress()
-			this.$emit(Events.Timeout, file, message, ...args)
-		}
-		this.$emit(Events.TimeoutMultiple, files, message, ...args)
+	// handleTimeout(files: VTransmitFile[], message: string, ...args: any[]): void {
+	// 	for (const file of files) {
+	// 		file.status = UploadStatuses.Timeout
+	// 		file.endProgress()
+	// 		this.$emit(Events.Timeout, file, message, ...args)
+	// 	}
+	// 	this.$emit(Events.TimeoutMultiple, files, message, ...args)
 
-		if (this.autoProcessQueue) {
-			this.processQueue()
-		}
-	}
+	// 	if (this.autoProcessQueue) {
+	// 		this.processQueue()
+	// 	}
+	// }
 	handleUploadProgress(files): (e?: ProgressEvent) => void {
 		const vm = this
 		return function onProgressFn(e?: ProgressEvent): void {
@@ -633,9 +629,6 @@ export default class VueTransmit extends Vue {
 		}
 
 		this.$emit(Events.TotalUploadProgress, progress)
-	}
-	getParamName(index): string {
-		return this.paramName + (this.uploadMultiple ? `[${index}]` : "")
 	}
 	uploadFinished(files: VTransmitFile[], response: string | object | any[], ...args: any[]): void {
 		for (const file of files) {

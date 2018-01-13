@@ -38,13 +38,6 @@ export function toMbps(bytes: number, seconds: number): number {
 	return fromBytesToMbit(bytes) / seconds
 }
 
-export const hbsRegex = /{{\s*?([a-zA-Z]+)\s*?}}/g
-export function hbsReplacer(context: object = {}) {
-	return function hbsReplacerFn(match: string, capture: string) {
-		return context[capture] !== undefined ? context[capture] : match
-	}
-}
-
 export function objFactory() {
 	return {}
 }
