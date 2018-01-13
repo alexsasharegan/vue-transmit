@@ -97,26 +97,30 @@ export default class VueTransmit extends Vue {
 	uploadAreaListeners: { [key: string]: any }
 	@Prop({ type: String, default: null })
 	dragClass: string
-	@Prop({ type: String, required: true })
-	url: string
-	@Prop({ type: String, default: "post" })
-	method: string
-	@Prop({ type: Boolean, default: false })
-	withCredentials: boolean
-	// timeout in milliseconds
-	@Prop({ type: Number, default: 0 })
-	timeout: number
+	/**
+	 * Sets the maximum number of uploads that can be running at a given time.
+	 */
 	@Prop({ type: Number, default: 2 })
 	maxConcurrentUploads: number
-	// Whether to send multiple files in one request.
+	/**
+	 * Whether to send multiple files in one request.
+	 */
 	@Prop({ type: Boolean, default: false })
 	uploadMultiple: boolean
-	// in MB
+	/**
+	 * Size in MB by default, or MiB if fileSizeBaseInBinary === true
+	 */
 	@Prop({ type: Number, default: 256 })
 	maxFileSize: number
-	// The name of the file param that gets transferred.
-	@Prop({ type: String, default: "file" })
-	paramName: string
+	/**
+   * The base that is used to calculate the file size.
+	 * You can change this to 1024 if you would rather display kibibytes, mebibytes, etc...
+   * 1024 is technically incorrect,
+   * because `1024 bytes` are `1 kibibyte` not `1 kilobyte`.
+   * You can change this to `1024` if you don't care about validity.
+   */
+	@Prop({ type: Boolean, default: false })
+	fileSizeBaseInBinary: boolean
 	@Prop({ type: Boolean, default: true })
 	createImageThumbnails: boolean
 	// in MB. When the filename exceeds this limit, the thumbnail will not be generated.
@@ -127,34 +131,19 @@ export default class VueTransmit extends Vue {
 	@Prop({ type: Number, default: 120 })
 	thumbnailHeight: number
 	/**
-   * The base that is used to calculate the file size. You can change this to
-   * 1024 if you would rather display kibibytes, mebibytes, etc...
-   * 1024 is technically incorrect,
-   * because `1024 bytes` are `1 kibibyte` not `1 kilobyte`.
-   * You can change this to `1024` if you don't care about validity.
-   */
-	@Prop({ type: Number, default: 1000 })
-	fileSizeBase: number
-	/**
    * Can be used to limit the maximum number of files that will be handled
    * by this Dropzone
    */
 	@Prop({ type: Number, default: null })
 	maxFiles: number
 	/**
-   * Can be an object of additional parameters to transfer to the server.
-   * This is the same as adding hidden input fields in the form element.
-   */
-	@Prop({ type: Object, default: objFactory })
-	params: { [key: string]: any }
-	@Prop({ type: Object, default: objFactory })
-	headers: { [key: string]: any }
-	@Prop({ type: String, default: "" })
-	responseType: XMLHttpRequestResponseType
-	// If true, the dropzone will present a file selector when clicked.
+	 * If true, the dropzone will present a file selector when clicked.
+	 */
 	@Prop({ type: Boolean, default: true })
 	clickable: boolean
-	// Whether hidden files in directories should be ignored.
+	/**
+	 * Whether dot files in directories should be ignored.
+	 */
 	@Prop({ type: Boolean, default: true })
 	ignoreHiddenFiles: boolean
 	/**
@@ -204,27 +193,28 @@ export default class VueTransmit extends Vue {
 	@Prop({ type: Function, default: identity })
 	renameFile: (name: string) => string
 	// If the file size is too big.
-	@Prop({ type: String, default: "File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MB." })
-	dictFileTooBig: string
+	@Prop({
+		type: Function,
+		default: (fileSize: number, maxFileSize: number, units: string) =>
+			`The file is too big (${fileSize}${units}). Max file size: ${maxFileSize}${units}.`,
+	})
+	errMaxFileSizeExceeded: (fileSize: number, maxFileSize: number, units: string) => string
 	// If the file doesn't match the file type.
-	@Prop({ type: String, default: "You can't upload files of this type." })
-	dictInvalidFileType: string
-	// If the server response was invalid.
-	@Prop({ type: String, default: "Error during upload: {{ statusText }} [{{ statusCode }}]" })
-	dictResponseError: string
+	@Prop({ type: Function, default: (file: VTransmitFile) => `You can't upload files of this type: ${file.type}` })
+	errInvalidFileType: (file: VTransmitFile) => string
 	/**
    * Displayed when the maxFiles have been exceeded
    * You can use {{maxFiles}} here, which will be replaced by the option.
    */
-	@Prop({ type: String, default: "You can not upload any more files." })
-	dictMaxFilesExceeded: string
+	@Prop({ type: String, default: (maxFiles: number) => `You can not upload any more files (${maxFiles} max).` })
+	errMaxFilesExceeded: (maxFiles: number) => string
 	/**
    * If `done()` is called without argument the file is accepted
    * If you call it with an error message, the file is rejected
    * (This allows for asynchronous validation).
    */
 	@Prop({ type: Function, default: (_, done: Function) => done() })
-	accept: (file: VTransmitFile, done: Function) => void
+	accept: (file: VTransmitFile, done: (err?: string) => void) => void
 	@Prop({ type: Function, default: resizeImg })
 	resize: (file: VTransmitFile, dims: Dimensions) => DrawImageArgs
 	@Prop({ type: Object, default: objFactory })
@@ -265,6 +255,16 @@ export default class VueTransmit extends Vue {
 		}
 		return el
 	}
+	get fileSizeBase(): number {
+		if (this.fileSizeBaseInBinary) {
+			return 1024
+		}
+
+		return 1000
+	}
+	get maxFileSizeBytes(): number {
+		return this.maxFileSize * this.fileSizeBase * this.fileSizeBase
+	}
 	get filesToAccept(): string {
 		return this.acceptedFileTypes.join(",")
 	}
@@ -290,7 +290,7 @@ export default class VueTransmit extends Vue {
 		return this.getFilesWithStatus(UploadStatuses.Uploading, UploadStatuses.Queued)
 	}
 	get maxFilesReached(): boolean {
-		// Loose equality checks null && undefined
+		// Loose equality to check both null && undefined
 		return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles
 	}
 	get maxFilesReachedClass(): string {
@@ -344,7 +344,7 @@ export default class VueTransmit extends Vue {
 		this.files.push(vtFile)
 		this.$emit(Events.AddedFile, vtFile)
 		this.enqueueThumbnail(vtFile)
-		this.acceptFile(vtFile, error => {
+		this.acceptFile(vtFile, (error: string) => {
 			if (error) {
 				vtFile.accepted = false
 				this.errorProcessing([vtFile], error)
@@ -363,29 +363,26 @@ export default class VueTransmit extends Vue {
 
 		return vtFile
 	}
-	acceptFile(file: VTransmitFile, done: Function): void {
+	acceptFile(file: VTransmitFile, done: (err?: string) => void): void {
 		// File size check
-		if (file.size > this.maxFileSize * 1024 * 1024) {
-			return done(
-				this.dictFileTooBig.replace(
-					hbsRegex,
-					hbsReplacer({
-						fileSize: Math.round(file.size / 1024 / 10.24) / 100,
-						maxFileSize: this.maxFileSize,
-					})
-				)
-			)
+		if (file.size > this.maxFileSizeBytes) {
+			// size is in bytes, base is kilo multiplier, so base * base == mega
+			let baseMega = this.fileSizeBase * this.fileSizeBase
+			let fileSize = Math.trunc(file.size / baseMega)
+			fileSize += (file.size % baseMega) / baseMega
+			return done(this.errMaxFileSizeExceeded(fileSize, this.maxFileSize, this.fileSizeBaseInBinary ? "MiB" : "MB"))
 		}
 
 		// File type check
 		if (!this.isValidFileType(file, this.acceptedFileTypes)) {
-			return done(this.dictInvalidFileType)
+			return done(this.errInvalidFileType(file))
 		}
 
 		// Upload limit check
 		if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
 			this.$emit(Events.MaxFilesExceeded, file)
-			return done(this.dictMaxFilesExceeded.replace(hbsRegex, hbsReplacer({ maxFiles: this.maxFiles })))
+			// return done(this.dictMaxFilesExceeded.replace(hbsRegex, hbsReplacer({ maxFiles: this.maxFiles })))
+			return done(this.errMaxFilesExceeded(this.maxFiles))
 		}
 
 		// Happy path 😀
@@ -576,7 +573,7 @@ export default class VueTransmit extends Vue {
 	handleUploadError(files: VTransmitFile[], xhr: XMLHttpRequest): () => void {
 		const vm = this
 		return function onUploadErrorFn(): void {
-			if (files[0].status !== STATUSES.CANCELED) {
+			if (files[0].status !== UploadStatuses.Canceled) {
 				const message = vm.dictResponseError.replace(hbsRegex, hbsReplacer({ statusCode: xhr.status }))
 				vm.errorProcessing(files, message, xhr)
 			}
