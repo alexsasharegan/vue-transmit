@@ -19,7 +19,7 @@ export type UploadResolve = {
 	[key: string]: any
 }
 export type UploadReject = {
-	type: VTransmitEvents
+	event: VTransmitEvents
 	message: string
 	error?: Error
 	[key: string]: any

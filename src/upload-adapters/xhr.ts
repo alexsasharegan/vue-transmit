@@ -1,6 +1,7 @@
 import { VTransmitFile } from "../classes/VTransmitFile"
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext"
-import { UploaderInterface, UploadReject, UploadResolve } from "../core/interfaces"
+import { UploaderInterface, UploadResolve, UploadReject } from "../core/interfaces"
+import { VTransmitEvents as Events, UploadStatuses as Statuses } from "../core/utils"
 
 /**
  * Responsibilities:
@@ -60,6 +61,11 @@ export type XHRUploadOptions = {
 	 * Also, setting responseType for synchronous requests will throw an InvalidAccessError exception.
 	 */
 	responseType?: XMLHttpRequestResponseType
+	/**
+	 * responseParseFunc is a function that given an XMLHttpRequest
+	 * returns a response object. Allows for custom response parsing.
+	 */
+	responseParseFunc?: (xhr: XMLHttpRequest) => UploadResolve
 	errUploadError?: (xhr: XMLHttpRequest) => string
 	errUploadTimeout?: (xhr: XMLHttpRequest) => string
 	renameFile?: (name: string) => string
@@ -90,126 +96,128 @@ export class XHRUploadAdapter implements UploaderInterface {
 		`Error during upload: ${xhr.statusText} [${xhr.status}]`
 	public errUploadTimeout: (xhr: XMLHttpRequest) => string = _xhr => `Error during upload: the server timed out.`
 	public renameFile: (name: string) => string = name => name
-	private uploadGroups: UploadGroup[] = []
+	public responseParseFunc?: (xhr: XMLHttpRequest) => UploadResolve
+	private uploadGroups: { [key: number]: UploadGroup } = Object.create(null)
 
 	constructor(public context: VTransmitUploadContext, options: XHRUploadOptions) {
 		Object.assign(this, options)
 	}
 
-	uploadFiles(files: VTransmitFile[]): Promise<UploadReject> {
-		if (!this.url) {
-			throw new Error(`[Vue-Transmit] Missing upload URL.`)
-		}
-
-		const xhr = new XMLHttpRequest()
-		let resolve, reject
-		let p: Promise<UploadResolve> = new Promise((res, rej) => {
-			resolve = res
-			reject = rej
-		})
-		let groupID = ++GroupID
-		this.uploadGroups.push({ id: groupID, xhr, files })
-
-		for (const file of files) {
-			file.adapterData.groupID = groupID
-			file.startProgress()
-		}
-
-		xhr.open(this.method, this.url, true)
-		// Setting the timeout after open because of IE11 issue: https://gitlab.com/meno/dropzone/issues/8
-		xhr.timeout = this.timeout
-		xhr.withCredentials = Boolean(this.withCredentials)
-		xhr.responseType = this.responseType
-
-		const updateProgress = this.handleUploadProgress(files)
-
-		xhr.addEventListener("error", () => {
-			this.rmGroup(groupID)
-			reject({
-				type: this.context.Events.Error,
-				message: `The server responded with code ${xhr.status} (${xhr.statusText}).`,
-				xhr
-			})
-		})
-		xhr.upload.addEventListener("progress", updateProgress)
-		xhr.addEventListener("timeout", () => {
-			this.rmGroup(groupID)
-			reject({
-				type: this.context.Events.Timeout,
-				message: `The upload encountered a timeout error.`,
-				xhr
-			})
-		})
-		xhr.addEventListener("load", e => {
-			if (files[0].status === this.context.Statuses.Canceled || xhr.readyState !== XMLHttpRequest.DONE) {
-				return
+	uploadFiles(files: VTransmitFile[]): Promise<UploadResolve> {
+		return new Promise((resolve, reject: (reason: UploadReject) => void) => {
+			if (!this.url) {
+				throw new Error(`[Vue-Transmit] Missing upload URL.`)
 			}
-			let response = xhr.response
-			this.rmGroup(groupID)
 
-			if (!xhr.responseType) {
-				let contentType = xhr.getResponseHeader("content-type")
-				response = xhr.responseText
+			const xhr = new XMLHttpRequest()
+			const updateProgress = this.handleUploadProgress(files)
+			const id = GroupID++
 
-				if (contentType && contentType.indexOf("application/json") > -1) {
-					try {
-						response = JSON.parse(response)
-					} catch (err) {
-						response = "Invalid JSON response from server."
+			this.uploadGroups[id] = { id, xhr, files }
+
+			for (const file of files) {
+				file.adapterData.groupID = id
+				file.startProgress()
+			}
+
+			xhr.open(this.method, this.url, true)
+			// Setting the timeout after open because of IE11 issue: https://gitlab.com/meno/dropzone/issues/8
+			xhr.timeout = this.timeout
+			xhr.withCredentials = Boolean(this.withCredentials)
+			xhr.responseType = this.responseType
+
+			xhr.addEventListener("error", () => {
+				this.rmGroup(id)
+				reject({
+					event: Events.Error,
+					message: this.errUploadError(xhr),
+					xhr
+				})
+			})
+			xhr.upload.addEventListener("progress", updateProgress)
+			xhr.addEventListener("timeout", () => {
+				this.rmGroup(id)
+				reject({
+					event: Events.Timeout,
+					message: this.errUploadTimeout(xhr),
+					xhr
+				})
+			})
+			xhr.addEventListener("load", _ => {
+				if (files[0].status === Statuses.Canceled || xhr.readyState !== XMLHttpRequest.DONE) {
+					return
+				}
+
+				// The XHR is complete, so remove the group
+				this.rmGroup(id)
+
+				let response = {}
+				if (this.responseParseFunc) {
+					response = this.responseParseFunc(xhr)
+				} else {
+					Object.assign(response, xhr.response)
+
+					if (!xhr.responseType) {
+						let contentType = xhr.getResponseHeader("content-type")
+						if (contentType && contentType.indexOf("application/json") > -1) {
+							try {
+								response = JSON.parse(xhr.responseText)
+							} catch (err) {
+								return reject({
+									message: "Invalid JSON response from server.",
+									event: Events.Error,
+									error: err
+								})
+							}
+						}
 					}
+				}
+
+				// Called at load (when complete) will enable all the progress done logic.
+				updateProgress()
+				if (xhr.status < 200 || xhr.status >= 300) {
+					return reject({
+						event: Events.Error,
+						message: `The server responded with code ${xhr.status} (${xhr.statusText}).`,
+						xhr
+					})
+				}
+
+				return resolve(response)
+			})
+
+			// Use null proto obj for the following 'for in' loop without hasOwnProperty check
+			const headers = Object.assign(Object.create(null), this.headers)
+			for (const headerName in headers) {
+				if (headers[headerName]) {
+					xhr.setRequestHeader(headerName, headers[headerName])
 				}
 			}
 
-			// Called at load (when complete) will enable all the progress done logic.
-			updateProgress()
-			if (xhr.status < 200 || xhr.status >= 300) {
-				return reject({
-					type: this.context.Events.Error,
-					message: `The server responded with code ${xhr.status} (${xhr.statusText}).`,
-					xhr
-				})
+			const formData = new FormData()
+			for (const key in this.params) {
+				formData.append(key, this.params[key])
 			}
 
-			return resolve(files, response, e)
+			for (const file of files) {
+				this.context.emit(Events.Sending, file, xhr, formData)
+			}
+			if (this.context.props.uploadMultiple) {
+				this.context.emit(Events.SendingMultiple, files, xhr, formData)
+			}
+
+			for (let i = 0; i < files.length; i++) {
+				formData.append(this.getParamName(i), files[i].nativeFile, this.renameFile(files[i].name))
+			}
+
+			xhr.send(formData)
 		})
-
-		// Use null proto obj for the following 'for in' loop without hasOwnProperty check
-		const headers = Object.assign(Object.create(null), this.headers)
-		for (const headerName in headers) {
-			if (headers[headerName]) {
-				xhr.setRequestHeader(headerName, headers[headerName])
-			}
-		}
-
-		const formData = new FormData()
-		for (const key in this.params) {
-			formData.append(key, this.params[key])
-		}
-
-		for (const file of files) {
-			this.context.emit(this.context.Events.Sending, file, xhr, formData)
-		}
-		if (this.context.props.uploadMultiple) {
-			this.context.emit(this.context.Events.SendingMultiple, files, xhr, formData)
-		}
-
-		for (let i = 0; i < files.length; i++) {
-			formData.append(this.getParamName(i), files[i].nativeFile, this.renameFile(files[i].name))
-		}
-
-		xhr.send(formData)
-
-		return p
 	}
 
 	handleUploadProgress(files): (e?: ProgressEvent) => void {
 		const vm = this.context.vtransmit
 		return function onProgressFn(e?: ProgressEvent): void {
-			if (e instanceof ProgressEvent) {
-				for (const file of files) {
-					file.handleProgress(e)
-				}
-			} else {
+			if (!(e instanceof ProgressEvent)) {
 				let allFilesFinished = true
 				for (const file of files) {
 					if (file.upload.progress !== 100 || file.upload.bytesSent !== file.upload.total) {
@@ -225,7 +233,8 @@ export class XHRUploadAdapter implements UploaderInterface {
 			}
 
 			for (const file of files) {
-				vm.$emit(VTEvents.UploadProgress, file, file.upload.progress, file.upload.bytesSent)
+				file.handleProgress(e)
+				vm.$emit(Events.UploadProgress, file, file.upload.progress, file.upload.bytesSent)
 			}
 		}
 	}
@@ -235,24 +244,18 @@ export class XHRUploadAdapter implements UploaderInterface {
 	}
 
 	cancelUpload(file: VTransmitFile): VTransmitFile[] {
-		let group = this.uploadGroups.find(g => g.id === file.adapterData.groupID)
+		let group = this.uploadGroups[file.adapterData.groupID]
 		if (!group) {
 			return []
 		}
 
 		group.xhr.abort()
 		this.rmGroup(file.adapterData.groupID)
-		return group.files
-	}
 
-	getFilesWithXhr(xhr: XMLHttpRequest): VTransmitFile[] {
-		return this.files.filter(file => file.xhr === xhr)
+		return [...group.files]
 	}
 
 	rmGroup(id: number) {
-		let idx = this.uploadGroups.findIndex(g => g.id === id)
-		if (idx > -1) {
-			this.uploadGroups.splice(idx, 1)
-		}
+		this.uploadGroups[id] = undefined
 	}
 }

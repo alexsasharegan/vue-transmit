@@ -122,7 +122,7 @@ export function resizeImg(file: VTransmitFile, dims: Dimensions): DrawImageArgs 
 	// Extract the object's primitive values so we don't mutate the input
 	const sRatio = file.width / file.height
 	const dRatio = dims.width / dims.height
-	const imgCoords = {
+	const coords: DrawImageArgs = {
 		sx: 0,
 		sy: 0,
 		sWidth: file.width,
@@ -141,15 +141,15 @@ export function resizeImg(file: VTransmitFile, dims: Dimensions): DrawImageArgs 
 	}
 
 	if (w < file.width) {
-		imgCoords.sx = (file.width - w) / 2
-		imgCoords.sWidth = w
+		coords.sx = (file.width - w) / 2
+		coords.sWidth = w
 	}
 	if (h < file.height) {
-		imgCoords.sy = (file.height - h) / 2
-		imgCoords.sHeight = h
+		coords.sy = (file.height - h) / 2
+		coords.sHeight = h
 	}
 
-	return imgCoords
+	return coords
 }
 
 export function webkitIsFile(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitFileEntry {
