@@ -4,5 +4,7 @@ node_modules/
 !.eslintrc.json
 !.editorconfig
 !.babelrc
+!.prettierrc
 /test/uploads/*
 /tmp/
+coverage

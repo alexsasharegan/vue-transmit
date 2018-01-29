@@ -3,7 +3,10 @@ import { VTransmitUploadContext } from "../classes/VTransmitUploadContext"
 import { VTransmitEvents } from "../core/utils"
 
 export interface UploaderConstructor {
-	new (context: VTransmitUploadContext, options: { [key: string]: any }): UploaderInterface
+	new (
+		context: VTransmitUploadContext,
+		options: { [key: string]: any }
+	): UploaderInterface
 }
 
 export interface UploaderInterface {

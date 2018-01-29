@@ -1,4 +1,10 @@
-import { copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
+import {
+	copyOwnAndInheritedProps,
+	uniqueId,
+	round,
+	toKbps,
+	toMbps,
+} from "../core/utils"
 import { UploadStatuses } from "../core/utils"
 
 export interface UploadStats {
@@ -34,11 +40,11 @@ export class VTransmitFile {
 		total: 0,
 		speed: {
 			kbps: undefined,
-			mbps: undefined
+			mbps: undefined,
 		},
 		start: undefined,
 		end: undefined,
-		time: undefined
+		time: undefined,
 	}
 	public webkitRelativePath: USVString = undefined
 	public width: number = undefined
@@ -74,8 +80,12 @@ export class VTransmitFile {
 		this.upload.total = total
 		this.upload.time = (Date.now() - this.upload.start) / 1000
 		// Recalc the upload speed in bytes/sec
-		this.upload.speed.kbps = round(toKbps(this.upload.bytesSent, this.upload.time))
-		this.upload.speed.mbps = round(toMbps(this.upload.bytesSent, this.upload.time))
+		this.upload.speed.kbps = round(
+			toKbps(this.upload.bytesSent, this.upload.time)
+		)
+		this.upload.speed.mbps = round(
+			toMbps(this.upload.bytesSent, this.upload.time)
+		)
 		if (this.upload.progress === 100) {
 			this.endProgress()
 		}
@@ -104,7 +114,9 @@ export class VTransmitFile {
 
 	set nativeFile(file: File) {
 		if (!(file instanceof File)) {
-			throw new TypeError(`[${VTransmitFile.name}] Expected an instance of File (native).`)
+			throw new TypeError(
+				`[${VTransmitFile.name}] Expected an instance of File (native).`
+			)
 		}
 		this._nativeFile = file
 		this.upload.total = file.size
@@ -120,7 +132,7 @@ export class VTransmitFile {
 			value,
 			enumerable: false,
 			configurable: true,
-			writable: true
+			writable: true,
 		})
 	}
 

@@ -17,7 +17,11 @@ export function copyOwnAndInheritedProps(obj: object): object {
 
 export type Rounding = "round" | "ceil" | "floor" | "trunc"
 
-export function round(number: number, decimals: number = 2, roundStyle: Rounding = "round") {
+export function round(
+	number: number,
+	decimals: number = 2,
+	roundStyle: Rounding = "round"
+) {
 	const roundingFactor = Math.pow(10, decimals)
 	return Math[roundStyle](number * roundingFactor) / roundingFactor
 }
@@ -50,8 +54,14 @@ export function scaleW(ratio: number, height: number): number {
 	return height * ratio
 }
 
-export function scaleDims(ratio: number, width?: number, height?: number): number[] {
-	return typeof width === "number" ? [width, scaleH(ratio, width)] : [scaleW(ratio, height), height]
+export function scaleDims(
+	ratio: number,
+	width?: number,
+	height?: number
+): number[] {
+	return typeof width === "number"
+		? [width, scaleH(ratio, width)]
+		: [scaleW(ratio, height), height]
 }
 
 export enum UploadStatuses {
@@ -62,7 +72,7 @@ export enum UploadStatuses {
 	Canceled = "canceled",
 	Error = "error",
 	Timeout = "timeout",
-	Success = "success"
+	Success = "success",
 }
 
 export enum VTransmitEvents {
@@ -99,7 +109,7 @@ export enum VTransmitEvents {
 	DragLeave = "drag-leave",
 	DragEnd = "drag-end",
 	Drop = "drop",
-	Paste = "paste"
+	Paste = "paste",
 }
 
 export interface DrawImageArgs {
@@ -118,7 +128,10 @@ export interface Dimensions {
 	height: number
 }
 
-export function resizeImg(file: VTransmitFile, dims: Dimensions): DrawImageArgs {
+export function resizeImg(
+	file: VTransmitFile,
+	dims: Dimensions
+): DrawImageArgs {
 	// Extract the object's primitive values so we don't mutate the input
 	const sRatio = file.width / file.height
 	const dRatio = dims.width / dims.height
@@ -130,7 +143,7 @@ export function resizeImg(file: VTransmitFile, dims: Dimensions): DrawImageArgs 
 		dx: 0,
 		dy: 0,
 		dWidth: dims.width,
-		dHeight: dims.height
+		dHeight: dims.height,
 	}
 
 	let w, h
@@ -152,10 +165,14 @@ export function resizeImg(file: VTransmitFile, dims: Dimensions): DrawImageArgs 
 	return coords
 }
 
-export function webkitIsFile(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitFileEntry {
+export function webkitIsFile(
+	entry: WebKitFileEntry | WebKitDirectoryEntry
+): entry is WebKitFileEntry {
 	return entry.isFile
 }
 
-export function webkitIsDir(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitDirectoryEntry {
+export function webkitIsDir(
+	entry: WebKitFileEntry | WebKitDirectoryEntry
+): entry is WebKitDirectoryEntry {
 	return entry.isDirectory
 }

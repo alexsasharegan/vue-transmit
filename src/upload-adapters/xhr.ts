@@ -1,7 +1,14 @@
 import { VTransmitFile } from "../classes/VTransmitFile"
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext"
-import { UploaderInterface, UploadResolve, UploadReject } from "../core/interfaces"
-import { VTransmitEvents as Events, UploadStatuses as Statuses } from "../core/utils"
+import {
+	UploaderInterface,
+	UploadResolve,
+	UploadReject,
+} from "../core/interfaces"
+import {
+	VTransmitEvents as Events,
+	UploadStatuses as Statuses,
+} from "../core/utils"
 
 /**
  * Responsibilities:
@@ -89,17 +96,21 @@ export class XHRUploadAdapter implements UploaderInterface {
 	public headers: { [key: string]: any } = {
 		Accept: "application/json",
 		"Cache-Control": "no-cache",
-		"X-Requested-With": "XMLHttpRequest"
+		"X-Requested-With": "XMLHttpRequest",
 	}
 	public responseType: XMLHttpRequestResponseType = ""
 	public errUploadError: (xhr: XMLHttpRequest) => string = xhr =>
 		`Error during upload: ${xhr.statusText} [${xhr.status}]`
-	public errUploadTimeout: (xhr: XMLHttpRequest) => string = _xhr => `Error during upload: the server timed out.`
+	public errUploadTimeout: (xhr: XMLHttpRequest) => string = _xhr =>
+		`Error during upload: the server timed out.`
 	public renameFile: (name: string) => string = name => name
 	public responseParseFunc?: (xhr: XMLHttpRequest) => UploadResolve
 	private uploadGroups: { [key: number]: UploadGroup } = Object.create(null)
 
-	constructor(public context: VTransmitUploadContext, options: XHRUploadOptions) {
+	constructor(
+		public context: VTransmitUploadContext,
+		options: XHRUploadOptions
+	) {
 		Object.assign(this, options)
 	}
 
@@ -131,7 +142,7 @@ export class XHRUploadAdapter implements UploaderInterface {
 				reject({
 					event: Events.Error,
 					message: this.errUploadError(xhr),
-					xhr
+					xhr,
 				})
 			})
 			xhr.upload.addEventListener("progress", updateProgress)
@@ -140,11 +151,14 @@ export class XHRUploadAdapter implements UploaderInterface {
 				reject({
 					event: Events.Timeout,
 					message: this.errUploadTimeout(xhr),
-					xhr
+					xhr,
 				})
 			})
 			xhr.addEventListener("load", _ => {
-				if (files[0].status === Statuses.Canceled || xhr.readyState !== XMLHttpRequest.DONE) {
+				if (
+					files[0].status === Statuses.Canceled ||
+					xhr.readyState !== XMLHttpRequest.DONE
+				) {
 					return
 				}
 
@@ -166,7 +180,7 @@ export class XHRUploadAdapter implements UploaderInterface {
 								return reject({
 									message: "Invalid JSON response from server.",
 									event: Events.Error,
-									error: err
+									error: err,
 								})
 							}
 						}
@@ -178,8 +192,10 @@ export class XHRUploadAdapter implements UploaderInterface {
 				if (xhr.status < 200 || xhr.status >= 300) {
 					return reject({
 						event: Events.Error,
-						message: `The server responded with code ${xhr.status} (${xhr.statusText}).`,
-						xhr
+						message: `The server responded with code ${xhr.status} (${
+							xhr.statusText
+						}).`,
+						xhr,
 					})
 				}
 
@@ -207,7 +223,11 @@ export class XHRUploadAdapter implements UploaderInterface {
 			}
 
 			for (let i = 0; i < files.length; i++) {
-				formData.append(this.getParamName(i), files[i].nativeFile, this.renameFile(files[i].name))
+				formData.append(
+					this.getParamName(i),
+					files[i].nativeFile,
+					this.renameFile(files[i].name)
+				)
 			}
 
 			xhr.send(formData)
@@ -220,7 +240,10 @@ export class XHRUploadAdapter implements UploaderInterface {
 			if (!(e instanceof ProgressEvent)) {
 				let allFilesFinished = true
 				for (const file of files) {
-					if (file.upload.progress !== 100 || file.upload.bytesSent !== file.upload.total) {
+					if (
+						file.upload.progress !== 100 ||
+						file.upload.bytesSent !== file.upload.total
+					) {
 						allFilesFinished = false
 					}
 					file.upload.progress = 100
@@ -234,13 +257,20 @@ export class XHRUploadAdapter implements UploaderInterface {
 
 			for (const file of files) {
 				file.handleProgress(e)
-				vm.$emit(Events.UploadProgress, file, file.upload.progress, file.upload.bytesSent)
+				vm.$emit(
+					Events.UploadProgress,
+					file,
+					file.upload.progress,
+					file.upload.bytesSent
+				)
 			}
 		}
 	}
 
 	getParamName(index): string {
-		return this.paramName + (this.context.props.uploadMultiple ? `[${index}]` : "")
+		return (
+			this.paramName + (this.context.props.uploadMultiple ? `[${index}]` : "")
+		)
 	}
 
 	cancelUpload(file: VTransmitFile): VTransmitFile[] {
