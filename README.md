@@ -92,42 +92,55 @@ Vue.use(VueTransmit);
 
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
-| Property              | Type                  | Default                                                                     |
-| --------------------- | --------------------- | --------------------------------------------------------------------------- |
-| tag                   | String                | "div"                                                                       |
-| uploadAreaClasses     | Array, Object, String | null                                                                        |
-| uploadAreaAttrs       | Object                | {}                                                                          |
-| uploadAreaListeners   | Object                | {}                                                                          |
-| url                   | String                | undefined                                                                   |
-| method                | String                | "post"                                                                      |
-| withCredentials       | Boolean               | false                                                                       |
-| timeout               | Number                | 0                                                                           |
-| maxConcurrentUploads  | Number                | 2                                                                           |
-| uploadMultiple        | Boolean               | false                                                                       |
-| maxFileSize           | Number                | 256 _(in MiB)_                                                              |
-| paramName             | String                | "file"                                                                      |
-| createImageThumbnails | Boolean               | true                                                                        |
-| maxThumbnailFileSize  | Number                | 10                                                                          |
-| thumbnailWidth        | Number                | 120                                                                         |
-| thumbnailHeight       | Number                | 120                                                                         |
-| fileSizeBase          | Number                | 1000                                                                        |
-| maxFiles              | Number                | null                                                                        |
-| params                | Object                | default                                                                     |
-| headers               | Object                | default                                                                     |
-| responseType          | String                | ""                                                                          |
-| clickable             | Boolean               | true                                                                        |
-| ignoreHiddenFiles     | Boolean               | true                                                                        |
-| acceptedFileTypes     | Array                 | default                                                                     |
-| autoProcessQueue      | Boolean               | true                                                                        |
-| autoQueue             | Boolean               | true                                                                        |
-| capture               | String                | null                                                                        |
-| renameFile            | Function              | identity                                                                    |
-| dictFileTooBig        | String                | "File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MiB." |
-| dictInvalidFileType   | String                | "You can't upload files of this type."                                      |
-| dictResponseError     | String                | "Server responded with {{ statusCode }} code."                              |
-| dictMaxFilesExceeded  | String                | "You can not upload any more files."                                        |
-| accept                | Function              | default                                                                     |
-| resize                | Function              | default                                                                     |
+[**View Source**](./src/components/VueTransmit.vue#L85-L272)
+
+| Property               | Type                  | Default                        |
+| ---------------------- | --------------------- | ------------------------------ |
+| tag                    | String                | `"div"`                        |
+| uploadAreaClasses      | Array, Object, String | `null`                         |
+| uploadAreaAttrs        | Object                | `[Function: objFactory]`       |
+| uploadAreaListeners    | Object                | `[Function: objFactory]`       |
+| dragClass              | String                | `null`                         |
+| maxConcurrentUploads   | Number                | `2`                            |
+| uploadMultiple         | Boolean               | `false`                        |
+| maxFileSize            | Number                | `256`                          |
+| fileSizeBaseInBinary   | Boolean               | `false`                        |
+| createImageThumbnails  | Boolean               | `true`                         |
+| maxThumbnailFileSize   | Number                | `10`                           |
+| thumbnailWidth         | Number                | `120`                          |
+| thumbnailHeight        | Number                | `120`                          |
+| maxFiles               | Number                | `null`                         |
+| clickable              | Boolean               | `true`                         |
+| ignoreHiddenFiles      | Boolean               | `true`                         |
+| acceptedFileTypes      | Array                 | `[Function: default]`          |
+| autoProcessQueue       | Boolean               | `true`                         |
+| autoQueue              | Boolean               | `true`                         |
+| capture                | String                | `null`                         |
+| errMaxFileSizeExceeded | Function              | `[Function: default]`          |
+| errInvalidFileType     | Function              | `[Function: default]`          |
+| errMaxFilesExceeded    | Function              | `[Function: default]`          |
+| accept                 | Function              | `[Function: default]`          |
+| resize                 | Function              | `[Function: resizeImg]`        |
+| adapterOptions         | Object                | `[Function: objFactory]`       |
+| uploadAdapter          | Function              | `[Function: XHRUploadAdapter]` |
+
+## Adapter Options: XHRUploadAdapter
+
+[**View Source**](./src/upload-adapters/xhr.ts#L24-L79)
+
+| Property         | Type     | Default                                           |
+| ---------------- | -------- | ------------------------------------------------- |
+| url              | string   | _(required)_                                      |
+| method           | string   | `"post"`                                          |
+| withCredentials  | boolean  | `false`                                           |
+| timeout          | number   | `0`                                               |
+| paramName        | string   | `"file"`                                          |
+| params           | object   | `{}`                                              |
+| headers          | object   | `{ Accept, 'Cache-Control', 'X-Requested-With' }` |
+| responseType     | string   | `"json"`                                          |
+| errUploadError   | function | `[Function]`                                      |
+| errUploadTimeout | function | `[Function]`                                      |
+| renameFile       | function | `[Function]`                                      |
 
 ## Events
 

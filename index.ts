@@ -1,11 +1,12 @@
 import { PluginObject } from "vue";
 import { VueTransmit } from "./src/index";
+import { XHRUploadAdapter } from "./src/upload-adapters/xhr";
 
-const Plugin: PluginObject<undefined> = {
+const VueTransitPlugin: PluginObject<undefined> = {
   install(Vue) {
     Vue.component("VueTransmit", VueTransmit);
   },
   name: "vue-transmit",
 };
 
-export default Plugin;
+export { VueTransitPlugin, VueTransmit, XHRUploadAdapter };

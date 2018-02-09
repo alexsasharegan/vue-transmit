@@ -87,6 +87,7 @@ export type UploadGroup = {
 let GroupID = 0;
 
 export class XHRUploadAdapter implements UploaderInterface {
+  public context: VTransmitUploadContext;
   public url: string;
   public method: string;
   public withCredentials: boolean;
@@ -101,10 +102,7 @@ export class XHRUploadAdapter implements UploaderInterface {
   public responseParseFunc?: (xhr: XMLHttpRequest) => UploadResolve;
   private uploadGroups: { [key: number]: UploadGroup } = Object.create(null);
 
-  constructor(
-    public context: VTransmitUploadContext,
-    options: XHRUploadOptions
-  ) {
+  constructor(context: VTransmitUploadContext, options: XHRUploadOptions) {
     let {
       url,
       method = "post",
@@ -124,6 +122,8 @@ export class XHRUploadAdapter implements UploaderInterface {
         `Error during upload: the server timed out.`,
       renameFile = (name: string) => name,
     } = options;
+
+    this.context = context;
 
     this.url = url;
     this.method = method;
