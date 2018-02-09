@@ -253,7 +253,7 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
                     @click="triggerBrowse">Upload Files</button>
           </div>
           <!-- Scoped slot -->
-          <template slot="files" scope="props">
+          <template slot="files" slot-scope="props">
             <div v-for="(file, i) in props.files" :key="file.id" :class="{'mt-5': i === 0}">
               <div class="media">
                 <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
