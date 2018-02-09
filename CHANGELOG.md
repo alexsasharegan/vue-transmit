@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.6"></a>
+# [9.0.0-alpha.6](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.5...v9.0.0-alpha.6) (2018-02-09)
+
+
+### Bug Fixes
+
+* correct bad spelling of plugin named export ([3f2f0dd](https://github.com/alexsasharegan/vue-transmit/commit/3f2f0dd))
+
+
+
 <a name="9.0.0-alpha.5"></a>
 # [9.0.0-alpha.5](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.4...v9.0.0-alpha.5) (2018-02-09)
 
