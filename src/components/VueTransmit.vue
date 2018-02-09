@@ -70,6 +70,7 @@ import {
   webkitIsDir,
   UploadStatuses,
   VTransmitEvents as Events,
+  round,
 } from "../core/utils";
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
@@ -227,7 +228,10 @@ export default Vue.extend({
     errMaxFileSizeExceeded: {
       type: Function,
       default(fileSize: number, maxFileSize: number, units: string) {
-        return `The file is too big (${fileSize}${units}). Max file size: ${maxFileSize}${units}.`;
+        return `The file is too big (${round(
+          fileSize,
+          1
+        )}${units}). Max file size: ${round(maxFileSize, 1)}${units}.`;
       },
     },
     errInvalidFileType: {

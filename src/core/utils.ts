@@ -5,15 +5,9 @@ export function uniqueId(prefix: string): string {
   return prefix + ++idCounter;
 }
 
-export type Rounding = "round" | "ceil" | "floor" | "trunc";
-
-export function round(
-  number: number,
-  decimals: number = 2,
-  roundStyle: Rounding = "round"
-) {
+export function round(number: number, decimals: number = 2) {
   const roundingFactor = Math.pow(10, decimals);
-  return Math[roundStyle](number * roundingFactor) / roundingFactor;
+  return Math.round(number * roundingFactor) / roundingFactor;
 }
 
 export function fromBytesToKbit(bytes: number): number {

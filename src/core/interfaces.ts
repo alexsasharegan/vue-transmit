@@ -25,6 +25,5 @@ export type UploadResolve = {
 export type UploadReject = {
   event: VTransmitEvents;
   message: string;
-  error?: Error;
-  [key: string]: any;
+  data: AnyObject;
 };

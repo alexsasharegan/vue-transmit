@@ -87,23 +87,17 @@ export type UploadGroup = {
 let GroupID = 0;
 
 export class XHRUploadAdapter implements UploaderInterface {
-  public url: string = "";
-  public method: string = "post";
-  public withCredentials: boolean = false;
-  public timeout: number = 0;
-  public paramName: string = "file";
-  public params: { [key: string]: any } = Object.create(null);
-  public headers: { [key: string]: any } = {
-    Accept: "application/json",
-    "Cache-Control": "no-cache",
-    "X-Requested-With": "XMLHttpRequest",
-  };
-  public responseType: XMLHttpRequestResponseType = "";
-  public errUploadError: (xhr: XMLHttpRequest) => string = xhr =>
-    `Error during upload: ${xhr.statusText} [${xhr.status}]`;
-  public errUploadTimeout: (xhr: XMLHttpRequest) => string = _xhr =>
-    `Error during upload: the server timed out.`;
-  public renameFile: (name: string) => string = name => name;
+  public url: string;
+  public method: string;
+  public withCredentials: boolean;
+  public timeout: number;
+  public paramName: string;
+  public params: AnyObject;
+  public headers: AnyObject;
+  public responseType: XMLHttpRequestResponseType;
+  public errUploadError: (xhr: XMLHttpRequest) => string;
+  public errUploadTimeout: (xhr: XMLHttpRequest) => string;
+  public renameFile: (name: string) => string;
   public responseParseFunc?: (xhr: XMLHttpRequest) => UploadResolve;
   private uploadGroups: { [key: number]: UploadGroup } = Object.create(null);
 
@@ -111,13 +105,47 @@ export class XHRUploadAdapter implements UploaderInterface {
     public context: VTransmitUploadContext,
     options: XHRUploadOptions
   ) {
-    Object.assign(this, options);
+    let {
+      url,
+      method = "post",
+      withCredentials = false,
+      timeout = 0,
+      paramName = "file",
+      params = Object.create(null),
+      headers = {
+        Accept: "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      responseType = "json",
+      errUploadError = (xhr: XMLHttpRequest) =>
+        `Error during upload: ${xhr.statusText} [${xhr.status}]`,
+      errUploadTimeout = (_xhr: XMLHttpRequest) =>
+        `Error during upload: the server timed out.`,
+      renameFile = (name: string) => name,
+    } = options;
+
+    this.url = url;
+    this.method = method;
+    this.withCredentials = withCredentials;
+    this.timeout = timeout;
+    this.paramName = paramName;
+    this.params = params;
+    this.headers = headers;
+    this.responseType = responseType;
+    this.errUploadError = errUploadError;
+    this.errUploadTimeout = errUploadTimeout;
+    this.renameFile = renameFile;
   }
 
   uploadFiles(files: VTransmitFile[]): Promise<UploadResolve> {
     return new Promise((resolve, reject: (reason: UploadReject) => void) => {
       if (!this.url) {
-        throw new Error(`[Vue-Transmit] Missing upload URL.`);
+        return reject({
+          event: Events.Error,
+          message: `[Vue-Transmit] Missing upload URL.`,
+          data: {},
+        });
       }
 
       const xhr = new XMLHttpRequest();
@@ -142,7 +170,7 @@ export class XHRUploadAdapter implements UploaderInterface {
         reject({
           event: Events.Error,
           message: this.errUploadError(xhr),
-          xhr,
+          data: { xhr },
         });
       });
       xhr.upload.addEventListener("progress", updateProgress);
@@ -151,7 +179,7 @@ export class XHRUploadAdapter implements UploaderInterface {
         reject({
           event: Events.Timeout,
           message: this.errUploadTimeout(xhr),
-          xhr,
+          data: { xhr },
         });
       });
       xhr.addEventListener("load", _ => {
@@ -180,7 +208,7 @@ export class XHRUploadAdapter implements UploaderInterface {
                 return reject({
                   message: "Invalid JSON response from server.",
                   event: Events.Error,
-                  error: err,
+                  data: { error: err },
                 });
               }
             }
@@ -195,7 +223,7 @@ export class XHRUploadAdapter implements UploaderInterface {
             message: `The server responded with code ${xhr.status} (${
               xhr.statusText
             }).`,
-            xhr,
+            data: { xhr },
           });
         }
 
@@ -222,16 +250,11 @@ export class XHRUploadAdapter implements UploaderInterface {
         this.context.emit(Events.SendingMultiple, files, xhr, formData);
       }
 
-      let file: File | null;
       for (let i = 0; i < files.length; i++) {
-        file = files[i].nativeFile;
-        if (!file) {
-          continue;
-        }
         formData.append(
           this.getParamName(i),
-          file,
-          this.renameFile(files[i].name || "")
+          files[i].nativeFile,
+          this.renameFile(files[i].name)
         );
       }
 
