@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.1"></a>
+# [9.0.0-alpha.1](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.0...v9.0.0-alpha.1) (2018-02-09)
+
+
+### Bug Fixes
+
+* correct constructor prop for adapter ([e1807fc](https://github.com/alexsasharegan/vue-transmit/commit/e1807fc))
+
+
+
 <a name="9.0.0-alpha.0"></a>
 # [9.0.0-alpha.0](https://github.com/alexsasharegan/vue-transmit/compare/v8.0.0...v9.0.0-alpha.0) (2018-02-09)
 
