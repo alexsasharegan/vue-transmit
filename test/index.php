@@ -170,7 +170,7 @@
   <script>
     Vue.config.debug = true
     Vue.config.strict = true
-    Vue.use(VueTransmit)
+    Vue.use(VueTransmit.VueTransmitPlugin)
     Vue.use(vueFlex)
     window.app = new Vue({
       el: '#app',

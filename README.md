@@ -58,6 +58,18 @@ TypeScript._
 
 ![upload-example](./docs/vue-transmit-10fps.gif)
 
+## v8.x.x
+
+[Visit the `8.x` branch here.](https://github.com/alexsasharegan/vue-transmit/tree/8.x)
+
+Version 9 of Vue Transmit marks a new design that introduces various breaking
+changes. Migrating an existing app to `>=v9.x.x` should be roughly hour of work
+for most use cases (mileage may vary), but if you're using `v8.x.x` and you
+don't need any `v9` features, there's no need to update. An `8.x` branch will be
+maintained for LTS\* support.
+
+\* LTS support `===` patches only.
+
 ## Installation
 
 ```sh
@@ -73,14 +85,34 @@ lib would like either of the following:
 
 ```js
 // ESM
-import VueTransmit from "vue-transmit";
+import { VueTransmitPlugin } from "vue-transmit";
 // Common.js
-const VueTransmit = require("vue-transmit");
+const { VueTransmitPlugin } = require("vue-transmit");
 // Browser
-window.VueTransmit;
+const VueTransmitPlugin = window.VueTransmit.VueTransmitPlugin;
 
 // Installation
 Vue.use(VueTransmit);
+```
+
+If you don't wish to register `VueTransmit` as a global component, you can
+import the component directly.
+
+```js
+// ESM
+import { VueTransmit } from "vue-transmit";
+// Common.js
+const { VueTransmit } = require("vue-transmit");
+// Browser
+const VueTransmit = window.VueTransmit.VueTransmit;
+
+// Your component using VueTransmit
+const MyComponent = Vue.extend({
+  name: "my-component",
+  components: {
+    "vue-transmit": VueTransmit,
+  },
+});
 ```
 
 | Target | Path                                        | Minified |
