@@ -27,7 +27,9 @@
     "size:min": "cat dist/vue-transmit.esm.js | wc -c",
     "size:gzip": "gzip -c dist/vue-transmit.esm.js | wc -c",
     "release:alpha": "standard-version --prerelease alpha",
+    "postrelease:alpha": "git push --follow-tags origin master && npm publish --tag prerelease",
     "release:beta": "standard-version --prerelease beta",
+    "postrelease:beta": "git push --follow-tags origin master && npm publish --tag prerelease",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && npm publish"
   },

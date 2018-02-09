@@ -75,7 +75,7 @@ import {
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
 import { XHRUploadAdapter } from "../upload-adapters/xhr";
-import { UploaderInterface } from "../core/interfaces";
+import { UploaderInterface, UploadReject } from "../core/interfaces";
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry;
 
@@ -742,14 +742,14 @@ export default Vue.extend({
       this.transport
         .uploadFiles(files)
         .then(response => this.uploadFinished(files, response))
-        .catch(err => {
+        .catch((err: UploadReject) => {
           switch (err.event) {
             case Events.Timeout:
-              this.handleTimeout(files, err.message);
+              this.handleTimeout(files, err.message, err.data);
               break;
             case Events.Error:
             default:
-              this.errorProcessing(files, err.message);
+              this.errorProcessing(files, err.message, err.data);
               break;
           }
         });
@@ -757,15 +757,15 @@ export default Vue.extend({
     handleTimeout(
       files: VTransmitFile[],
       message: string,
-      ...args: any[]
+      data: AnyObject
     ): void {
       let f: VTransmitFile;
       for (f of files) {
         f.status = UploadStatuses.Timeout;
         f.endProgress();
-        this.$emit(Events.Timeout, f, message, ...args);
+        this.$emit(Events.Timeout, f, message, data);
       }
-      this.$emit(Events.TimeoutMultiple, files, message, ...args);
+      this.$emit(Events.TimeoutMultiple, files, message, data);
 
       if (this.autoProcessQueue) {
         this.processQueue();
@@ -812,17 +812,17 @@ export default Vue.extend({
     errorProcessing(
       files: VTransmitFile[],
       message: string,
-      xhr?: XMLHttpRequest
+      data: AnyObject = {}
     ) {
       for (const file of files) {
         file.status = UploadStatuses.Error;
         file.endProgress();
-        this.$emit(Events.Error, file, message, xhr);
+        this.$emit(Events.Error, file, message, data);
         this.$emit(Events.Complete, file);
       }
 
       if (this.uploadMultiple) {
-        this.$emit(Events.ErrorMultiple, files, message, xhr);
+        this.$emit(Events.ErrorMultiple, files, message, data);
         this.$emit(Events.CompleteMultiple, files);
       }
 
