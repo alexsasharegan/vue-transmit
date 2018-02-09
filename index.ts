@@ -1,8 +1,11 @@
-import { VueTransmit } from "./src"
+import { PluginObject } from "vue";
+import { VueTransmit } from "./src/index";
 
-export default {
-	install(Vue, _options) {
-		Vue.component("VueTransmit", VueTransmit)
-	},
-	name: "vue-transmit",
-}
+const Plugin: PluginObject<undefined> = {
+  install(Vue) {
+    Vue.component("VueTransmit", VueTransmit);
+  },
+  name: "vue-transmit",
+};
+
+export default Plugin;

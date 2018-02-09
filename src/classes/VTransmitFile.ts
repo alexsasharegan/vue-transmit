@@ -1,137 +1,115 @@
-import { assign, defineProperty, copyOwnAndInheritedProps, uniqueId, round, toKbps, toMbps } from "../core/utils"
+import { uniqueId, round, toKbps, toMbps } from "../core/utils";
+import { UploadStatuses } from "../core/utils";
 
-export interface IUploadStats {
-	bytesSent: number
-	progress: number
-	total: number
-	speed: ISpeedStats
-	start: number
-	end: number
-	time: number
+export interface UploadStats {
+  bytesSent: number;
+  progress: number;
+  total: number;
+  speed: SpeedStats;
+  start: number;
+  end: number;
+  time: number;
 }
 
-export interface ISpeedStats {
-	kbps: number
-	mbps: number
+export interface SpeedStats {
+  kbps: number;
+  mbps: number;
 }
 
-class VTransmitFile {
-	private _nativeFile: File = null
-	id: string = VTransmitFile.idFactory()
-	accepted: boolean = undefined // Passed all validation.
-	lastModified: number = undefined
-	lastModifiedDate: Date = undefined
-	name: string = undefined
-	processing: boolean = undefined
-	size: number = undefined
-	status: string = undefined
-	type: string = undefined
-	upload: IUploadStats = {
-		bytesSent: 0,
-		progress: 0,
-		total: 0,
-		speed: {
-			kbps: undefined,
-			mbps: undefined,
-		},
-		start: undefined,
-		end: undefined,
-		time: undefined,
-	}
-	webkitRelativePath: USVString = undefined
-	width: number = undefined
-	height: number = undefined
-	xhr: XMLHttpRequest = undefined
-	private _dataUrl: string
-	errorMessage: string = undefined
+export class VTransmitFile {
+  private _dataUrl: string = "";
 
-	constructor(...data: object[]) {
-		assign(this, ...data)
-	}
+  public nativeFile: File;
+  public id: string = VTransmitFile.idFactory();
+  public status: UploadStatuses = UploadStatuses.None;
+  public accepted: boolean = false; // Passed all validation.
+  public lastModified: number;
+  public lastModifiedDate: Date;
+  public name: string;
+  public processing: boolean = false;
+  public size: number;
+  public type: string;
+  public webkitRelativePath: USVString;
+  public width: number = 0;
+  public height: number = 0;
+  public errorMessage: string = "";
+  public adapterData: AnyObject = {};
+  public upload: UploadStats = {
+    bytesSent: 0,
+    progress: 0,
+    total: 0,
+    speed: {
+      kbps: 0,
+      mbps: 0,
+    },
+    start: 0,
+    end: 0,
+    time: 0,
+  };
 
-	set(...data: object[]): VTransmitFile {
-		assign(this, ...data)
-		return this
-	}
+  constructor(file: File) {
+    this.nativeFile = file;
+    this.lastModified = file.lastModified;
+    this.lastModifiedDate = file.lastModifiedDate;
+    this.name = file.name;
+    this.size = file.size;
+    this.type = file.type;
+    this.webkitRelativePath = file.webkitRelativePath;
 
-	copyNativeFile(file: File): VTransmitFile {
-		// save reference for upload
-		this.nativeFile = file
-		// Copy props to normal object for Vue reactivity.
-		// Vue cannot define reactive properties on native file's readonly props.
-		return this.set(copyOwnAndInheritedProps(file))
-	}
+    this.upload.total = file.size;
+  }
 
-	copyOwnAndInheritedProps(...data: object[]): VTransmitFile {
-		return this.set(...data.map(copyOwnAndInheritedProps))
-	}
+  handleProgress(e: ProgressEvent): void {
+    this.startProgress();
+    const total = e.total || this.upload.total;
+    this.upload.progress = Math.min(100, 100 * e.loaded / total);
+    this.upload.bytesSent = e.loaded;
+    this.upload.total = total;
+    this.upload.time = (Date.now() - this.upload.start) / 1000;
+    // Recalculate the upload speed in bytes/sec
+    this.upload.speed.kbps = round(
+      toKbps(this.upload.bytesSent, this.upload.time)
+    );
+    this.upload.speed.mbps = round(
+      toMbps(this.upload.bytesSent, this.upload.time)
+    );
+    if (this.upload.progress === 100) {
+      this.endProgress();
+    }
+  }
 
-	handleProgress(e: ProgressEvent): void {
-		this.startProgress()
-		const total = e.total || this.upload.total
-		this.upload.progress = Math.min(100, 100 * e.loaded / total)
-		this.upload.bytesSent = e.loaded
-		this.upload.total = total
-		this.upload.time = (Date.now() - this.upload.start) / 1000
-		// Recalc the upload speed in bytes/sec
-		this.upload.speed.kbps = round(toKbps(this.upload.bytesSent, this.upload.time))
-		this.upload.speed.mbps = round(toMbps(this.upload.bytesSent, this.upload.time))
-		if (this.upload.progress === 100) {
-			this.endProgress()
-		}
-	}
+  startProgress(): VTransmitFile {
+    // Avoid starting twice
+    if (!this.upload.start) {
+      this.upload.start = Date.now();
+    }
+    return this;
+  }
 
-	startProgress(): VTransmitFile {
-		// Avoid starting twice
-		if (typeof this.upload.start !== "number") {
-			this.upload.start = Date.now()
-		}
-		return this
-	}
+  endProgress(): VTransmitFile {
+    // Avoid ending twice
+    if (!this.upload.end) {
+      this.upload.end = Date.now();
+      this.upload.time = (Date.now() - this.upload.start) / 1000;
+    }
+    return this;
+  }
 
-	endProgress(): VTransmitFile {
-		// Avoid ending twice
-		if (typeof this.upload.end !== "number") {
-			this.upload.end = Date.now()
-			this.upload.time = (Date.now() - this.upload.start) / 1000
-		}
-		return this
-	}
+  get dataUrl() {
+    return this._dataUrl || "";
+  }
 
-	get nativeFile() {
-		return this._nativeFile
-	}
+  set dataUrl(value) {
+    // Use non-enumerable data url to avoid copying around large datasets
+    Object.defineProperty(this, "_dataUrl", {
+      value,
+      enumerable: false,
+      configurable: true,
+      writable: true,
+    });
+  }
 
-	set nativeFile(file: File) {
-		if (!(file instanceof File)) {
-			throw new TypeError(`[${VTransmitFile.name}] Expected an instance of File (native).`)
-		}
-		this._nativeFile = file
-		this.upload.total = file.size
-	}
-
-	get dataUrl() {
-		return this._dataUrl || ""
-	}
-
-	set dataUrl(value) {
-		defineProperty(this, "_dataUrl", {
-			value,
-			enumerable: false,
-			configurable: true,
-			writable: true,
-		})
-	}
-
-	static fromNativeFile(file: File, ...data) {
-		const instance = new VTransmitFile(...data)
-		instance.copyNativeFile(file)
-		return instance
-	}
-
-	static idFactory() {
-		return uniqueId("v-transmit-file-")
-	}
+  static idFactory() {
+    return uniqueId("v-transmit-file-");
+  }
 }
-
-export default VTransmitFile

@@ -22,6 +22,7 @@ async function rmDirContents(dirPath) {
 async function main() {
   try {
     return await Promise.all([
+      rmDirContents(resolve(__dirname, "../lib")),
       rmDirContents(resolve(__dirname, "../dist")),
       rmDirContents(resolve(__dirname, "../types"))
     ])
