@@ -5,16 +5,6 @@ export function uniqueId(prefix: string): string {
   return prefix + ++idCounter;
 }
 
-export function copyOwnAndInheritedProps(obj: object): object {
-  let newData = {};
-  for (let prop in obj) {
-    if (typeof obj[prop] !== "function") {
-      newData[prop] = obj[prop];
-    }
-  }
-  return newData;
-}
-
 export type Rounding = "round" | "ceil" | "floor" | "trunc";
 
 export function round(
@@ -46,6 +36,8 @@ export function objFactory() {
   return {};
 }
 
+export function noop() {}
+
 export function scaleH(ratio: number, width: number): number {
   return width / ratio;
 }
@@ -55,6 +47,7 @@ export function scaleW(ratio: number, height: number): number {
 }
 
 export enum UploadStatuses {
+  None = "",
   Added = "added",
   Queued = "queued",
   Accepted = "queued",
@@ -102,6 +95,9 @@ export enum VTransmitEvents {
   Paste = "paste",
 }
 
+/**
+ * @link https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+ */
 export interface DrawImageArgs {
   sx: number;
   sy: number;
@@ -122,10 +118,8 @@ export function resizeImg(
   file: VTransmitFile,
   dims: Dimensions
 ): DrawImageArgs {
-  if (!file.width || !file.height) {
-    throw Error("File width/height is missing.");
-  }
-  // Extract the object's primitive values so we don't mutate the input
+  // 's' variables are for source
+  // 'd' variables are for destination
   const sRatio = file.width / file.height;
   const dRatio = dims.width / dims.height;
   const coords: DrawImageArgs = {
@@ -141,9 +135,11 @@ export function resizeImg(
 
   let w, h;
   if (dRatio > sRatio) {
-    [w, h] = [file.width, scaleH(dRatio, file.width)];
+    w = file.width;
+    h = scaleH(dRatio, file.width);
   } else {
-    [w, h] = [scaleW(dRatio, file.height), file.height];
+    w = scaleW(dRatio, file.height);
+    h = file.height;
   }
 
   if (w < file.width) {

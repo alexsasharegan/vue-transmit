@@ -1,10 +1,4 @@
-import {
-  copyOwnAndInheritedProps,
-  uniqueId,
-  round,
-  toKbps,
-  toMbps,
-} from "../core/utils";
+import { uniqueId, round, toKbps, toMbps } from "../core/utils";
 import { UploadStatuses } from "../core/utils";
 
 export interface UploadStats {
@@ -23,17 +17,23 @@ export interface SpeedStats {
 }
 
 export class VTransmitFile {
-  private _nativeFile: File | null = null;
-  private _dataUrl?: string;
+  private _dataUrl: string = "";
+
+  public nativeFile: File;
   public id: string = VTransmitFile.idFactory();
-  public accepted?: boolean = undefined; // Passed all validation.
-  public lastModified?: number = undefined;
-  public lastModifiedDate?: Date = undefined;
-  public name?: string = undefined;
-  public processing?: boolean = undefined;
-  public size?: number = undefined;
-  public status?: UploadStatuses = undefined;
-  public type?: string = undefined;
+  public status: UploadStatuses = UploadStatuses.None;
+  public accepted: boolean = false; // Passed all validation.
+  public lastModified: number;
+  public lastModifiedDate: Date;
+  public name: string;
+  public processing: boolean = false;
+  public size: number;
+  public type: string;
+  public webkitRelativePath: USVString;
+  public width: number = 0;
+  public height: number = 0;
+  public errorMessage: string = "";
+  public adapterData: AnyObject = {};
   public upload: UploadStats = {
     bytesSent: 0,
     progress: 0,
@@ -46,30 +46,17 @@ export class VTransmitFile {
     end: 0,
     time: 0,
   };
-  public webkitRelativePath?: USVString = undefined;
-  public width?: number = undefined;
-  public height?: number = undefined;
-  public errorMessage?: string = undefined;
-  public adapterData: { [key: string]: any } = {};
 
-  constructor(...data: object[]) {
-    Object.assign(this, ...data);
-  }
-
-  set(...data: object[]): VTransmitFile {
-    return Object.assign(this, ...data);
-  }
-
-  copyNativeFile(file: File): VTransmitFile {
-    // save reference for upload
+  constructor(file: File) {
     this.nativeFile = file;
-    // Copy props to normal object for Vue reactivity.
-    // Vue cannot define reactive properties on native file's readonly props.
-    return this.set(copyOwnAndInheritedProps(file));
-  }
+    this.lastModified = file.lastModified;
+    this.lastModifiedDate = file.lastModifiedDate;
+    this.name = file.name;
+    this.size = file.size;
+    this.type = file.type;
+    this.webkitRelativePath = file.webkitRelativePath;
 
-  copyOwnAndInheritedProps(...data: object[]): VTransmitFile {
-    return this.set(...data.map(copyOwnAndInheritedProps));
+    this.upload.total = file.size;
   }
 
   handleProgress(e: ProgressEvent): void {
@@ -79,7 +66,7 @@ export class VTransmitFile {
     this.upload.bytesSent = e.loaded;
     this.upload.total = total;
     this.upload.time = (Date.now() - this.upload.start) / 1000;
-    // Recalc the upload speed in bytes/sec
+    // Recalculate the upload speed in bytes/sec
     this.upload.speed.kbps = round(
       toKbps(this.upload.bytesSent, this.upload.time)
     );
@@ -108,20 +95,6 @@ export class VTransmitFile {
     return this;
   }
 
-  get nativeFile(): File | null {
-    return this._nativeFile;
-  }
-
-  set nativeFile(file: File | null) {
-    if (!(file instanceof File)) {
-      throw new TypeError(
-        `[${VTransmitFile.name}] Expected an instance of File (native).`
-      );
-    }
-    this._nativeFile = file;
-    this.upload.total = file.size;
-  }
-
   get dataUrl() {
     return this._dataUrl || "";
   }
@@ -134,12 +107,6 @@ export class VTransmitFile {
       configurable: true,
       writable: true,
     });
-  }
-
-  static fromNativeFile(file: File, ...data) {
-    const instance = new VTransmitFile(...data);
-    instance.copyNativeFile(file);
-    return instance;
   }
 
   static idFactory() {

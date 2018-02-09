@@ -8,3 +8,6 @@ node_modules/
 /test/uploads/*
 /tmp/
 coverage
+
+dist
+lib

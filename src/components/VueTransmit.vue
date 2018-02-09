@@ -29,31 +29,29 @@
   </component :is="tag">
 </template>
 
-<style lang="scss">
-  $border-color: #bdbdbd;
-  $drop-color: #e1f5fe;
-  $drop-color-alt: #fafafa;
-
+<style>
   .v-transmit__upload-area {
     width: 100%;
     border-radius: 1rem;
-    border: 2px dashed $border-color;
+    border: 2px dashed #bdbdbd;
     min-height: 30vh;
+  }
 
-    @media (min-height: 1000px) {
+  @media (min-height: 1000px) {
+    .v-transmit__upload-area {
       min-height: 300px;
     }
   }
 
   .v-transmit__upload-area--is-dragging {
-    background: $drop-color
+    background: #e1f5fe
       linear-gradient(
         -45deg,
-        $drop-color-alt 25%,
+        #fafafa 25%,
         transparent 25%,
         transparent 50%,
-        $drop-color-alt 50%,
-        $drop-color-alt 75%,
+        #fafafa 50%,
+        #fafafa 75%,
         transparent 75%,
         transparent
       );
@@ -64,9 +62,9 @@
 <script lang="ts">
 // @ts-ignore
 import Vue, { VueConstructor } from "vue";
-import noop from "lodash-es/noop";
 import {
   objFactory,
+  noop,
   resizeImg,
   webkitIsFile,
   webkitIsDir,
@@ -272,14 +270,16 @@ export default Vue.extend({
   mounted() {
     this.$on(Events.UploadProgress, this.updateTotalUploadProgress);
     this.$on(Events.RemovedFile, this.updateTotalUploadProgress);
-    this.$on(Events.Canceled, file => this.$emit(Events.Complete, file));
-    this.$on(Events.Complete, file => {
+    this.$on(Events.Canceled, (file: VTransmitFile) =>
+      this.$emit(Events.Complete, file)
+    );
+    this.$on(Events.Complete, (file: VTransmitFile) => {
       if (
         this.addedFiles.length === 0 &&
         this.uploadingFiles.length === 0 &&
         this.queuedFiles.length === 0
       ) {
-        setTimeout(() => this.$emit(Events.QueueComplete, file), 0);
+        Promise.resolve().then(() => this.$emit(Events.QueueComplete, file));
       }
     });
 
@@ -317,18 +317,20 @@ export default Vue.extend({
   },
 
   computed: {
-    inputEl(): HTMLInputElement {
-      let el = null;
-      if (this.$refs.hiddenFileInput instanceof HTMLInputElement) {
-        el = this.$refs.hiddenFileInput;
+    inputEl(): HTMLInputElement | null {
+      let el = this.$refs.hiddenFileInput;
+      if (!(el instanceof HTMLInputElement)) {
+        return null;
       }
+
       return el;
     },
-    formEl(): HTMLFormElement {
-      let el = null;
-      if (this.$refs.uploadForm instanceof HTMLFormElement) {
-        el = this.$refs.uploadForm;
+    formEl(): HTMLFormElement | null {
+      let el = this.$refs.uploadForm;
+      if (!(el instanceof HTMLFormElement)) {
+        return null;
       }
+
       return el;
     },
     fileSizeBase(): number {
@@ -369,15 +371,14 @@ export default Vue.extend({
       );
     },
     maxFilesReached(): boolean {
-      // Loose equality to check both null && undefined
       return (
         this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles
       );
     },
-    maxFilesReachedClass(): string {
+    maxFilesReachedClass(): string | null {
       return this.maxFilesReached ? "v-transmit__max-files--reached" : null;
     },
-    isDraggingClass(): { [key: string]: boolean } {
+    isDraggingClass(): Dictionary<boolean> {
       return {
         "v-transmit__upload-area--is-dragging": this.dragging,
         [this.dragClass]: this.dragging,
@@ -431,19 +432,34 @@ export default Vue.extend({
       return this.files.filter(f => statuses.indexOf(f.status) > -1);
     },
     onFileInputChange(): void {
+      let { inputEl, formEl } = this;
+      if (inputEl == null || formEl == null) {
+        // This is unreachable code,
+        // but we need to let TS know it.
+        throw TypeError();
+      }
+
+      // Can be null
+      if (!inputEl.files) {
+        return;
+      }
+
       this.$emit(
         Events.AddedFiles,
-        Array.from(this.inputEl.files).map(this.addFile)
+        Array.from(inputEl.files).map(this.addFile)
       );
-      this.formEl.reset();
+
+      // Reset input element's files
+      // https://github.com/alexsasharegan/vue-transmit/issues/25
+      formEl.reset();
     },
     addFile(file: File): VTransmitFile {
-      const vtFile = VTransmitFile.fromNativeFile(file);
+      const vtFile = new VTransmitFile(file);
       vtFile.status = UploadStatuses.Added;
       this.files.push(vtFile);
       this.$emit(Events.AddedFile, vtFile);
       this.enqueueThumbnail(vtFile);
-      this.acceptFile(vtFile, (error: string) => {
+      this.acceptFile(vtFile, (error?: string) => {
         if (error) {
           vtFile.accepted = false;
           this.errorProcessing([vtFile], error);
@@ -514,7 +530,9 @@ export default Vue.extend({
       }
     },
     triggerBrowseFiles(): void {
-      this.inputEl.click();
+      if (this.inputEl) {
+        this.inputEl.click();
+      }
     },
     handleClickUploaderAction(): void {
       if (this.clickable) {
@@ -546,6 +564,8 @@ export default Vue.extend({
       setTimeout(this.processThumbnailQueue, 0);
     },
     processThumbnailQueue(): void {
+      let file: VTransmitFile | undefined;
+
       // Employ a chain of self-calling, self-queuing createThumbnail calls
       // so execution can stay as non-blocking as possible.
       if (this.processingThumbnail || this.thumbnailQueue.length === 0) {
@@ -553,10 +573,12 @@ export default Vue.extend({
       }
 
       this.processingThumbnail = true;
-      this.createThumbnail(this.thumbnailQueue.shift(), () => {
-        this.processingThumbnail = false;
-        this.processThumbnailQueue();
-      });
+      if ((file = this.thumbnailQueue.shift())) {
+        this.createThumbnail(file, () => {
+          this.processingThumbnail = false;
+          this.processThumbnailQueue();
+        });
+      }
     },
     createThumbnail(file: VTransmitFile, callback = noop): void {
       const reader = new FileReader();
@@ -586,6 +608,7 @@ export default Vue.extend({
       imgEl.addEventListener(
         "load",
         () => {
+          let ctx: CanvasRenderingContext2D | null;
           file.width = imgEl.width;
           file.height = imgEl.height;
           const resizeInfo = this.resize(file, {
@@ -593,7 +616,11 @@ export default Vue.extend({
             height: this.thumbnailHeight,
           });
           const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
+          // Can be null
+          if (!(ctx = canvas.getContext("2d"))) {
+            return;
+          }
+
           canvas.width = resizeInfo.dWidth;
           canvas.height = resizeInfo.dHeight;
           ctx.drawImage(
@@ -644,7 +671,7 @@ export default Vue.extend({
       }
 
       let i = processingLength;
-      let file: VTransmitFile;
+      let file: VTransmitFile | undefined;
       for (; i < this.maxConcurrentUploads; i++) {
         if ((file = queuedFiles.shift())) {
           this.processFile(file);
@@ -903,7 +930,10 @@ export default Vue.extend({
       for (const item of items) {
         // Newer API on standards track
         if (item.getAsFile && item.kind == "file") {
-          this.addFile(item.getAsFile());
+          let file = item.getAsFile();
+          if (file) {
+            this.addFile(file);
+          }
           continue;
         }
 
@@ -925,7 +955,7 @@ export default Vue.extend({
         }
       }
     },
-    addFilesFromDirectory(directory: WebKitDirectoryEntry, path): void {
+    addFilesFromDirectory(directory: WebKitDirectoryEntry, path: string): void {
       directory.createReader().readEntries(
         <any>((entries: FileSystemEntry[]) => {
           for (const entry of entries) {

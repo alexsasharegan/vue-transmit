@@ -239,11 +239,13 @@ export class XHRUploadAdapter implements UploaderInterface {
     });
   }
 
-  handleUploadProgress(files): (e?: ProgressEvent) => void {
+  handleUploadProgress(files: VTransmitFile[]): (e?: ProgressEvent) => void {
     const vm = this.context.vtransmit;
+
     return function onProgressFn(e?: ProgressEvent): void {
-      if (!(e instanceof ProgressEvent)) {
+      if (!e) {
         let allFilesFinished = true;
+
         for (const file of files) {
           if (
             file.upload.progress !== 100 ||
@@ -255,13 +257,16 @@ export class XHRUploadAdapter implements UploaderInterface {
           file.upload.bytesSent = file.upload.total;
           file.endProgress();
         }
+
         if (allFilesFinished) {
           return;
         }
       }
 
       for (const file of files) {
-        file.handleProgress(e);
+        if (e) {
+          file.handleProgress(e);
+        }
         vm.$emit(
           Events.UploadProgress,
           file,
@@ -272,7 +277,7 @@ export class XHRUploadAdapter implements UploaderInterface {
     };
   }
 
-  getParamName(index): string {
+  getParamName(index: string | number): string {
     return (
       this.paramName + (this.context.props.uploadMultiple ? `[${index}]` : "")
     );

@@ -8,26 +8,33 @@
 [![GitHub stars](https://img.shields.io/github/stars/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/stargazers)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=for-the-badge)](https://conventionalcommits.org)
 
-A Vue.js drag & drop uploader based on Dropzone.js (`~42kB`, `~12.5kB` gzipped). Many thanks to
-[Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for paving the way with the original Dropzone.js!
-[Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your non-vue projects. 🙌
+A Vue.js drag & drop uploader based on Dropzone.js (`~42kB`, `~12.5kB` gzipped).
+Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for
+paving the way with the original Dropzone.js!
+[Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your
+non-vue projects. 🙌
 
 ## Features
 
-Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in TypeScript/ES6 for Vue.js. Instead of
-creating a Vue wrapper component that duplicates and proxies all of the methods and event logic between Dropzone and the
-component, Vue-Transmit implements them directly from the component. This cuts down on library size and offers a much
-tighter integration.
+Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in
+TypeScript/ES6 for Vue.js. Instead of creating a Vue wrapper component that
+duplicates and proxies all of the methods and event logic between Dropzone and
+the component, Vue-Transmit implements them directly from the component. This
+cuts down on library size and offers a much tighter integration.
 
-Vue-Transmit takes an event-based approach to the upload cycle. Instead of passing callbacks to the component via an
-options object, use the template event binding syntax (`<vue-transmit @event="callback" />`). All events strictly
-conform to kebab-casing, including events proxied off native events (e.g. `dragover => @drag-over`). This is for
-uniformity and so events can be easily distinguished.
+Vue-Transmit takes an event-based approach to the upload cycle. Instead of
+passing callbacks to the component via an options object, use the template event
+binding syntax (`<vue-transmit @event="callback" />`). All events strictly
+conform to kebab-casing, including events proxied off native events (e.g.
+`dragover => @drag-over`). This is for uniformity and so events can be easily
+distinguished.
 
-In order to comply with Vue.js reactivity, an object's properties must be defined up front and be configurable. A
-special File class has been written (`VTransmitFile`) to register file objects from uploads reactively, since the native
-File object's properties are read-only. This class also adds useful information not present in the native File object
-(dimensions, upload stats, etc.).
+In order to comply with Vue.js reactivity, an object's properties must be
+defined up front and be configurable. A special File class has been written
+(`VTransmitFile`) to register file objects from uploads reactively, since the
+native File object's properties are read-only. This class also adds useful
+information not present in the native File object (dimensions, upload stats,
+etc.).
 
 * HTML 5 file uploads
 * Emits upload lifecycle events (accepted, sending, progress, success, etc.)
@@ -37,8 +44,9 @@ File object's properties are read-only. This class also adds useful information 
 * Scoped slots allow for fully customizable styling
 * Written in modern TypeScript/ES6 with modules
 
-_\* Note: this library uses some built-ins (`Array.from`) that require a polyfill. All other ESNext language features
-(arrow fns, for of, etc.) are transpiled with babel._
+_\* Note: this library uses some built-ins (`Array.from`) that require a
+polyfill. All other ESNext language features (arrow fns, for of, etc.) are
+transpiled with babel._
 
 ![upload-example](./docs/vue-transmit-10fps.gif)
 
@@ -50,32 +58,26 @@ npm install vue-transmit
 
 ## Builds
 
-The default build for ESM loaders (webpack) is indicated in the `module` and/or `jsnext:main` fields of the package.
-This build is a more modern build with slightly less transpilation. For the commonjs and browser build, a full ES5
-transpilation is performed.
-
-For most setups, importing the lib would like the following:
+The default build for ESM loaders like webpack is indicated in the `module`
+fields of the package. For most setups, importing the lib would like the
+following:
 
 ```js
 // ESM
-import VueTransmit from "vue-transmit"
+import VueTransmit from "vue-transmit";
 // Common.js
-const VueTransmit = require("vue-transmit")
+const VueTransmit = require("vue-transmit");
 // Browser
-window.VueTransmit
+window.VueTransmit;
 
 // Installation
-Vue.use(VueTransmit)
+Vue.use(VueTransmit);
 ```
 
-| Target    | Path                                            | Minified |
-| --------- | ----------------------------------------------- | -------- |
-| ESM       | `vue-transmit/dist/vue-transmit.esm.js`         | false    |
-| ESM       | `vue-transmit/dist/vue-transmit.esm.min.js`     | true     |
-| Common.js | `vue-transmit/dist/vue-transmit.common.js`      | false    |
-| Common.js | `vue-transmit/dist/vue-transmit.common.min.js`  | true     |
-| Browser   | `vue-transmit/dist/vue-transmit.browser.js`     | false    |
-| Browser   | `vue-transmit/dist/vue-transmit.browser.min.js` | true     |
+| Target | Path                                    | Minified |
+| ------ | --------------------------------------- | -------- |
+| ESM    | `vue-transmit/dist/vue-transmit.esm.js` | true     |
+| AMD    | `vue-transmit/dist/vue-transmit.js`     | true     |
 
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
@@ -158,8 +160,8 @@ Vue.use(VueTransmit)
 
 ### Default (`$slots.default`)
 
-The default slot should contain your markup for getting an upload started. This could be a file uploader button and/or a
-dropzone.
+The default slot should contain your markup for getting an upload started. This
+could be a file uploader button and/or a dropzone.
 
 ### Files (Scoped, `$slots.files`)
 
@@ -167,14 +169,14 @@ This slot receives a number of props:
 
 ```ts
 interface FilesSlotProps {
-	files: VTransmitFile[]
-	acceptedFiles: VTransmitFile[]
-	rejectedFiles: VTransmitFile[]
-	addedFiles: VTransmitFile[]
-	queuedFiles: VTransmitFile[]
-	uploadingFiles: VTransmitFile[]
-	activeFiles: VTransmitFile[]
-	isUploading: Boolean
+  files: VTransmitFile[];
+  acceptedFiles: VTransmitFile[];
+  rejectedFiles: VTransmitFile[];
+  addedFiles: VTransmitFile[];
+  queuedFiles: VTransmitFile[];
+  uploadingFiles: VTransmitFile[];
+  activeFiles: VTransmitFile[];
+  isUploading: Boolean;
 }
 ```
 
@@ -182,39 +184,41 @@ interface FilesSlotProps {
 
 ```json
 {
-	"_nativeFile": {},
-	"id": "v-transmit-file-1",
-	"accepted": true,
-	"lastModified": 1478117443000,
-	"lastModifiedDate": "2016-11-02T20:10:43.000Z",
-	"name": "cosmo.jpg",
-	"processing": true,
-	"size": 142776,
-	"status": "success",
-	"type": "image/jpeg",
-	"upload": {
-		"bytesSent": 142776,
-		"progress": 100,
-		"speed": {
-			"kbps": 10.06,
-			"mbps": 0.01
-		},
-		"start": 1503273157993,
-		"end": 1503273158029,
-		"time": 0.036,
-		"total": 142776
-	},
-	"webkitRelativePath": "",
-	"width": 700,
-	"height": 700,
-	"xhr": {},
-	"dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAgAElEQVR4XlS9B7RmZ3UluG/="
+  "_nativeFile": {},
+  "id": "v-transmit-file-1",
+  "accepted": true,
+  "lastModified": 1478117443000,
+  "lastModifiedDate": "2016-11-02T20:10:43.000Z",
+  "name": "cosmo.jpg",
+  "processing": true,
+  "size": 142776,
+  "status": "success",
+  "type": "image/jpeg",
+  "upload": {
+    "bytesSent": 142776,
+    "progress": 100,
+    "speed": {
+      "kbps": 10.06,
+      "mbps": 0.01
+    },
+    "start": 1503273157993,
+    "end": 1503273158029,
+    "time": 0.036,
+    "total": 142776
+  },
+  "webkitRelativePath": "",
+  "width": 700,
+  "height": 700,
+  "xhr": {},
+  "dataUrl":
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAgAElEQVR4XlS9B7RmZ3UluG/="
 }
 ```
 
 ## Usage
 
-If you have PHP installed on your machine, you can clone this repo and open up a working test app by running:
+If you have PHP installed on your machine, you can clone this repo and open up a
+working test app by running:
 
 ```sh
 npm test
@@ -289,13 +293,16 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
 
 ## Lifecycle
 
-The upload process has many stages, each with different possible outcomes. Here is an overview of the lifecycle of an upload with Vue Transmit:
+The upload process has many stages, each with different possible outcomes. Here
+is an overview of the lifecycle of an upload with Vue Transmit:
 
 * Trigger event
   * input on `change`: value of `input.files` is read and passed to `vm.addFile`
-  * target on `drop`: value of `event.dataTransfer["files" || "items"]` is read/traversed and passed to `vm.addFile`
+  * target on `drop`: value of `event.dataTransfer["files" || "items"]` is
+    read/traversed and passed to `vm.addFile`
 * Add File
-  * instantiate `VTransmitFile` from native file object (for reactivity & extra info)
+  * instantiate `VTransmitFile` from native file object (for reactivity & extra
+    info)
   * status `added`
   * pushed onto `vm.files`
   * thumbnail is enqueued
@@ -307,7 +314,8 @@ The upload process has many stages, each with different possible outcomes. Here 
 * Enqueue file
   * check that file status is `added` & has been accepted
   * status = `queued`
-  * if `autoProcessQueue`, invoke `processQueue` async _(like node `setImmediate`)_
+  * if `autoProcessQueue`, invoke `processQueue` async _(like node
+    `setImmediate`)_
 * Process queue
   * check number of uploading files against upload limit
   * invoke `processFiles` with max amount of queued files options allow
