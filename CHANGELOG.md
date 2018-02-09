@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.5"></a>
+# [9.0.0-alpha.5](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.4...v9.0.0-alpha.5) (2018-02-09)
+
+
+### Bug Fixes
+
+* use named exports and update props in docs ([2150854](https://github.com/alexsasharegan/vue-transmit/commit/2150854))
+
+
+
 <a name="9.0.0-alpha.4"></a>
 # [9.0.0-alpha.4](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.3...v9.0.0-alpha.4) (2018-02-09)
 
