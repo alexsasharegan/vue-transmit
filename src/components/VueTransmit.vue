@@ -554,7 +554,7 @@ export default Vue.extend({
 
       file.status = UploadStatuses.Queued;
       if (this.autoProcessQueue) {
-        setTimeout(this.processQueue, 0);
+        Promise.resolve().then(this.processQueue);
       }
     },
     enqueueThumbnail(file: VTransmitFile): void {
@@ -567,7 +567,7 @@ export default Vue.extend({
       }
 
       this.thumbnailQueue.push(file);
-      setTimeout(this.processThumbnailQueue, 0);
+      Promise.resolve().then(this.processThumbnailQueue);
     },
     processThumbnailQueue(): void {
       let file: VTransmitFile | undefined;
