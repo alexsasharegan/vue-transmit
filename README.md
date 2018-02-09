@@ -85,7 +85,7 @@ Vue.use(VueTransmit);
 | Target | Path                                    | Minified |
 | ------ | --------------------------------------- | -------- |
 | ESM    | `vue-transmit/dist/vue-transmit.esm.js` | true     |
-| AMD    | `vue-transmit/dist/vue-transmit.js`     | true     |
+| UMD    | `vue-transmit/dist/vue-transmit.js`     | true     |
 
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
