@@ -262,7 +262,7 @@ export default Vue.extend({
       default: objFactory,
     },
     uploadAdapter: {
-      type: Object,
+      type: Function,
       default: XHRUploadAdapter,
     },
   },
@@ -409,10 +409,16 @@ export default Vue.extend({
       };
     },
     transport(): UploaderInterface {
-      return new this.uploadAdapter(
-        new VTransmitUploadContext(this),
-        this.adapterOptions
-      );
+      let Adapter: any = this.uploadAdapter;
+      try {
+        return new Adapter(
+          new VTransmitUploadContext(this),
+          this.adapterOptions
+        );
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
     },
   },
 

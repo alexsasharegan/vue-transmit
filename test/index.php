@@ -14,7 +14,7 @@
         crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/vue-flex/dist/vue-flex.css">
   <script>
-    <?= file_get_contents(__DIR__. "/../dist/vue-transmit.browser.js" ); ?>
+    <?= file_get_contents(__DIR__. "/../dist/vue-transmit.js" ); ?>
   </script>
   <style>
     #app {
@@ -178,9 +178,11 @@
         return {
           options: {
             acceptedFileTypes: ['image/*'],
-            url: './upload.php',
             clickable: false,
-            accept: this.accept
+            accept: this.accept,
+            adapterOptions: {
+              url: './upload.php',
+            },
           },
           files: [],
           showModal: false,
@@ -215,7 +217,7 @@
         accept(file, done) {
 					this.count++
           console.log(JSON.stringify(file, undefined, 2))
-          done(this.count == 1)
+          done()
         }
       },
       filters: {

@@ -80,7 +80,7 @@ export class VTransmitFile {
 
   startProgress(): VTransmitFile {
     // Avoid starting twice
-    if (typeof this.upload.start !== "number") {
+    if (!this.upload.start) {
       this.upload.start = Date.now();
     }
     return this;
@@ -88,7 +88,7 @@ export class VTransmitFile {
 
   endProgress(): VTransmitFile {
     // Avoid ending twice
-    if (typeof this.upload.end !== "number") {
+    if (!this.upload.end) {
       this.upload.end = Date.now();
       this.upload.time = (Date.now() - this.upload.start) / 1000;
     }
