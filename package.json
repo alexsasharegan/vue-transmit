@@ -48,9 +48,7 @@
     "collectCoverage": true,
     "mapCoverage": true
   },
-  "dependencies": {
-    "lodash-es": "^4.17.5"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^22.1.1",
     "cross-env": "^5.1.3",

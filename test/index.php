@@ -210,8 +210,11 @@
           this.showModal = true
         },
         listen(event) {
-          this.$refs.uploader.$on(event, function(...args) {
-            console.log(event, ...args.map(arg => `${typeof arg}: ${JSON.stringify(arg, undefined, 2)}`))
+          this.$refs.uploader.$on(event, (...args) => {
+            console.log(event)
+            for (let arg of args) {
+              console.log(`${typeof arg}: ${JSON.stringify(arg, undefined, 2)}`)
+            }
           })
         },
         accept(file, done) {

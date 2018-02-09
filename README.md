@@ -29,38 +29,46 @@ conform to kebab-casing, including events proxied off native events (e.g.
 `dragover => @drag-over`). This is for uniformity and so events can be easily
 distinguished.
 
-In order to comply with Vue.js reactivity, an object's properties must be
-defined up front and be configurable. A special File class has been written
-(`VTransmitFile`) to register file objects from uploads reactively, since the
-native File object's properties are read-only. This class also adds useful
-information not present in the native File object (dimensions, upload stats,
-etc.).
+Vue-Transmit also has a modular upload transport. The default transport
+implementation uses `XMLHttpRequest` to upload client-side files using
+multi-part form data, but this could be swapped for a custom implementation for
+something like Firebase.
+
+In order to integrate with Vue.js reactivity, an object's properties must be
+defined initially, be enumerable, and be configurable. A special File class has
+been written (`VTransmitFile`) to register native browser file objects from
+uploads reactively, since the native object properties are read-only. This class
+also adds useful information not present in the native File object (dimensions,
+upload stats, etc.).
 
 * HTML 5 file uploads
 * Emits upload lifecycle events (accepted, sending, progress, success, etc.)
 * Image thumbnail previews
 * Support for concurrent uploads
+* Modular upload transport layer
 * Completely written in Vue.js&mdash;no wrapper components
 * Scoped slots allow for fully customizable styling
 * Written in modern TypeScript/ES6 with modules
 
-_\* Note: this library uses some built-ins (`Array.from`) that require a
-polyfill. All other ESNext language features (arrow fns, for of, etc.) are
-transpiled with babel._
+_\* Note: this library uses some built-ins (`Array.from`, `Promise`) that
+require
+[a polyfill](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Polyfill).
+All other ESNext language features (arrow fns, for of, etc.) are transpiled with
+TypeScript._
 
 ![upload-example](./docs/vue-transmit-10fps.gif)
 
 ## Installation
 
-```shell
+```sh
 npm install vue-transmit
 ```
 
 ## Builds
 
 The default build for ESM loaders like webpack is indicated in the `module`
-fields of the package. For most setups, importing the lib would like the
-following:
+field of the package, while non-esm will resolve from the `main` field. For most
+setups, importing the lib would like either of the following:
 
 ```js
 // ESM
@@ -273,8 +281,10 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
     data: {
       options: {
         acceptedFileTypes: ['image/*'],
-        url: './upload.php',
-        clickable: false
+        clickable: false,
+        adapterOptions: {
+          url: './upload.php',
+        },
       }
     },
     methods: {
