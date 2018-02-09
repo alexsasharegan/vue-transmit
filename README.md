@@ -67,8 +67,9 @@ npm install vue-transmit
 ## Builds
 
 The default build for ESM loaders like webpack is indicated in the `module`
-field of the package, while non-esm will resolve from the `main` field. For most
-setups, importing the lib would like either of the following:
+field of the package, while non-esm will resolve from the `main` field. By
+default, the unminified versions are specified. For most setups, importing the
+lib would like either of the following:
 
 ```js
 // ESM
@@ -82,10 +83,12 @@ window.VueTransmit;
 Vue.use(VueTransmit);
 ```
 
-| Target | Path                                    | Minified |
-| ------ | --------------------------------------- | -------- |
-| ESM    | `vue-transmit/dist/vue-transmit.esm.js` | true     |
-| UMD    | `vue-transmit/dist/vue-transmit.js`     | true     |
+| Target | Path                                        | Minified |
+| ------ | ------------------------------------------- | -------- |
+| ESM    | `vue-transmit/dist/vue-transmit.esm.js`     | false    |
+| ESM    | `vue-transmit/dist/vue-transmit.esm.min.js` | true     |
+| UMD    | `vue-transmit/dist/vue-transmit.js`         | false    |
+| UMD    | `vue-transmit/dist/vue-transmit.min.js`     | true     |
 
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
