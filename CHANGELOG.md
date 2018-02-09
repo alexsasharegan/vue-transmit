@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.3"></a>
+# [9.0.0-alpha.3](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.2...v9.0.0-alpha.3) (2018-02-09)
+
+
+
 <a name="9.0.0-alpha.2"></a>
 # [9.0.0-alpha.2](https://github.com/alexsasharegan/vue-transmit/compare/v8.0.0...v9.0.0-alpha.2) (2018-02-09)
 
