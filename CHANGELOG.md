@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.7"></a>
+# [9.0.0-alpha.7](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.6...v9.0.0-alpha.7) (2018-02-17)
+
+
+### Features
+
+* improving XHR adapter ([82baf15](https://github.com/alexsasharegan/vue-transmit/commit/82baf15))
+
+
+
 <a name="9.0.0-alpha.6"></a>
 # [9.0.0-alpha.6](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.5...v9.0.0-alpha.6) (2018-02-09)
 
