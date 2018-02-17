@@ -9,8 +9,8 @@
   <title>Vue Dropzone Test</title>
   <script src="https://unpkg.com/vue"></script>
   <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/vue-flex/dist/vue-flex.css">
   <script>
@@ -99,6 +99,10 @@
              src="/assets/logo.png">
       </a>
       <h1 class="mb-5"><code>&lt;vue-transmit&gt;</code></h1>
+      <b-form-checkbox class="mb-3"
+                       v-model="options.uploadMultiple">
+        Upload Multiple
+      </b-form-checkbox>
     </header>
     <b-container tag="main">
       <b-row>
@@ -108,8 +112,10 @@
                         upload-area-classes="vh-20"
                         drag-class="dragging"
                         v-bind="options"
-												@added-file="onAddedFile"
+                        @added-file="onAddedFile"
                         @success="onUploadSuccess"
+                        @success-multiple="onUploadSuccessMulti"
+                        @timeout="onError"
                         @error="onError">
             <flex-col align-v="center"
                       class="h-100">
@@ -180,30 +186,43 @@
             acceptedFileTypes: ['image/*'],
             clickable: false,
             accept: this.accept,
+            uploadMultiple: true,
+            maxConcurrentUploads: 4,
             adapterOptions: {
               url: './upload.php',
+              timeout: 3000,
+              errUploadError: xhr => xhr.response.message
             },
           },
           files: [],
           showModal: false,
-					error: "",
-					count: 0
+          error: "",
+          count: 0
         }
       },
       methods: {
         triggerBrowse() {
           this.$refs.uploader.triggerBrowseFiles()
-				},
-				onAddedFile(file) {
-					console.log(
-						this.$refs.uploader.inputEl.value,
-						this.$refs.uploader.inputEl.files
-					)
-				},
+        },
+        onAddedFile(file) {
+          console.log(
+            this.$refs.uploader.inputEl.value,
+            this.$refs.uploader.inputEl.files
+          )
+        },
         onUploadSuccess(file, res) {
           console.log(res)
-          file.src = res.url
-          this.files.push(file)
+          if (!this.options.uploadMultiple) {
+            file.src = res.url[0]
+            this.files.push(file)
+          }
+        },
+        onUploadSuccessMulti(files, res) {
+          console.log(...arguments)
+          for (let i = 0; i < files.length; i++) {
+            files[i].src = res.url[i];
+            this.files.push(files[i])
+          }
         },
         onError(file, errorMsg) {
           this.error = errorMsg
@@ -213,12 +232,13 @@
           this.$refs.uploader.$on(event, (...args) => {
             console.log(event)
             for (let arg of args) {
-              console.log(`${typeof arg}: ${JSON.stringify(arg, undefined, 2)}`)
+              // console.log(`${typeof arg}: ${JSON.stringify(arg, undefined, 2)}`)
+              console.log(arg)
             }
           })
         },
         accept(file, done) {
-					this.count++
+          this.count++
           console.log(JSON.stringify(file, undefined, 2))
           done()
         }

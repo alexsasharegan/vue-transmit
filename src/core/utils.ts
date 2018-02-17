@@ -40,6 +40,10 @@ export function scaleW(ratio: number, height: number): number {
   return height * ratio;
 }
 
+export function expectNever(_: never, msg: string): never {
+  throw new Error(msg);
+}
+
 export enum UploadStatuses {
   None = "",
   Added = "added",
@@ -50,6 +54,11 @@ export enum UploadStatuses {
   Error = "error",
   Timeout = "timeout",
   Success = "success",
+}
+
+export enum ErrType {
+  Any,
+  Timeout,
 }
 
 export enum VTransmitEvents {

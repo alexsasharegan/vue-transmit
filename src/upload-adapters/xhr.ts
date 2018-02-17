@@ -1,13 +1,10 @@
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
-import {
-  UploaderInterface,
-  UploadResolve,
-  UploadReject,
-} from "../core/interfaces";
+import { UploaderInterface, UploadResult } from "../core/interfaces";
 import {
   VTransmitEvents as Events,
   UploadStatuses as Statuses,
+  ErrType,
 } from "../core/utils";
 
 /**
@@ -20,29 +17,34 @@ import {
  * - on success: emit to vue-transmit & update file status
  * - once complete: emit to vue-transmit & update file status
  */
-
-export type XHRUploadOptions = {
+export type XHRUploadOptions<T = any> = {
   /**
    * A string representing the URL to send the request to.
    */
   url: string;
   /**
-   * The HTTP method to use, such as "GET", "POST", "PUT", "DELETE", etc. Ignored for non-HTTP(S) URLs.
+   * The HTTP method to use, such as "GET", "POST", "PUT", "DELETE", etc.
+   * Ignored for non-HTTP(S) URLs.
+   *
+   * ```
+   * // default => "post"
+   * ```
    */
   method?: string;
   /**
-   * The XMLHttpRequest.withCredentials property is a Boolean that indicates whether or not
-   * cross-site Access-Control requests should be made using credentials such as
-   * cookies, authorization headers or TLS client certificates.
-   * Setting withCredentials has no effect on same-site requests.
+   * The XMLHttpRequest.withCredentials property is a Boolean that indicates
+   * whether or not cross-site Access-Control requests should be made using
+   * credentials such as cookies, authorization headers or TLS client
+   * certificates. Setting withCredentials has no effect on same-site requests.
    */
   withCredentials?: boolean;
   /**
-   * The XMLHttpRequest.timeout property is an unsigned long representing
-   * the number of milliseconds a request can take before automatically being terminated.
-   * The default value is 0, which means there is no timeout.
-   * Timeout shouldn't be used for synchronous XMLHttpRequests requests used in a document environment
-   * or it will throw an InvalidAccessError exception. When a timeout happens, a timeout event is fired.
+   * The XMLHttpRequest.timeout property is an unsigned long representing the
+   * number of milliseconds a request can take before automatically being
+   * terminated. The default value is 0, which means there is no timeout.
+   * Timeout shouldn't be used for synchronous XMLHttpRequests requests used in
+   * a document environment or it will throw an InvalidAccessError exception.
+   * When a timeout happens, a timeout event is fired.
    */
   timeout?: number;
   /**
@@ -56,23 +58,25 @@ export type XHRUploadOptions = {
   params?: { [key: string]: any };
   headers?: { [key: string]: any };
   /**
-   * The XMLHttpRequest.responseType property is an enumerated value that returns the type of response.
-   * It also lets the author change the response type.
-   * If an empty string is set as the value of responseType, the default value text will be used.
+   * The XMLHttpRequest.responseType property is an enumerated value that
+   * returns the type of response. It also lets the author change the response
+   * type. If an empty string is set as the value of responseType, the default
+   * value text will be used.
    *
-   * Setting the value of responseType to "document" is ignored if done in a  Worker environment.
-   * When setting responseType to a particular value,
-   * the author should make sure that the server is actually sending a response compatible to that format.
-   * If the server returns data that is not compatible to the responseType that was set,
-   * the value of response will be null.
-   * Also, setting responseType for synchronous requests will throw an InvalidAccessError exception.
+   * Setting the value of responseType to "document" is ignored if done in a
+   * Worker environment. When setting responseType to a particular value,
+   * the author should make sure that the server is actually sending a response
+   * compatible to that format. If the server returns data that is not
+   * compatible to the responseType that was set, the value of response will be
+   * null. Also, setting responseType for synchronous requests will throw an
+   * InvalidAccessError exception.
    */
   responseType?: XMLHttpRequestResponseType;
   /**
    * responseParseFunc is a function that given an XMLHttpRequest
    * returns a response object. Allows for custom response parsing.
    */
-  responseParseFunc?: (xhr: XMLHttpRequest) => UploadResolve;
+  responseParseFunc?: (xhr: XMLHttpRequest) => T;
   errUploadError?: (xhr: XMLHttpRequest) => string;
   errUploadTimeout?: (xhr: XMLHttpRequest) => string;
   renameFile?: (name: string) => string;
@@ -84,9 +88,9 @@ export type UploadGroup = {
   xhr: XMLHttpRequest;
 };
 
-let GroupID = 0;
+let group_id = 0;
 
-export class XHRUploadAdapter implements UploaderInterface {
+export class XHRUploadAdapter<T = any> implements UploaderInterface {
   public context: VTransmitUploadContext;
   public url: string;
   public method: string;
@@ -99,10 +103,10 @@ export class XHRUploadAdapter implements UploaderInterface {
   public errUploadError: (xhr: XMLHttpRequest) => string;
   public errUploadTimeout: (xhr: XMLHttpRequest) => string;
   public renameFile: (name: string) => string;
-  public responseParseFunc?: (xhr: XMLHttpRequest) => UploadResolve;
+  public responseParseFunc?: (xhr: XMLHttpRequest) => T;
   private uploadGroups: { [key: number]: UploadGroup } = Object.create(null);
 
-  constructor(context: VTransmitUploadContext, options: XHRUploadOptions) {
+  constructor(context: VTransmitUploadContext, options: XHRUploadOptions<T>) {
     let {
       url,
       method = "post",
@@ -116,6 +120,7 @@ export class XHRUploadAdapter implements UploaderInterface {
         "X-Requested-With": "XMLHttpRequest",
       },
       responseType = "json",
+      responseParseFunc,
       errUploadError = (xhr: XMLHttpRequest) =>
         `Error during upload: ${xhr.statusText} [${xhr.status}]`,
       errUploadTimeout = (_xhr: XMLHttpRequest) =>
@@ -133,24 +138,28 @@ export class XHRUploadAdapter implements UploaderInterface {
     this.params = params;
     this.headers = headers;
     this.responseType = responseType;
+    this.responseParseFunc = responseParseFunc;
     this.errUploadError = errUploadError;
     this.errUploadTimeout = errUploadTimeout;
     this.renameFile = renameFile;
   }
 
-  uploadFiles(files: VTransmitFile[]): Promise<UploadResolve> {
-    return new Promise((resolve, reject: (reason: UploadReject) => void) => {
+  uploadFiles(files: VTransmitFile[]): Promise<UploadResult<T>> {
+    return new Promise(resolve => {
       if (!this.url) {
-        return reject({
-          event: Events.Error,
-          message: `[Vue-Transmit] Missing upload URL.`,
-          data: {},
+        return resolve({
+          ok: false,
+          err: {
+            type: ErrType.Any,
+            message: `Missing upload URL.`,
+            data: this.url,
+          },
         });
       }
 
       const xhr = new XMLHttpRequest();
       const updateProgress = this.handleUploadProgress(files);
-      const id = GroupID++;
+      const id = group_id++;
 
       this.uploadGroups[id] = { id, xhr, files };
 
@@ -160,26 +169,33 @@ export class XHRUploadAdapter implements UploaderInterface {
       }
 
       xhr.open(this.method, this.url, true);
-      // Setting the timeout after open because of IE11 issue: https://gitlab.com/meno/dropzone/issues/8
+      // Setting the timeout after open because of IE11 issue:
+      // @link https://gitlab.com/meno/dropzone/issues/8
       xhr.timeout = this.timeout;
       xhr.withCredentials = Boolean(this.withCredentials);
       xhr.responseType = this.responseType;
 
       xhr.addEventListener("error", () => {
         this.rmGroup(id);
-        reject({
-          event: Events.Error,
-          message: this.errUploadError(xhr),
-          data: { xhr },
+        resolve({
+          ok: false,
+          err: {
+            type: ErrType.Any,
+            message: this.errUploadError(xhr),
+            data: xhr,
+          },
         });
       });
       xhr.upload.addEventListener("progress", updateProgress);
       xhr.addEventListener("timeout", () => {
         this.rmGroup(id);
-        reject({
-          event: Events.Timeout,
-          message: this.errUploadTimeout(xhr),
-          data: { xhr },
+        resolve({
+          ok: false,
+          err: {
+            type: ErrType.Timeout,
+            message: this.errUploadTimeout(xhr),
+            data: xhr,
+          },
         });
       });
       xhr.addEventListener("load", _ => {
@@ -193,11 +209,11 @@ export class XHRUploadAdapter implements UploaderInterface {
         // The XHR is complete, so remove the group
         this.rmGroup(id);
 
-        let response = {};
+        let response: T;
         if (this.responseParseFunc) {
           response = this.responseParseFunc(xhr);
         } else {
-          Object.assign(response, xhr.response);
+          response = xhr.response;
 
           if (!xhr.responseType) {
             let contentType = xhr.getResponseHeader("content-type");
@@ -205,10 +221,13 @@ export class XHRUploadAdapter implements UploaderInterface {
               try {
                 response = JSON.parse(xhr.responseText);
               } catch (err) {
-                return reject({
-                  message: "Invalid JSON response from server.",
-                  event: Events.Error,
-                  data: { error: err },
+                return resolve({
+                  ok: false,
+                  err: {
+                    message: "Invalid JSON response from server.",
+                    type: ErrType.Any,
+                    data: err,
+                  },
                 });
               }
             }
@@ -218,16 +237,20 @@ export class XHRUploadAdapter implements UploaderInterface {
         // Called at load (when complete) will enable all the progress done logic.
         updateProgress();
         if (xhr.status < 200 || xhr.status >= 300) {
-          return reject({
-            event: Events.Error,
-            message: `The server responded with code ${xhr.status} (${
-              xhr.statusText
-            }).`,
-            data: { xhr },
+          return resolve({
+            ok: false,
+            err: {
+              type: ErrType.Any,
+              message: this.errUploadError(xhr),
+              data: xhr,
+            },
           });
         }
 
-        return resolve(response);
+        return resolve({
+          ok: true,
+          data: response,
+        });
       });
 
       // Use null proto obj for the following 'for in' loop without hasOwnProperty check
@@ -301,9 +324,11 @@ export class XHRUploadAdapter implements UploaderInterface {
   }
 
   getParamName(index: string | number): string {
-    return (
-      this.paramName + (this.context.props.uploadMultiple ? `[${index}]` : "")
-    );
+    let suffix = "";
+    if (this.context.props.uploadMultiple) {
+      suffix = `[${index}]`;
+    }
+    return this.paramName + suffix;
   }
 
   cancelUpload(file: VTransmitFile): VTransmitFile[] {

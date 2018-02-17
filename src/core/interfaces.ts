@@ -1,29 +1,36 @@
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
-import { VTransmitEvents } from "../core/utils";
+import { ErrType } from "../core/utils";
 
-export interface UploaderConstructor {
+export interface UploaderConstructor<T = any> {
   new (
     context: VTransmitUploadContext,
     options: { [key: string]: any }
-  ): UploaderInterface;
+  ): UploaderInterface<T>;
 }
 
-export interface UploaderInterface {
+export interface UploaderInterface<T = any> {
   /**
    * Given a file, cancel it's underlying transport
    * and return a list of affected files
    * (since files can be grouped in transport).
    */
   cancelUpload(file: VTransmitFile): VTransmitFile[];
-  uploadFiles(files: VTransmitFile[]): Promise<UploadResolve>;
+  uploadFiles(files: VTransmitFile[]): Promise<UploadResult<T>>;
 }
 
-export type UploadResolve = {
-  [key: string]: any;
-};
-export type UploadReject = {
-  event: VTransmitEvents;
+export type UploadResult<T> =
+  | {
+      readonly ok: true;
+      data: T;
+    }
+  | {
+      readonly ok: false;
+      err: UploadErr;
+    };
+
+export type UploadErr = {
+  type: ErrType;
   message: string;
-  data: AnyObject;
+  data: any;
 };

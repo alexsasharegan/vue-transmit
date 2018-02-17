@@ -100,7 +100,7 @@ export class VTransmitFile {
   }
 
   set dataUrl(value) {
-    // Use non-enumerable data url to avoid copying around large datasets
+    // Use non-enumerable data url to avoid copying around large data sets
     Object.defineProperty(this, "_dataUrl", {
       value,
       enumerable: false,
@@ -110,6 +110,6 @@ export class VTransmitFile {
   }
 
   static idFactory() {
-    return uniqueId("v-transmit-file-");
+    return uniqueId("vt_");
   }
 }

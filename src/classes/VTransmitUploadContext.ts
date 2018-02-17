@@ -1,10 +1,9 @@
 import VueTransmit from "../components/VueTransmit.vue";
 import { VTransmitFile } from "./VTransmitFile";
-import { UploadStatuses, VTransmitEvents } from "../core/utils";
+import { UploadStatuses } from "../core/utils";
 
 export class VTransmitUploadContext {
   public Statuses = UploadStatuses;
-  public Events = VTransmitEvents;
   public props: AnyObject;
 
   constructor(public vtransmit: VueTransmit) {

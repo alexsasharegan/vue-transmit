@@ -71,11 +71,13 @@ import {
   UploadStatuses,
   VTransmitEvents as Events,
   round,
+  expectNever,
+  ErrType,
 } from "../core/utils";
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
 import { XHRUploadAdapter } from "../upload-adapters/xhr";
-import { UploaderInterface, UploadReject } from "../core/interfaces";
+import { UploaderInterface } from "../core/interfaces";
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry;
 
@@ -665,25 +667,24 @@ export default Vue.extend({
       imgEl.src = imageUrl;
     },
     processQueue(): void {
-      const processingLength = this.uploadingFiles.length;
+      const len_uploading = this.uploadingFiles.length;
       if (
-        processingLength >= this.maxConcurrentUploads ||
+        len_uploading >= this.maxConcurrentUploads ||
         this.queuedFiles.length === 0
       ) {
         return;
       }
 
-      const queuedFiles = [...this.queuedFiles];
       if (this.uploadMultiple) {
         return this.processFiles(
-          queuedFiles.slice(0, this.maxConcurrentUploads - processingLength)
+          this.queuedFiles.slice(0, this.maxConcurrentUploads - len_uploading)
         );
       }
 
-      let i = processingLength;
+      let i = len_uploading;
       let file: VTransmitFile | undefined;
       for (; i < this.maxConcurrentUploads; i++) {
-        if ((file = queuedFiles.shift())) {
+        if ((file = this.queuedFiles.shift())) {
           this.processFile(file);
         }
       }
@@ -739,26 +740,27 @@ export default Vue.extend({
       this.uploadFiles([file]);
     },
     uploadFiles(files: VTransmitFile[]): void {
-      this.transport
-        .uploadFiles(files)
-        .then(response => this.uploadFinished(files, response))
-        .catch((err: UploadReject) => {
-          switch (err.event) {
-            case Events.Timeout:
-              this.handleTimeout(files, err.message, err.data);
-              break;
-            case Events.Error:
-            default:
-              this.errorProcessing(files, err.message, err.data);
-              break;
-          }
-        });
+      this.transport.uploadFiles(files).then(result => {
+        if (result.ok) {
+          return this.uploadFinished(files, result.data);
+        }
+
+        switch (result.err.type) {
+          case ErrType.Any:
+            this.errorProcessing(files, result.err.message, result.err.data);
+            break;
+
+          case ErrType.Timeout:
+            this.handleTimeout(files, result.err.message, result.err.data);
+            break;
+
+          default:
+            expectNever(result.err.type, "unmatched error case");
+            break;
+        }
+      });
     },
-    handleTimeout(
-      files: VTransmitFile[],
-      message: string,
-      data: AnyObject
-    ): void {
+    handleTimeout(files: VTransmitFile[], message: string, data: any): void {
       let f: VTransmitFile;
       for (f of files) {
         f.status = UploadStatuses.Timeout;
@@ -809,11 +811,7 @@ export default Vue.extend({
         this.processQueue();
       }
     },
-    errorProcessing(
-      files: VTransmitFile[],
-      message: string,
-      data: AnyObject = {}
-    ) {
+    errorProcessing(files: VTransmitFile[], message: string, data?: any) {
       for (const file of files) {
         file.status = UploadStatuses.Error;
         file.endProgress();
@@ -834,34 +832,41 @@ export default Vue.extend({
       if (!acceptedFileTypes.length) {
         return true;
       }
-      const mimeType = file.type;
-      const baseMimeType = mimeType.replace(/\/.*$/, "");
+      const mime_type = file.type;
+      const base_type = mime_type.slice(0, mime_type.indexOf("/"));
+      let valid_type: string;
       // Return true on the first condition match,
       // otherwise exhaust all conditions and return false.
-      for (let i = 0; i < acceptedFileTypes.length; i++) {
-        const validType = acceptedFileTypes[i];
-        if (validType.charAt(0) === ".") {
+      for (valid_type of acceptedFileTypes) {
+        switch (true) {
           // Handle extension validation
-          // Ensure extension exists at the end of the filename.
-          if (
-            file.name
-              .toLowerCase()
-              .indexOf(
-                validType.toLowerCase(),
-                file.name.length - validType.length
-              ) !== -1
-          ) {
-            return true;
-          }
-        } else if (/\/\*$/.test(validType)) {
-          // Handle globbed mimetype validation ("image/*")
-          if (baseMimeType === validType.replace(/\/.*$/, "")) {
-            return true;
-          }
-        } else {
-          if (mimeType === validType) {
-            return true;
-          }
+          case valid_type.charAt(0) == ".":
+            // Ensure extension exists at the end of the filename.
+            if (
+              file.name
+                .toLowerCase()
+                .indexOf(
+                  valid_type.toLowerCase(),
+                  file.name.length - valid_type.length
+                ) !== -1
+            ) {
+              return true;
+            }
+            break;
+
+          // Handle globs ("image/*")
+          case valid_type.slice(-2) == "/*":
+            if (base_type === valid_type.slice(0, -2)) {
+              return true;
+            }
+            break;
+
+          // Match mimetype exact
+          default:
+            if (mime_type == valid_type) {
+              return true;
+            }
+            break;
         }
       }
 
@@ -979,7 +984,7 @@ export default Vue.extend({
             if (webkitIsFile(entry)) {
               entry.file(
                 <any>((file: File) => {
-                  if (this.ignoreHiddenFiles && /^\./.test(file.name)) {
+                  if (this.ignoreHiddenFiles && file.name.charAt(0) == ".") {
                     return;
                   }
                   (file as any).fullPath = `${path}/${file.name}`;
