@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.8"></a>
+# [9.0.0-alpha.8](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.7...v9.0.0-alpha.8) (2018-02-22)
+
+
+### Features
+
+* **esm:** adds default export for esm build only ([4826819](https://github.com/alexsasharegan/vue-transmit/commit/4826819))
+
+
+
 <a name="9.0.0-alpha.7"></a>
 # [9.0.0-alpha.7](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.6...v9.0.0-alpha.7) (2018-02-17)
 
