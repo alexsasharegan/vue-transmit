@@ -61,7 +61,7 @@
           <b-nav-item href="#">Link</b-nav-item>
           <b-nav-item href="#"
                       disabled>Disabled</b-nav-item>
-        </b-navbar-n>
+        </b-navbar-nav>
         <!-- Right aligned nav items -->
         <b-navbar-nav
               class="ml-auto">
@@ -89,7 +89,7 @@
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Sign out</b-dropdown-item>
           </b-nav-item-dropdown>
-        </b-nav>
+        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <header class="text-center">
