@@ -14,12 +14,15 @@
   "directories": {
     "test": "test"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "scripts/clean.js",
     "predev": "npm run clean",
     "dev": "cross-env NODE_ENV=development rollup -c ./rollup.config.js",
     "prebuild": "npm run clean",
-    "build": "cross-env NODE_ENV=production rollup -c ./rollup.config.js && rollup -c ./rollup.config.min.js",
+    "build": "cross-env NODE_ENV=production rollup -c ./rollup.config.js",
     "prepublishOnly": "npm run build",
     "test:site": "php -S localhost:3030 -t ./test/",
     "test:jest": "jest --coverage",

@@ -10,5 +10,3 @@ const VueTransmitPlugin: PluginObject<undefined> = {
 };
 
 export { VueTransmitPlugin, VueTransmit, XHRUploadAdapter };
-
-export default VueTransmitPlugin;
