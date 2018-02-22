@@ -14,6 +14,8 @@ paving the way with the original Dropzone.js!
 [Check it out](https://gitlab.com/meno/dropzone/tree/master) for any of your
 non-vue projects. 🙌
 
+Check out the CodeSandbox here: https://codesandbox.io/s/lyzqn4m659
+
 ## Features
 
 Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in
