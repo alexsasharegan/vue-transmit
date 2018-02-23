@@ -16,6 +16,12 @@ non-vue projects. 🙌
 
 Check out the CodeSandbox here: https://codesandbox.io/s/lyzqn4m659
 
+Have a question? Check out the [FAQ section](#faq). 
+Can't find what you're looking for? 
+[Open an issue](https://github.com/alexsasharegan/vue-transmit/issues).
+Want to add to the docs?
+[Submit a PR](https://github.com/alexsasharegan/vue-transmit/pulls).
+
 ## Features
 
 Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in
@@ -86,12 +92,14 @@ default, the unminified versions are specified. For most setups, importing the
 lib would like either of the following:
 
 ```js
-// ESM
+// ESM default export
+import VueTransmit from "vue-transmit";
+// ESM named export
 import { VueTransmitPlugin } from "vue-transmit";
-// Common.js
+// Common.js (no 'default' export)
 const { VueTransmitPlugin } = require("vue-transmit");
 // Browser
-const VueTransmitPlugin = window.VueTransmit.VueTransmitPlugin;
+const { VueTransmitPlugin } = window.VueTransmit;
 
 // Installation
 Vue.use(VueTransmit);
@@ -106,7 +114,7 @@ import { VueTransmit } from "vue-transmit";
 // Common.js
 const { VueTransmit } = require("vue-transmit");
 // Browser
-const VueTransmit = window.VueTransmit.VueTransmit;
+const { VueTransmit } = window.VueTransmit;
 
 // Your component using VueTransmit
 const MyComponent = Vue.extend({
@@ -349,6 +357,28 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
     }
   })
 </script>
+```
+
+## FAQ
+
+### Accessing the VueTransmit component instance
+
+It's always recommended to place a ref on your vue-transmit instance so that your 
+component can call methods and retrieve data directly from the instance.
+
+```html
+<vue-transmit ref="vtransmit" />
+```
+
+### How to remove a file
+
+You can remove a single file or all files from the component instance. To remove a
+single file, you'll need the file you wish to delete.
+
+```js
+// from your component
+this.$refs.vtransmit.removeFile(vtFile); // single file
+this.$refs.vtransmit.removeAllFiles(cancelInProgressUploads = false); // all files
 ```
 
 ## Lifecycle
