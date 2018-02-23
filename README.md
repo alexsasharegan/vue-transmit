@@ -16,9 +16,11 @@ non-vue projects. 🙌
 
 Check out the CodeSandbox here: https://codesandbox.io/s/lyzqn4m659
 
-Have a question? Check out the [FAQ section](#faq). 
+Have a question? Check out the [FAQ section](#faq).
+
 Can't find what you're looking for? 
 [Open an issue](https://github.com/alexsasharegan/vue-transmit/issues).
+
 Want to add to the docs?
 [Submit a PR](https://github.com/alexsasharegan/vue-transmit/pulls).
 
