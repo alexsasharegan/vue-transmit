@@ -34,7 +34,7 @@ distinguished.
 Vue-Transmit also has a modular upload transport. The default transport
 implementation uses `XMLHttpRequest` to upload client-side files using
 multi-part form data, but this could be swapped for a custom implementation for
-something like Firebase.
+something like Firebase or WebSockets.
 
 In order to integrate with Vue.js reactivity, an object's properties must be
 defined initially, be enumerable, and be configurable. A special File class has
