@@ -40,7 +40,7 @@ to add to the docs?
 * [FAQ](#faq) - Frequently Asked Questions
   * [Accessing the VueTransmit instance](#accessing-the-vuetransmit-component-instance)
   * [How to Remove a File](#how-to-remove-a-file)
-  * [Lifecycle](#lifecycle)
+* [Lifecycle](#lifecycle) - Basic explanation of upload lifecycle
 
 ## Features
 
