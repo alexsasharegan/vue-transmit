@@ -55,8 +55,8 @@ export type XHRUploadOptions<T = any> = {
    * An object of additional parameters to transfer to the server.
    * This is the same as adding hidden input fields in the form element.
    */
-  params?: { [key: string]: any };
-  headers?: { [key: string]: any };
+  params?: { [key: string]: string };
+  headers?: { [key: string]: string };
   /**
    * The XMLHttpRequest.responseType property is an enumerated value that
    * returns the type of response. It also lets the author change the response
@@ -97,8 +97,8 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
   public withCredentials: boolean;
   public timeout: number;
   public paramName: string;
-  public params: AnyObject;
-  public headers: AnyObject;
+  public params: { [key: string]: string };
+  public headers: { [key: string]: string };
   public responseType: XMLHttpRequestResponseType;
   public errUploadError: (xhr: XMLHttpRequest) => string;
   public errUploadTimeout: (xhr: XMLHttpRequest) => string;
