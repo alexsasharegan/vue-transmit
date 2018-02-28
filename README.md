@@ -156,95 +156,111 @@ const MyComponent = Vue.extend({
 | UMD    | `vue-transmit/dist/vue-transmit.js`         | false    |
 | UMD    | `vue-transmit/dist/vue-transmit.min.js`     | true     |
 
+```sh
+vue-transmit
+└── dist
+    ├── index.d.ts
+    ├── vue-transmit.css
+    ├── vue-transmit.esm.js
+    ├── vue-transmit.esm.js.map
+    ├── vue-transmit.esm.min.js
+    ├── vue-transmit.esm.min.js.map
+    ├── vue-transmit.js
+    ├── vue-transmit.js.map
+    ├── vue-transmit.min.js
+    └── vue-transmit.min.js.map
+```
+
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
 [**View Source**](./src/components/VueTransmit.vue#L87)
 
 | Property               | Type                  | Default/Function Signature                                                                                                                                                                 |
 | ---------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| tag                    | String                | `"div"`                                                                                                                                                                                    |
-| uploadAreaClasses      | Array, Object, String | `null`                                                                                                                                                                                     |
-| uploadAreaAttrs        | Object                | `{}`                                                                                                                                                                                       |
-| uploadAreaListeners    | Object                | `{}`                                                                                                                                                                                       |
-| dragClass              | String                | `null`                                                                                                                                                                                     |
-| maxConcurrentUploads   | Number                | `2`                                                                                                                                                                                        |
-| uploadMultiple         | Boolean               | `false`                                                                                                                                                                                    |
-| maxFileSize            | Number                | `256`                                                                                                                                                                                      |
-| fileSizeBaseInBinary   | Boolean               | `false`                                                                                                                                                                                    |
-| createImageThumbnails  | Boolean               | `true`                                                                                                                                                                                     |
-| maxThumbnailFileSize   | Number                | `10`                                                                                                                                                                                       |
-| thumbnailWidth         | Number                | `120`                                                                                                                                                                                      |
-| thumbnailHeight        | Number                | `120`                                                                                                                                                                                      |
-| maxFiles               | Number                | `null`                                                                                                                                                                                     |
-| clickable              | Boolean               | `true`                                                                                                                                                                                     |
-| ignoreHiddenFiles      | Boolean               | `true`                                                                                                                                                                                     |
-| acceptedFileTypes      | Array                 | `[]`                                                                                                                                                                                       |
-| autoProcessQueue       | Boolean               | `true`                                                                                                                                                                                     |
-| autoQueue              | Boolean               | `true`                                                                                                                                                                                     |
-| capture                | String                | `null`                                                                                                                                                                                     |
-| errMaxFileSizeExceeded | Function              | `(fileSize: number, maxFileSize: number, units: string) => string`                                                                                                                         |
-| errInvalidFileType     | Function              | `(type: string, acceptedTypes: string[], file: VTransmitFile) => string`                                                                                                                   |
-| errMaxFilesExceeded    | Function              | `(maxFiles: number) => string`                                                                                                                                                             |
-| accept                 | Function              | `(file: VTransmitFile, done: Function) => string`                                                                                                                                          |
-| resize                 | Function              | `(file: VTransmitFile, dims: { width: number; height: number; }) => { sx: number; sy: number; sWidth: number; sHeight: number; dx: number; dy: number; dWidth: number; dHeight: number; }` |
-| adapterOptions         | Object                | `{}`                                                                                                                                                                                       |
-| uploadAdapter          | Function              | `XHRUploadAdapter`                                                                                                                                                                         |
+| tag                    | string                | `"div"`                                                                                                                                                                                    |
+| uploadAreaClasses      | array, object, string | `null`                                                                                                                                                                                     |
+| uploadAreaAttrs        | object                | `{}`                                                                                                                                                                                       |
+| uploadAreaListeners    | object                | `{}`                                                                                                                                                                                       |
+| dragClass              | string                | `null`                                                                                                                                                                                     |
+| maxConcurrentUploads   | number                | `2`                                                                                                                                                                                        |
+| uploadMultiple         | boolean               | `false`                                                                                                                                                                                    |
+| maxFileSize            | number                | `256`                                                                                                                                                                                      |
+| fileSizeBaseInBinary   | boolean               | `false`                                                                                                                                                                                    |
+| createImageThumbnails  | boolean               | `true`                                                                                                                                                                                     |
+| maxThumbnailFileSize   | number                | `10`                                                                                                                                                                                       |
+| thumbnailWidth         | number                | `120`                                                                                                                                                                                      |
+| thumbnailHeight        | number                | `120`                                                                                                                                                                                      |
+| maxFiles               | number                | `null`                                                                                                                                                                                     |
+| clickable              | boolean               | `true`                                                                                                                                                                                     |
+| ignoreHiddenFiles      | boolean               | `true`                                                                                                                                                                                     |
+| acceptedFileTypes      | array                 | `[]`                                                                                                                                                                                       |
+| autoProcessQueue       | boolean               | `true`                                                                                                                                                                                     |
+| autoQueue              | boolean               | `true`                                                                                                                                                                                     |
+| capture                | string                | `null`                                                                                                                                                                                     |
+| errMaxFileSizeExceeded | function              | `(fileSize: number, maxFileSize: number, units: string) => string`                                                                                                                         |
+| errInvalidFileType     | function              | `(type: string, acceptedTypes: string[], file: VTransmitFile) => string`                                                                                                                   |
+| errMaxFilesExceeded    | function              | `(maxFiles: number) => string`                                                                                                                                                             |
+| accept                 | function              | `(file: VTransmitFile, done: Function) => string`                                                                                                                                          |
+| resize                 | function              | `(file: VTransmitFile, dims: { width: number; height: number; }) => { sx: number; sy: number; sWidth: number; sHeight: number; dx: number; dy: number; dWidth: number; dHeight: number; }` |
+| adapterOptions         | object                | `{}`                                                                                                                                                                                       |
+| uploadAdapter          | function              | `XHRUploadAdapter`                                                                                                                                                                         |
 
 ## Adapter Options: XHRUploadAdapter
 
 [**View Source**](./src/upload-adapters/xhr.ts#L24-L79)
 
-| Property         | Type     | Default                                           |
-| ---------------- | -------- | ------------------------------------------------- |
-| url              | string   | _(required)_                                      |
-| method           | string   | `"post"`                                          |
-| withCredentials  | boolean  | `false`                                           |
-| timeout          | number   | `0`                                               |
-| paramName        | string   | `"file"`                                          |
-| params           | object   | `{}`                                              |
-| headers          | object   | `{ Accept, 'Cache-Control', 'X-Requested-With' }` |
-| responseType     | string   | `"json"`                                          |
-| errUploadError   | function | `[Function]`                                      |
-| errUploadTimeout | function | `[Function]`                                      |
-| renameFile       | function | `[Function]`                                      |
+| Property          | Type                                                         | Default/Function Signature                        |
+| ----------------- | ------------------------------------------------------------ | ------------------------------------------------- |
+| url               | string                                                       | _(required)_                                      |
+| method            | string                                                       | `"post"`                                          |
+| withCredentials   | boolean                                                      | `false`                                           |
+| timeout           | number                                                       | `0`                                               |
+| paramName         | string                                                       | `"file"`                                          |
+| params            | `{ [key: string]: string }`                                  | `{}`                                              |
+| headers           | `{ [key: string]: string }`                                  | `{ Accept, 'Cache-Control', 'X-Requested-With' }` |
+| responseType      | `"" | "arraybuffer" | "blob" | "document" | "json" | "text"` | `"json"`                                          |
+| errUploadError    | function                                                     | `(xhr: XMLHttpRequest) => string`                 |
+| errUploadTimeout  | function                                                     | `(xhr: XMLHttpRequest) => string`                 |
+| renameFile        | function                                                     | `(name: string) => string`                        |
+| responseParseFunc | function                                                     | `<T>(xhr: XMLHttpRequest) => T`                   |
 
 ## Events
 
-| Event                   | Arguments                                            | Description                                                                                                                                                         |
-| ----------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `drop`                  | `DragEvent`                                          | The `drop` event is fired when an data transfer is dropped on the drop target.                                                                                      |
-| `drag-start`            | `DragEvent`                                          | The `drag-start` event is fired when the user starts dragging an element or text selection.                                                                         |
-| `drag-end`              | `DragEvent`                                          | The `drag-end` event is fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key).                                         |
-| `drag-enter`            | `DragEvent`                                          | The `drag-enter` event is fired when a dragged element or text selection enters a valid drop target.                                                                |
-| `drag-over`             | `DragEvent`                                          | The `drag-over` event is fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds).                        |
-| `drag-leave`            | `DragEvent`                                          | The `drag-leave` event is fired when a dragged element or text selection leaves a valid drop target.                                                                |
-| `added-file`            | `VTransmitFile`                                      | Fired on change from the hidden file input after the Native File has been copied to VTransmitFile and added to the component data. _(status: 'added')_              |
-| `added-files`           | `VTransmitFile[]`                                    | Fired on change from the hidden file input after the Native Files have been copied to VTransmitFiles and added to the component data. _(status: 'added')_           |
-| `accepted-file`         | `VTransmitFile`                                      | Fired if the user-supplied accept function returns without error. _(status: 'added', accepted: true)_                                                               |
-| `rejected-file`         | `VTransmitFile`                                      | Fired if the user-supplied accept function returns an error. Fired AFTER the `error` event to ensure correct file status. _(status: 'error', accepted: false)_      |
-| `accept-complete`       | `VTransmitFile`                                      | Fired after the user-supplied accept function has returned regardless of success/failure. Fired after `accepted-file` & `rejected-file`. _(status: ?, accepted: ?)_ |
-| `removed-file`          | `VTransmitFile`                                      | Fired on the removal of a file.                                                                                                                                     |
-| `thumbnail`             | `VTransmitFile, Blob\|URL`                           | Fires on creation of a thumbnail.                                                                                                                                   |
-| `error`                 | `VTransmitFile, message: String, XmlHttpRequest`     | Fired on an ajax upload error. _(status: 'error')_                                                                                                                  |
-| `error-multiple`        | `VTransmitFile[], message: String, XmlHttpRequest`   | Fired on an ajax upload error. _(status: 'error')_                                                                                                                  |
-| `processing`            | `VTransmitFile`                                      | Fired after the status is changed to `'uploading'`, right before the ajax request.                                                                                  |
-| `processing-multiple`   | `VTransmitFile[]`                                    | Fired after the status is changed to `'uploading'`, right before the ajax request.                                                                                  |
-| `upload-progress`       | `VTransmitFile, progress: Number, bytesSent: Number` | Fired on progress of the XHR.                                                                                                                                       |
-| `total-upload-progress` | `VTransmitFile, totalUploadProgress: Number`         | Fired directly after `upload-progress`.                                                                                                                             |
-| `sending`               | `VTransmitFile, XmlHttpRequest, FormData`            | Fired right before the XHR is sent.                                                                                                                                 |
-| `sending-multiple`      | `VTransmitFile[], XmlHttpRequest, FormData`          | Fired right before the XHR is sent.                                                                                                                                 |
-| `success`               | `VTransmitFile, response: String, ProgressEvent`     | Fired on load of the XHR.                                                                                                                                           |
-| `success-multiple`      | `VTransmitFile[], response: String, ProgressEvent`   | Fired on load of the XHR.                                                                                                                                           |
-| `timeout`               | `VTransmitFile, TimeoutEvent, XmlHttpRequest`        | Fired on timeout of the XHR.                                                                                                                                        |
-| `timeout-multiple`      | `VTransmitFile[], TimeoutEvent, XmlHttpRequest`      | Fired on timeout of the XHR.                                                                                                                                        |
-| `canceled`              | `VTransmitFile`                                      | Fired upon cancellation of the XHR. _(status: 'canceled')_                                                                                                          |
-| `canceled-multiple`     | `VTransmitFile[]`                                    | Fired upon cancellation of the XHR. _(status: 'canceled')_                                                                                                          |
-| `complete`              | `VTransmitFile`                                      | Fired upon completion of the XHR. _(success or failure)_                                                                                                            |
-| `complete-multiple`     | `VTransmitFile[]`                                    | Fired upon completion of the XHR. _(success or failure)_                                                                                                            |
-| `reset`                 | n/a                                                  | Fired when all files have been removed.                                                                                                                             |
-| `max-files-exceeded`    | `VTransmitFile`                                      | Fired if a file is added that exceeds the max files prop.                                                                                                           |
-| `max-files-reached`     | `VTransmitFile[]`                                    | Fired when the total accepted files on the instance exceeds the max files prop.                                                                                     |
-| `queue-complete`        | `VTransmitFile`                                      | Fired once all added files have uploaded and the queue has been flushed.                                                                                            |
+| Event                   | Arguments                                                  | Description                                                                                                                                                         |
+| ----------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `drop`                  | `event: DragEvent`                                         | The `drop` event is fired when an data transfer is dropped on the drop target.                                                                                      |
+| `drag-start`            | `event: DragEvent`                                         | The `drag-start` event is fired when the user starts dragging an element or text selection.                                                                         |
+| `drag-end`              | `event: DragEvent`                                         | The `drag-end` event is fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key).                                         |
+| `drag-enter`            | `event: DragEvent`                                         | The `drag-enter` event is fired when a dragged element or text selection enters a valid drop target.                                                                |
+| `drag-over`             | `event: DragEvent`                                         | The `drag-over` event is fired when an element or text selection is being dragged over a valid drop target (every few hundred milliseconds).                        |
+| `drag-leave`            | `event: DragEvent`                                         | The `drag-leave` event is fired when a dragged element or text selection leaves a valid drop target.                                                                |
+| `added-file`            | `file: VTransmitFile`                                      | Fired on change from the hidden file input after the Native File has been copied to file: VTransmitFile and added to the component data. _(status: 'added')_        |
+| `added-files`           | `files: VTransmitFile[]`                                   | Fired on change from the hidden file input after the Native Files have been copied to VTransmitFiles and added to the component data. _(status: 'added')_           |
+| `accepted-file`         | `file: VTransmitFile`                                      | Fired if the user-supplied accept function returns without error. _(status: 'added', accepted: true)_                                                               |
+| `rejected-file`         | `file: VTransmitFile`                                      | Fired if the user-supplied accept function returns an error. Fired AFTER the `error` event to ensure correct file status. _(status: 'error', accepted: false)_      |
+| `accept-complete`       | `file: VTransmitFile`                                      | Fired after the user-supplied accept function has returned regardless of success/failure. Fired after `accepted-file` & `rejected-file`. _(status: ?, accepted: ?)_ |
+| `removed-file`          | `file: VTransmitFile`                                      | Fired on the removal of a file.                                                                                                                                     |
+| `thumbnail`             | `file: VTransmitFile, data: Blob\|URL`                     | Fires on creation of a thumbnail.                                                                                                                                   |
+| `error`                 | `file: VTransmitFile, message: string, data: any`          | Fired on an ajax upload error. _(status: 'error')_                                                                                                                  |
+| `error-multiple`        | `files: VTransmitFile[], message: string, data: any`       | Fired on an ajax upload error. _(status: 'error')_                                                                                                                  |
+| `processing`            | `file: VTransmitFile`                                      | Fired after the status is changed to `'uploading'`, right before the ajax request.                                                                                  |
+| `processing-multiple`   | `files: VTransmitFile[]`                                   | Fired after the status is changed to `'uploading'`, right before the ajax request.                                                                                  |
+| `upload-progress`       | `file: VTransmitFile, progress: number, bytesSent: number` | Fired on progress of the upload.                                                                                                                                    |
+| `total-upload-progress` | `file: VTransmitFile, totalUploadProgress: number`         | Fired directly after `upload-progress`.                                                                                                                             |
+| `sending`               | `file: VTransmitFile, xhr: XMLHttpRequest, data: FormData` | Fired right before the upload is sent.                                                                                                                              |
+| `sending-multiple`      | `files: VTransmitFile[], xhr: XMLHttpRequest, FormData`    | Fired right before the upload is sent.                                                                                                                              |
+| `success`               | `file: VTransmitFile, result: any`                         | Fired on load of the upload.                                                                                                                                        |
+| `success-multiple`      | `files: VTransmitFile[], result: any`                      | Fired on load of the upload.                                                                                                                                        |
+| `timeout`               | `file: VTransmitFile, message: string, data: any`          | Fired on timeout of the upload.                                                                                                                                     |
+| `timeout-multiple`      | `files: VTransmitFile[], message: string, data: any`       | Fired on timeout of the upload.                                                                                                                                     |
+| `canceled`              | `file: VTransmitFile`                                      | Fired upon cancellation of the upload. _(status: 'canceled')_                                                                                                       |
+| `canceled-multiple`     | `files: VTransmitFile[]`                                   | Fired upon cancellation of the upload. _(status: 'canceled')_                                                                                                       |
+| `complete`              | `file: VTransmitFile`                                      | Fired upon completion of the upload. _(whether success or failure)_                                                                                                 |
+| `complete-multiple`     | `files: VTransmitFile[]`                                   | Fired upon completion of the upload. _(whether success or failure)_                                                                                                 |
+| `reset`                 | `void`                                                     | Fired when all files have been removed.                                                                                                                             |
+| `max-files-exceeded`    | `file: VTransmitFile`                                      | Fired if a file is added that exceeds the max files prop.                                                                                                           |
+| `max-files-reached`     | `files: VTransmitFile[]`                                   | Fired when the total accepted files on the instance exceeds the max files prop.                                                                                     |
+| `queue-complete`        | `file: VTransmitFile`                                      | Fired once all added files have uploaded and the queue has been flushed.                                                                                            |
 
 ## Slots
 
