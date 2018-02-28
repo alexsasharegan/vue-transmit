@@ -16,11 +16,29 @@ non-vue projects. 🙌
 
 Check out the CodeSandbox here: https://codesandbox.io/s/lyzqn4m659
 
-Have a question? Check out the [FAQ section](#faq).<br>
-Can't find what you're looking for? 
-[Open an issue](https://github.com/alexsasharegan/vue-transmit/issues).<br>
-Want to add to the docs?
+Have a question? Check out the [FAQ section](#faq).<br> Can't find what you're
+looking for?
+[Open an issue](https://github.com/alexsasharegan/vue-transmit/issues).<br> Want
+to add to the docs?
 [Submit a PR](https://github.com/alexsasharegan/vue-transmit/pulls).
+
+## Table of Contents
+
+* [Features](#features) - Vue Transmit features
+* [v8.x](#v8xx) - Info for v8.x users
+* [Installation](#installation)
+  * [Builds](#builds)
+* [Component Props](#props-vue-transmit)
+* [XHR Adapter Options](#adapter-options-xhruploadadapter)
+* [Component Events](#events)
+* [Slots](#slots)
+  * [Slot: `"files"`](#files-scoped-slotsfiles)
+* [VTransmitFile](#vtransmitfile)
+* [Usage example](#usage)
+* [FAQ](#faq)
+  * [Accessing the VueTransmit instance](#accessing-the-vuetransmit-component-instance)
+  * [How to Remove a File](#how-to-remove-a-file)
+  * [Lifecycle](#lifecycle)
 
 ## Features
 
@@ -81,10 +99,14 @@ maintained for LTS\* support.
 ## Installation
 
 ```sh
+# npm
 npm install vue-transmit
+
+# yarn
+yarn add vue-transmit
 ```
 
-## Builds
+### Builds
 
 The default build for ESM loaders like webpack is indicated in the `module`
 field of the package, while non-esm will resolve from the `main` field. By
@@ -134,37 +156,37 @@ const MyComponent = Vue.extend({
 
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
-[**View Source**](./src/components/VueTransmit.vue#L85-L272)
+[**View Source**](./src/components/VueTransmit.vue#L87)
 
-| Property               | Type                  | Default                        |
-| ---------------------- | --------------------- | ------------------------------ |
-| tag                    | String                | `"div"`                        |
-| uploadAreaClasses      | Array, Object, String | `null`                         |
-| uploadAreaAttrs        | Object                | `[Function: objFactory]`       |
-| uploadAreaListeners    | Object                | `[Function: objFactory]`       |
-| dragClass              | String                | `null`                         |
-| maxConcurrentUploads   | Number                | `2`                            |
-| uploadMultiple         | Boolean               | `false`                        |
-| maxFileSize            | Number                | `256`                          |
-| fileSizeBaseInBinary   | Boolean               | `false`                        |
-| createImageThumbnails  | Boolean               | `true`                         |
-| maxThumbnailFileSize   | Number                | `10`                           |
-| thumbnailWidth         | Number                | `120`                          |
-| thumbnailHeight        | Number                | `120`                          |
-| maxFiles               | Number                | `null`                         |
-| clickable              | Boolean               | `true`                         |
-| ignoreHiddenFiles      | Boolean               | `true`                         |
-| acceptedFileTypes      | Array                 | `[Function: default]`          |
-| autoProcessQueue       | Boolean               | `true`                         |
-| autoQueue              | Boolean               | `true`                         |
-| capture                | String                | `null`                         |
-| errMaxFileSizeExceeded | Function              | `[Function: default]`          |
-| errInvalidFileType     | Function              | `[Function: default]`          |
-| errMaxFilesExceeded    | Function              | `[Function: default]`          |
-| accept                 | Function              | `[Function: default]`          |
-| resize                 | Function              | `[Function: resizeImg]`        |
-| adapterOptions         | Object                | `[Function: objFactory]`       |
-| uploadAdapter          | Function              | `[Function: XHRUploadAdapter]` |
+| Property               | Type                  | Default/Function Signature                                                                                                                                                                 |
+| ---------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| tag                    | String                | `"div"`                                                                                                                                                                                    |
+| uploadAreaClasses      | Array, Object, String | `null`                                                                                                                                                                                     |
+| uploadAreaAttrs        | Object                | `{}`                                                                                                                                                                                       |
+| uploadAreaListeners    | Object                | `{}`                                                                                                                                                                                       |
+| dragClass              | String                | `null`                                                                                                                                                                                     |
+| maxConcurrentUploads   | Number                | `2`                                                                                                                                                                                        |
+| uploadMultiple         | Boolean               | `false`                                                                                                                                                                                    |
+| maxFileSize            | Number                | `256`                                                                                                                                                                                      |
+| fileSizeBaseInBinary   | Boolean               | `false`                                                                                                                                                                                    |
+| createImageThumbnails  | Boolean               | `true`                                                                                                                                                                                     |
+| maxThumbnailFileSize   | Number                | `10`                                                                                                                                                                                       |
+| thumbnailWidth         | Number                | `120`                                                                                                                                                                                      |
+| thumbnailHeight        | Number                | `120`                                                                                                                                                                                      |
+| maxFiles               | Number                | `null`                                                                                                                                                                                     |
+| clickable              | Boolean               | `true`                                                                                                                                                                                     |
+| ignoreHiddenFiles      | Boolean               | `true`                                                                                                                                                                                     |
+| acceptedFileTypes      | Array                 | `[]`                                                                                                                                                                                       |
+| autoProcessQueue       | Boolean               | `true`                                                                                                                                                                                     |
+| autoQueue              | Boolean               | `true`                                                                                                                                                                                     |
+| capture                | String                | `null`                                                                                                                                                                                     |
+| errMaxFileSizeExceeded | Function              | `(fileSize: number, maxFileSize: number, units: string) => string`                                                                                                                         |
+| errInvalidFileType     | Function              | `(type: string, acceptedTypes: string[], file: VTransmitFile) => string`                                                                                                                   |
+| errMaxFilesExceeded    | Function              | `(maxFiles: number) => string`                                                                                                                                                             |
+| accept                 | Function              | `(file: VTransmitFile, done: Function) => string`                                                                                                                                          |
+| resize                 | Function              | `(file: VTransmitFile, dims: { width: number; height: number; }) => { sx: number; sy: number; sWidth: number; sHeight: number; dx: number; dy: number; dWidth: number; dHeight: number; }` |
+| adapterOptions         | Object                | `{}`                                                                                                                                                                                       |
+| uploadAdapter          | Function              | `XHRUploadAdapter`                                                                                                                                                                         |
 
 ## Adapter Options: XHRUploadAdapter
 
@@ -363,8 +385,8 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
 
 ### Accessing the VueTransmit component instance
 
-It's always recommended to place a ref on your vue-transmit instance so that your 
-component can call methods and retrieve data directly from the instance.
+It's always recommended to place a ref on your vue-transmit instance so that
+your component can call methods and retrieve data directly from the instance.
 
 ```html
 <vue-transmit ref="vtransmit" />
@@ -372,13 +394,13 @@ component can call methods and retrieve data directly from the instance.
 
 ### How to remove a file
 
-You can remove a single file or all files from the component instance. To remove a
-single file, you'll need the file you wish to delete.
+You can remove a single file or all files from the component instance. To remove
+a single file, you'll need the file you wish to delete.
 
 ```js
 // from your component
 this.$refs.vtransmit.removeFile(vtFile); // single file
-this.$refs.vtransmit.removeAllFiles(cancelInProgressUploads = false); // all files
+this.$refs.vtransmit.removeAllFiles((cancelInProgressUploads = false)); // all files
 ```
 
 ## Lifecycle
