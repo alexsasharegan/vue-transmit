@@ -209,20 +209,20 @@ vue-transmit
 
 [**View Source**](./src/upload-adapters/xhr.ts#L24-L79)
 
-| Property          | Type                                                         | Default/Function Signature                        |
-| ----------------- | ------------------------------------------------------------ | ------------------------------------------------- |
-| url               | string                                                       | _(required)_                                      |
-| method            | string                                                       | `"post"`                                          |
-| withCredentials   | boolean                                                      | `false`                                           |
-| timeout           | number                                                       | `0`                                               |
-| paramName         | string                                                       | `"file"`                                          |
-| params            | `{ [key: string]: string }`                                  | `{}`                                              |
-| headers           | `{ [key: string]: string }`                                  | `{ Accept, 'Cache-Control', 'X-Requested-With' }` |
-| responseType      | `"" | "arraybuffer" | "blob" | "document" | "json" | "text"` | `"json"`                                          |
-| errUploadError    | function                                                     | `(xhr: XMLHttpRequest) => string`                 |
-| errUploadTimeout  | function                                                     | `(xhr: XMLHttpRequest) => string`                 |
-| renameFile        | function                                                     | `(name: string) => string`                        |
-| responseParseFunc | function                                                     | `<T>(xhr: XMLHttpRequest) => T`                   |
+| Property          | Type                                                              | Default/Function Signature                        |
+| ----------------- | ----------------------------------------------------------------- | ------------------------------------------------- |
+| url               | string                                                            | _(required)_                                      |
+| method            | string                                                            | `"post"`                                          |
+| withCredentials   | boolean                                                           | `false`                                           |
+| timeout           | number                                                            | `0`                                               |
+| paramName         | string                                                            | `"file"`                                          |
+| params            | `{ [key: string]: string }`                                       | `{}`                                              |
+| headers           | `{ [key: string]: string }`                                       | `{ Accept, 'Cache-Control', 'X-Requested-With' }` |
+| responseType      | `"" \| "arraybuffer" \| "blob" \| "document" \| "json" \| "text"` | `"json"`                                          |
+| errUploadError    | function                                                          | `(xhr: XMLHttpRequest) => string`                 |
+| errUploadTimeout  | function                                                          | `(xhr: XMLHttpRequest) => string`                 |
+| renameFile        | function                                                          | `(name: string) => string`                        |
+| responseParseFunc | function                                                          | `<T>(xhr: XMLHttpRequest) => T`                   |
 
 ## Events
 
