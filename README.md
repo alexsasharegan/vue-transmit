@@ -26,16 +26,18 @@ to add to the docs?
 
 * [Features](#features) - Vue Transmit features
 * [v8.x](#v8xx) - Info for v8.x users
-* [Installation](#installation)
-  * [Builds](#builds)
-* [Component Props](#props-vue-transmit)
-* [XHR Adapter Options](#adapter-options-xhruploadadapter)
-* [Component Events](#events)
-* [Slots](#slots)
-  * [Slot: `"files"`](#files-scoped-slotsfiles)
-* [VTransmitFile](#vtransmitfile)
-* [Usage example](#usage)
-* [FAQ](#faq)
+* [Installation](#installation) - Package install
+  * [Builds](#builds) - ESM, UMD build info
+* [Component Props](#props-vue-transmit) - Vue component props
+* [XHR Adapter Options](#adapter-options-xhruploadadapter) - Default adapter
+  options
+* [Component Events](#events) - Events emitted from VueTransmit
+* [Slots](#slots) - Component slots
+  * [Slot: default](#default-slotsdefault) - default slot
+  * [Slot: `"files"`](#files-scoped-slotsfiles) - files slot
+* [VTransmitFile](#vtransmitfile) - the class that wraps the native File object
+* [Usage example](#usage) - implementation example
+* [FAQ](#faq) - Frequently Asked Questions
   * [Accessing the VueTransmit instance](#accessing-the-vuetransmit-component-instance)
   * [How to Remove a File](#how-to-remove-a-file)
   * [Lifecycle](#lifecycle)
