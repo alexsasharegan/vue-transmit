@@ -6,3 +6,4 @@ node_modules/
 !.babelrc
 /test/uploads/*
 /tmp/
+coverage

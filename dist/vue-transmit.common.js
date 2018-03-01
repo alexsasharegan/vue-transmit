@@ -80,6 +80,7 @@ module.exports = require("vue");
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.STATUSES = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -125,8 +126,7 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
         if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-var STATUSES = {
+var STATUSES = exports.STATUSES = {
     ADDED: "added",
     QUEUED: "queued",
     ACCEPTED: "queued",
@@ -234,6 +234,11 @@ var VueTransmit = function (_Vue) {
                     this.$emit("reset");
                 }
             }
+        }
+    }, {
+        key: "removeFilesWithStatus",
+        value: function removeFilesWithStatus() {
+            this.getFilesWithStatus.apply(this, arguments).map(this.removeFile);
         }
     }, {
         key: "removeAllFiles",
@@ -1021,7 +1026,6 @@ var VueTransmit = function (_Vue) {
                                 if (_this7.ignoreHiddenFiles && /^\./.test(file.name)) {
                                     return;
                                 }
-                                ;
                                 file.fullPath = path + "/" + file.name;
                                 _this7.addFile(file);
                             }, console.error);
@@ -1091,6 +1095,16 @@ var VueTransmit = function (_Vue) {
             return this.maxFiles === null || this.maxFiles > 1;
         }
     }, {
+        key: "addedFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.ADDED);
+        }
+    }, {
+        key: "queuedFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.QUEUED);
+        }
+    }, {
         key: "acceptedFiles",
         get: function get() {
             return this.files.filter(function (f) {
@@ -1105,19 +1119,29 @@ var VueTransmit = function (_Vue) {
             });
         }
     }, {
-        key: "addedFiles",
-        get: function get() {
-            return this.getFilesWithStatus(STATUSES.ADDED);
-        }
-    }, {
-        key: "queuedFiles",
-        get: function get() {
-            return this.getFilesWithStatus(STATUSES.QUEUED);
-        }
-    }, {
         key: "uploadingFiles",
         get: function get() {
             return this.getFilesWithStatus(STATUSES.UPLOADING);
+        }
+    }, {
+        key: "canceledFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.CANCELED);
+        }
+    }, {
+        key: "failedFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.ERROR);
+        }
+    }, {
+        key: "timeoutFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.TIMEOUT);
+        }
+    }, {
+        key: "successfulFiles",
+        get: function get() {
+            return this.getFilesWithStatus(STATUSES.SUCCESS);
         }
     }, {
         key: "activeFiles",
@@ -1157,6 +1181,10 @@ var VueTransmit = function (_Vue) {
                 addedFiles: this.addedFiles,
                 queuedFiles: this.queuedFiles,
                 uploadingFiles: this.uploadingFiles,
+                canceledFiles: this.canceledFiles,
+                failedFiles: this.failedFiles,
+                timeoutFiles: this.timeoutFiles,
+                successfulFiles: this.successfulFiles,
                 activeFiles: this.activeFiles,
                 isUploading: this.isUploading
             };
@@ -1196,9 +1224,15 @@ __decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], 
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Boolean, default: true })], VueTransmit.prototype, "autoQueue", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: null })], VueTransmit.prototype, "capture", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: _identity2.default })], VueTransmit.prototype, "renameFile", void 0);
-__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MB." })], VueTransmit.prototype, "dictFileTooBig", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({
+    type: String,
+    default: "File is too big ({{ fileSize }}MiB). Max file size: {{ maxFileSize }}MB."
+})], VueTransmit.prototype, "dictFileTooBig", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "You can't upload files of this type." })], VueTransmit.prototype, "dictInvalidFileType", void 0);
-__decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "Error during upload: {{ statusText }} [{{ statusCode }}]" })], VueTransmit.prototype, "dictResponseError", void 0);
+__decorate([(0, _vuePropertyDecorator.Prop)({
+    type: String,
+    default: "Error during upload: {{ statusText }} [{{ statusCode }}]"
+})], VueTransmit.prototype, "dictResponseError", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: String, default: "You can not upload any more files." })], VueTransmit.prototype, "dictMaxFilesExceeded", void 0);
 __decorate([(0, _vuePropertyDecorator.Prop)({ type: Function, default: function _default(_, done) {
         return done();
@@ -1393,7 +1427,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_61e675b9_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a95e450e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__ = __webpack_require__(16);
 function injectStyle (ssrContext) {
   __webpack_require__(6)
 }
@@ -1413,7 +1447,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_vue_ts_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VueTransmit_vue___default.a,
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_61e675b9_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a95e450e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VueTransmit_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
