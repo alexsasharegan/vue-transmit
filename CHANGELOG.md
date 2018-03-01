@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.1.0"></a>
+# [8.1.0](https://github.com/alexsasharegan/vue-transmit/compare/v8.0.0...v8.1.0) (2018-03-01)
+
+
+### Features
+
+* **component:** adds removeFilesWithStatus method ([418ec94](https://github.com/alexsasharegan/vue-transmit/commit/418ec94))
+
+
+
 <a name="8.0.0"></a>
 # [8.0.0](https://github.com/alexsasharegan/vue-transmit/compare/v7.1.7...v8.0.0) (2018-01-12)
 
