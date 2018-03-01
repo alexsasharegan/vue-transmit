@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.9"></a>
+# [9.0.0-alpha.9](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.8...v9.0.0-alpha.9) (2018-03-01)
+
+
+### Bug Fixes
+
+* **xhr:** stricter types for xhr headers and params ([1a85d77](https://github.com/alexsasharegan/vue-transmit/commit/1a85d77))
+
+
+### Features
+
+* **component:** adds removeFilesWithStatus method ([6654080](https://github.com/alexsasharegan/vue-transmit/commit/6654080))
+
+
+
 <a name="9.0.0-alpha.8"></a>
 # [9.0.0-alpha.8](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.7...v9.0.0-alpha.8) (2018-02-22)
 
