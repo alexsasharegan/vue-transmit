@@ -355,20 +355,32 @@ export default Vue.extend({
     multiple(): boolean {
       return this.maxFiles === null || this.maxFiles > 1;
     },
-    acceptedFiles(): VTransmitFile[] {
-      return this.files.filter(f => f.accepted);
-    },
-    rejectedFiles(): VTransmitFile[] {
-      return this.files.filter(f => !f.accepted);
-    },
     addedFiles(): VTransmitFile[] {
       return this.getFilesWithStatus(UploadStatuses.Added);
     },
     queuedFiles(): VTransmitFile[] {
       return this.getFilesWithStatus(UploadStatuses.Queued);
     },
+    acceptedFiles(): VTransmitFile[] {
+      return this.files.filter(f => f.accepted);
+    },
+    rejectedFiles(): VTransmitFile[] {
+      return this.files.filter(f => !f.accepted);
+    },
     uploadingFiles(): VTransmitFile[] {
       return this.getFilesWithStatus(UploadStatuses.Uploading);
+    },
+    canceledFiles(): VTransmitFile[] {
+      return this.getFilesWithStatus(UploadStatuses.Canceled);
+    },
+    failedFiles(): VTransmitFile[] {
+      return this.getFilesWithStatus(UploadStatuses.Error);
+    },
+    timeoutFiles(): VTransmitFile[] {
+      return this.getFilesWithStatus(UploadStatuses.Timeout);
+    },
+    successfulFiles(): VTransmitFile[] {
+      return this.getFilesWithStatus(UploadStatuses.Success);
     },
     activeFiles(): VTransmitFile[] {
       return this.getFilesWithStatus(
@@ -400,6 +412,10 @@ export default Vue.extend({
       addedFiles: VTransmitFile[];
       queuedFiles: VTransmitFile[];
       uploadingFiles: VTransmitFile[];
+      canceledFiles: VTransmitFile[];
+      failedFiles: VTransmitFile[];
+      timeoutFiles: VTransmitFile[];
+      successfulFiles: VTransmitFile[];
       activeFiles: VTransmitFile[];
       isUploading: boolean;
     } {
@@ -410,6 +426,10 @@ export default Vue.extend({
         addedFiles: this.addedFiles,
         queuedFiles: this.queuedFiles,
         uploadingFiles: this.uploadingFiles,
+        canceledFiles: this.canceledFiles,
+        failedFiles: this.failedFiles,
+        timeoutFiles: this.timeoutFiles,
+        successfulFiles: this.successfulFiles,
         activeFiles: this.activeFiles,
         isUploading: this.isUploading,
       };
@@ -532,6 +552,9 @@ export default Vue.extend({
           this.$emit(Events.Reset);
         }
       }
+    },
+    removeFilesWithStatus(...statuses: UploadStatuses[]): void {
+      this.getFilesWithStatus(...statuses).map(this.removeFile);
     },
     removeAllFiles(cancelInProgressUploads = false): void {
       let f: VTransmitFile;

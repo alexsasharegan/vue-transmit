@@ -32,6 +32,7 @@ to add to the docs?
 * [XHR Adapter Options](#adapter-options-xhruploadadapter) - Default adapter
   options
 * [Component Events](#events) - Events emitted from VueTransmit
+* [File Statuses](#file-statuses) - enum of `file.status` values
 * [Slots](#slots) - Component slots
   * [Slot: default](#default-slotsdefault) - default slot
   * [Slot: `"files"`](#files-scoped-slotsfiles) - files slot
@@ -262,6 +263,28 @@ vue-transmit
 | `max-files-reached`     | `files: VTransmitFile[]`                                   | Fired when the total accepted files on the instance exceeds the max files prop.                                                                                     |
 | `queue-complete`        | `file: VTransmitFile`                                      | Fired once all added files have uploaded and the queue has been flushed.                                                                                            |
 
+## File Statuses
+
+VTransmitFiles have a status property used to indicate its place in the upload
+cycle. Note that `Accepted` is an alias of `Queued` since the is the same place
+in the lifecycle (inherited from Dropzone lifecycle). This may change in a
+future version for more clarity. Also note that `Rejected` is not a status.
+Accepted/rejected is derived from the `file.accepted` boolean property.
+
+```ts
+enum UploadStatuses {
+  None = "",
+  Added = "added",
+  Queued = "queued",
+  Accepted = "queued",
+  Uploading = "uploading",
+  Canceled = "canceled",
+  Error = "error",
+  Timeout = "timeout",
+  Success = "success",
+}
+```
+
 ## Slots
 
 ### Default (`$slots.default`)
@@ -281,8 +304,12 @@ interface FilesSlotProps {
   addedFiles: VTransmitFile[];
   queuedFiles: VTransmitFile[];
   uploadingFiles: VTransmitFile[];
+  canceledFiles: VTransmitFile[];
+  failedFiles: VTransmitFile[];
+  timeoutFiles: VTransmitFile[];
+  successfulFiles: VTransmitFile[];
   activeFiles: VTransmitFile[];
-  isUploading: Boolean;
+  isUploading: boolean;
 }
 ```
 
