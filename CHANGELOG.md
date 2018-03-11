@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.1.1"></a>
+## [8.1.1](https://github.com/alexsasharegan/vue-transmit/compare/v8.1.0...v8.1.1) (2018-03-11)
+
+
+### Bug Fixes
+
+* adds draggable configurability fixes [#39](https://github.com/alexsasharegan/vue-transmit/issues/39) ([46397aa](https://github.com/alexsasharegan/vue-transmit/commit/46397aa))
+
+
+
 <a name="8.1.0"></a>
 # [8.1.0](https://github.com/alexsasharegan/vue-transmit/compare/v8.0.0...v8.1.0) (2018-03-01)
 
