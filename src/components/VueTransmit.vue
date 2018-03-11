@@ -2,7 +2,7 @@
   <component :is="tag">
     <div class="v-transmit__upload-area"
          :class="[isDraggingClass, uploadAreaClasses]"
-         draggable="!disableDraggable"
+         :draggable="!disableDraggable"
          v-bind="uploadAreaAttrs"
          v-on="uploadAreaListeners"
          @click="handleClickUploaderAction"
