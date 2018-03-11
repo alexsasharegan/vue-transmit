@@ -2,7 +2,7 @@
 	<component :is="tag">
 		<div class="v-transmit__upload-area"
 		     :class="[isDraggingClass, uploadAreaClasses]"
-		     draggable="true"
+		     :draggable="!disabledDraggable"
 		     v-bind="uploadAreaAttrs"
 		     v-on="uploadAreaListeners"
 		     @click="handleClickUploaderAction"
@@ -96,6 +96,9 @@ export const STATUSES = {
 export default class VueTransmit extends Vue {
   @Prop({ type: String, default: "div" })
   tag: string;
+
+  @Prop({ type: Boolean, default: false })
+  disabledDraggable: boolean;
 
   @Prop({ type: [Array, Object, String], default: null })
   uploadAreaClasses: any[] | object | string;
