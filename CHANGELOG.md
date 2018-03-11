@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.11"></a>
+# [9.0.0-alpha.11](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.10...v9.0.0-alpha.11) (2018-03-11)
+
+
+### Bug Fixes
+
+* use bind syntax for disableDraggable ([8ed89b9](https://github.com/alexsasharegan/vue-transmit/commit/8ed89b9))
+
+
+
 <a name="9.0.0-alpha.10"></a>
 # [9.0.0-alpha.10](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.9...v9.0.0-alpha.10) (2018-03-11)
 
