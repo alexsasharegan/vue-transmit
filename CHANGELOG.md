@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0-alpha.10"></a>
+# [9.0.0-alpha.10](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.9...v9.0.0-alpha.10) (2018-03-11)
+
+
+### Bug Fixes
+
+* adds draggable configurability fixes [#39](https://github.com/alexsasharegan/vue-transmit/issues/39) ([ef175a6](https://github.com/alexsasharegan/vue-transmit/commit/ef175a6))
+
+
+
 <a name="9.0.0-alpha.9"></a>
 # [9.0.0-alpha.9](https://github.com/alexsasharegan/vue-transmit/compare/v9.0.0-alpha.8...v9.0.0-alpha.9) (2018-03-01)
 
