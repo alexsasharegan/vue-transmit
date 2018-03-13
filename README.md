@@ -43,6 +43,14 @@ to add to the docs?
   * [How to Remove a File](#how-to-remove-a-file)
 * [Lifecycle](#lifecycle) - Basic explanation of upload lifecycle
 
+## Download
+
+To get the latest alpha build:
+
+```sh
+npm install vue-transmit@9.0.0-alpha.11
+```
+
 ## Features
 
 Vue-Transmit is a fork of Dropzone.js that has been completely rewritten in
