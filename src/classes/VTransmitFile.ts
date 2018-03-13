@@ -33,7 +33,14 @@ export class VTransmitFile {
   public width: number = 0;
   public height: number = 0;
   public errorMessage: string = "";
+  /**
+   * `adapterData` is data meant for use by an upload adapter only.
+   */
   public adapterData: AnyObject = {};
+  /**
+   * `meta` is a place to add custom properties.
+   */
+  public meta: AnyObject = {};
   public upload: UploadStats = {
     bytesSent: 0,
     progress: 0,
