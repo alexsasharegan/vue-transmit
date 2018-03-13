@@ -5,7 +5,10 @@ import {
   VTransmitEvents as Events,
   UploadStatuses as Statuses,
   ErrType,
+  is_function,
 } from "../core/utils";
+
+export type StaticOrDynamic<T> = T | ((files: VTransmitFile[]) => T);
 
 /**
  * Responsibilities:
@@ -19,9 +22,11 @@ import {
  */
 export type XHRUploadOptions<T = any> = {
   /**
-   * A string representing the URL to send the request to.
+   * A string representing the URL to send the request to
+   * or a function called with an array of files for the upload
+   * that returns a string url.
    */
-  url: string;
+  url: StaticOrDynamic<string>;
   /**
    * The HTTP method to use, such as "GET", "POST", "PUT", "DELETE", etc.
    * Ignored for non-HTTP(S) URLs.
@@ -30,14 +35,14 @@ export type XHRUploadOptions<T = any> = {
    * // default => "post"
    * ```
    */
-  method?: string;
+  method?: StaticOrDynamic<string>;
   /**
    * The XMLHttpRequest.withCredentials property is a Boolean that indicates
    * whether or not cross-site Access-Control requests should be made using
    * credentials such as cookies, authorization headers or TLS client
    * certificates. Setting withCredentials has no effect on same-site requests.
    */
-  withCredentials?: boolean;
+  withCredentials?: StaticOrDynamic<boolean>;
   /**
    * The XMLHttpRequest.timeout property is an unsigned long representing the
    * number of milliseconds a request can take before automatically being
@@ -46,17 +51,17 @@ export type XHRUploadOptions<T = any> = {
    * a document environment or it will throw an InvalidAccessError exception.
    * When a timeout happens, a timeout event is fired.
    */
-  timeout?: number;
+  timeout?: StaticOrDynamic<number>;
   /**
    * The name of the file param that gets transferred.
    */
-  paramName?: string;
+  paramName?: StaticOrDynamic<string>;
   /**
    * An object of additional parameters to transfer to the server.
    * This is the same as adding hidden input fields in the form element.
    */
-  params?: { [key: string]: string };
-  headers?: { [key: string]: string };
+  params?: StaticOrDynamic<Dictionary<string>>;
+  headers?: StaticOrDynamic<Dictionary<string>>;
   /**
    * The XMLHttpRequest.responseType property is an enumerated value that
    * returns the type of response. It also lets the author change the response
@@ -71,7 +76,7 @@ export type XHRUploadOptions<T = any> = {
    * null. Also, setting responseType for synchronous requests will throw an
    * InvalidAccessError exception.
    */
-  responseType?: XMLHttpRequestResponseType;
+  responseType?: StaticOrDynamic<XMLHttpRequestResponseType>;
   /**
    * responseParseFunc is a function that given an XMLHttpRequest
    * returns a response object. Allows for custom response parsing.
@@ -92,18 +97,19 @@ let group_id = 0;
 
 export class XHRUploadAdapter<T = any> implements UploaderInterface {
   public context: VTransmitUploadContext;
-  public url: string;
-  public method: string;
-  public withCredentials: boolean;
-  public timeout: number;
-  public paramName: string;
-  public params: { [key: string]: string };
-  public headers: { [key: string]: string };
-  public responseType: XMLHttpRequestResponseType;
+  public url: StaticOrDynamic<string>;
+  public method: StaticOrDynamic<string>;
+  public withCredentials: StaticOrDynamic<boolean>;
+  public timeout: StaticOrDynamic<number>;
+  public paramName: StaticOrDynamic<string>;
+  public params: StaticOrDynamic<Dictionary<string>>;
+  public headers: StaticOrDynamic<Dictionary<string>>;
+  public responseType: StaticOrDynamic<XMLHttpRequestResponseType>;
   public errUploadError: (xhr: XMLHttpRequest) => string;
   public errUploadTimeout: (xhr: XMLHttpRequest) => string;
   public renameFile: (name: string) => string;
   public responseParseFunc?: (xhr: XMLHttpRequest) => T;
+
   private uploadGroups: { [key: number]: UploadGroup } = Object.create(null);
 
   constructor(context: VTransmitUploadContext, options: XHRUploadOptions<T>) {
@@ -128,8 +134,13 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
       renameFile = (name: string) => name,
     } = options;
 
-    this.context = context;
+    if (!url) {
+      throw new TypeError(
+        `The VueTransmit XHRUploadAdapter requires a 'url' parameter. Supply a string or a function returning a string.`
+      );
+    }
 
+    this.context = context;
     this.url = url;
     this.method = method;
     this.withCredentials = withCredentials;
@@ -160,6 +171,25 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
       const xhr = new XMLHttpRequest();
       const updateProgress = this.handleUploadProgress(files);
       const id = group_id++;
+      const url = is_function(this.url) ? this.url(files) : this.url;
+      const method = is_function(this.method)
+        ? this.method(files)
+        : this.method;
+      const timeout = is_function(this.timeout)
+        ? this.timeout(files)
+        : this.timeout;
+      const withCredentials = is_function(this.withCredentials)
+        ? this.withCredentials(files)
+        : this.withCredentials;
+      const responseType = is_function(this.responseType)
+        ? this.responseType(files)
+        : this.responseType;
+      const params = is_function(this.params)
+        ? this.params(files)
+        : this.params;
+      const headers = is_function(this.headers)
+        ? this.headers(files)
+        : this.headers;
 
       this.uploadGroups[id] = { id, xhr, files };
 
@@ -168,12 +198,12 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
         file.startProgress();
       }
 
-      xhr.open(this.method, this.url, true);
+      xhr.open(method, url, true);
       // Setting the timeout after open because of IE11 issue:
       // @link https://gitlab.com/meno/dropzone/issues/8
-      xhr.timeout = this.timeout;
-      xhr.withCredentials = Boolean(this.withCredentials);
-      xhr.responseType = this.responseType;
+      xhr.timeout = timeout;
+      xhr.withCredentials = withCredentials;
+      xhr.responseType = responseType;
 
       xhr.addEventListener("error", () => {
         this.rmGroup(id);
@@ -198,7 +228,7 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
           },
         });
       });
-      xhr.addEventListener("load", _ => {
+      xhr.addEventListener("load", () => {
         if (
           files[0].status === Statuses.Canceled ||
           xhr.readyState !== XMLHttpRequest.DONE
@@ -253,27 +283,26 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
         });
       });
 
-      // Use null proto obj for the following 'for in' loop without hasOwnProperty check
-      const headers = Object.assign(Object.create(null), this.headers);
-      for (const headerName in headers) {
+      for (const headerName of Object.keys(headers)) {
         if (headers[headerName]) {
           xhr.setRequestHeader(headerName, headers[headerName]);
         }
       }
 
       const formData = new FormData();
-      for (const key in this.params) {
-        formData.append(key, this.params[key]);
+      for (const key of Object.keys(params)) {
+        formData.append(key, params[key]);
       }
 
       for (const file of files) {
         this.context.emit(Events.Sending, file, xhr, formData);
       }
+
       if (this.context.props.uploadMultiple) {
         this.context.emit(Events.SendingMultiple, files, xhr, formData);
       }
 
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0, len = files.length; i < len; i++) {
         formData.append(
           this.getParamName(i),
           files[i].nativeFile,

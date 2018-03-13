@@ -1,5 +1,9 @@
 import { VTransmitFile } from "../classes/VTransmitFile";
 
+export function is_function(x: any): x is Function {
+  return typeof x == "function";
+}
+
 let idCounter = 0;
 export function uniqueId(prefix: string): string {
   return prefix + ++idCounter;
