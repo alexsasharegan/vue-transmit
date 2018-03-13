@@ -53,6 +53,9 @@
     "collectCoverage": true,
     "mapCoverage": true
   },
+  "peerDependencies": {
+    "vue": "^2.5.0"
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^22.1.4",
