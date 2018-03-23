@@ -5,7 +5,7 @@
   "module": "dist/vue-transmit.esm.min.js",
   "jsnext:main": "dist/vue-transmit.esm.min.js",
   "main": "dist/vue-transmit.common.min.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "keywords": [
     "dragndrop",
     "drag and drop",
