@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.1.2"></a>
+## [8.1.2](https://github.com/alexsasharegan/vue-transmit/compare/v8.1.1...v8.1.2) (2018-03-23)
+
+
+### Bug Fixes
+
+* **types:** corrects path to type defs ([1f9e285](https://github.com/alexsasharegan/vue-transmit/commit/1f9e285))
+
+
+
 <a name="8.1.1"></a>
 ## [8.1.1](https://github.com/alexsasharegan/vue-transmit/compare/v8.1.0...v8.1.1) (2018-03-11)
 
