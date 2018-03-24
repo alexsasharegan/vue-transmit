@@ -9,6 +9,13 @@ import {
 } from "../core/utils";
 
 export type StaticOrDynamic<T> = T | ((files: VTransmitFile[]) => T);
+export type ParamName = string | ((file: VTransmitFile) => string);
+
+export enum MultipleParamNameStyle {
+  Empty,
+  Indexed,
+  Brackets,
+}
 
 /**
  * Responsibilities:
@@ -55,7 +62,16 @@ export type XHRUploadOptions<T = any> = {
   /**
    * The name of the file param that gets transferred.
    */
-  paramName?: StaticOrDynamic<string>;
+  paramName?: ParamName;
+  /**
+   * The param name syntax for multiple uploads.
+   *
+   * **Options:**
+   * - `0 (Empty)` _(Default)_ Adds nothing to the paramName: `file`
+   * - `1 (Indexed)` Adds the array index of the file: `file[0]`
+   * - `2 (Brackets)` Adds the array-like brackets without index: `file[]`
+   */
+  multipleParamNameStyle?: MultipleParamNameStyle;
   /**
    * An object of additional parameters to transfer to the server.
    * This is the same as adding hidden input fields in the form element.
@@ -101,7 +117,8 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
   public method: StaticOrDynamic<string>;
   public withCredentials: StaticOrDynamic<boolean>;
   public timeout: StaticOrDynamic<number>;
-  public paramName: StaticOrDynamic<string>;
+  public paramName: ParamName;
+  public multipleParamNameStyle: MultipleParamNameStyle;
   public params: StaticOrDynamic<Dictionary<string>>;
   public headers: StaticOrDynamic<Dictionary<string>>;
   public responseType: StaticOrDynamic<XMLHttpRequestResponseType>;
@@ -119,6 +136,7 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
       withCredentials = false,
       timeout = 0,
       paramName = "file",
+      multipleParamNameStyle = MultipleParamNameStyle.Empty,
       params = Object.create(null),
       headers = {
         Accept: "application/json",
@@ -146,6 +164,7 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
     this.withCredentials = withCredentials;
     this.timeout = timeout;
     this.paramName = paramName;
+    this.multipleParamNameStyle = multipleParamNameStyle;
     this.params = params;
     this.headers = headers;
     this.responseType = responseType;
@@ -304,7 +323,7 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
 
       for (let i = 0, len = files.length; i < len; i++) {
         formData.append(
-          this.getParamName(i),
+          this.getParamName(files[i], i),
           files[i].nativeFile,
           this.renameFile(files[i].name)
         );
@@ -352,12 +371,28 @@ export class XHRUploadAdapter<T = any> implements UploaderInterface {
     };
   }
 
-  getParamName(index: string | number): string {
-    let suffix = "";
-    if (this.context.props.uploadMultiple) {
-      suffix = `[${index}]`;
+  getParamName(file: VTransmitFile, index: string | number): string {
+    let paramName = is_function(this.paramName)
+      ? this.paramName(file)
+      : this.paramName;
+
+    if (!this.context.props.uploadMultiple) {
+      return paramName;
     }
-    return this.paramName + suffix;
+
+    switch (this.multipleParamNameStyle) {
+      case MultipleParamNameStyle.Indexed:
+        paramName += `[${index}]`;
+        break;
+      case MultipleParamNameStyle.Brackets:
+        paramName += `[]`;
+        break;
+      case MultipleParamNameStyle.Empty:
+      default:
+        break;
+    }
+
+    return paramName;
   }
 
   cancelUpload(file: VTransmitFile): VTransmitFile[] {

@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible"
         content="ie=edge">
-  <title>Vue Dropzone Test</title>
-  <script src="https://unpkg.com/vue"></script>
+  <title>Vue Transmit Test</title>
   <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-  <link rel="stylesheet" href="https://unpkg.com/vue-flex/dist/vue-flex.css">
+        href="/assets/bootstrap.min.css">
+  <link rel="stylesheet"
+        href="/assets/bootstrap-vue.css">
+  <link rel="stylesheet"
+        href="/assets/vue-flex.css">
+  <link rel="stylesheet"
+        href="/assets/vue-transmit.css">
   <script>
-    <?= file_get_contents(__DIR__. "/../dist/vue-transmit.js" ); ?>
   </script>
   <style>
     #app {
@@ -35,12 +37,15 @@
     .btn {
       cursor: pointer;
     }
+
     .card-body {
       max-height: 300px;
       overflow-y: scroll;
     }
-    [v-cloak] { display: none; }
-    <?= file_get_contents(__DIR__. "/../dist/vue-transmit.css" ); ?>
+
+    [v-cloak] {
+      display: none;
+    }
   </style>
 </head>
 
@@ -63,8 +68,7 @@
                       disabled>Disabled</b-nav-item>
         </b-navbar-nav>
         <!-- Right aligned nav items -->
-        <b-navbar-nav
-              class="ml-auto">
+        <b-navbar-nav class="ml-auto">
           <b-nav-form>
             <b-form-input size="sm"
                           class="mr-sm-2"
@@ -75,7 +79,7 @@
                       type="submit">Search</b-button>
           </b-nav-form>
           <b-nav-item-dropdown text="Lang"
-                              right>
+                               right>
             <b-dropdown-item href="#">EN</b-dropdown-item>
             <b-dropdown-item href="#">ES</b-dropdown-item>
             <b-dropdown-item href="#">RU</b-dropdown-item>
@@ -98,7 +102,9 @@
         <img class="img--logo"
              src="/assets/logo.png">
       </a>
-      <h1 class="mb-5"><code>&lt;vue-transmit&gt;</code></h1>
+      <h1 class="mb-5">
+        <code>&lt;vue-transmit&gt;</code>
+      </h1>
       <b-form-checkbox class="mb-3"
                        v-model="options.uploadMultiple">
         Upload Multiple
@@ -112,6 +118,7 @@
                         upload-area-classes="vh-20"
                         drag-class="dragging"
                         v-bind="options"
+                        :adapter-options="adapterOptions"
                         @added-file="onAddedFile"
                         @success="onUploadSuccess"
                         @success-multiple="onUploadSuccessMulti"
@@ -136,9 +143,9 @@
                         class="w-100 my-5"
                         style="height: 100px;">
                 <img v-show="file.dataUrl"
-                    :src="file.dataUrl"
-                    :alt="file.name"
-                    class="img-fluid w-25">
+                     :src="file.dataUrl"
+                     :alt="file.name"
+                     class="img-fluid w-25">
                 <b-progress :value="file.upload.progress"
                             show-progress
                             :precision="2"
@@ -171,8 +178,10 @@
     </b-modal>
   </b-container>
 
-  <script src="https://unpkg.com/bootstrap-vue/dist/bootstrap-vue.js"></script>
-  <script src="js/vue-flex.js"></script>
+  <script src="/assets/vue.js"></script>
+  <script src="/assets/bootstrap-vue.js"></script>
+  <script src="/assets/vue-flex.js"></script>
+  <script src="/assets/vue-transmit.js"></script>
   <script>
     Vue.config.debug = true
     Vue.config.strict = true
@@ -188,16 +197,23 @@
             accept: this.accept,
             uploadMultiple: true,
             maxConcurrentUploads: 4,
-            adapterOptions: {
-              url: './upload.php',
-              timeout: 3000,
-              errUploadError: xhr => xhr.response.message
-            },
           },
           files: [],
           showModal: false,
           error: "",
           count: 0
+        }
+      },
+      computed: {
+        adapterOptions() {
+          return {
+            url: this.url,
+            timeout: 3000,
+            errUploadError: xhr => xhr.response.message
+          }
+        },
+        url() {
+          return this.options.uploadMultiple ? `/api/upload/multiple` : `/api/upload/single`
         }
       },
       methods: {
@@ -286,4 +302,5 @@
     })
   </script>
 </body>
+
 </html>

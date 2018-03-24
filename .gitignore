@@ -7,6 +7,5 @@ node_modules
 !.prettierrc
 coverage
 tmp
-
 dist
 lib
