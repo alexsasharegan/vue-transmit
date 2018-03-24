@@ -163,7 +163,7 @@
                cols="4">
           <b-card :title="file.name"
                   :sub-title="file.type"
-                  :img-src="file.src"
+                  :img-src="file.meta.url"
                   :img-alt="file.name"
                   img-top>
             <pre>{{ file | json }}</pre>
@@ -213,7 +213,11 @@
           }
         },
         url() {
-          return this.options.uploadMultiple ? `/api/upload/multiple` : `/api/upload/single`
+          if (this.options.uploadMultiple) {
+            return `/api/upload/multiple`
+          }
+
+          return `/api/upload/single`
         }
       },
       methods: {
@@ -229,14 +233,14 @@
         onUploadSuccess(file, res) {
           console.log(res)
           if (!this.options.uploadMultiple) {
-            file.src = res.url[0]
+            file.meta.url = res.file.url
             this.files.push(file)
           }
         },
         onUploadSuccessMulti(files, res) {
           console.log(...arguments)
-          for (let i = 0; i < files.length; i++) {
-            files[i].src = res.url[i];
+          for (let i = 0, len = files.length; i < len; i++) {
+            files[i].meta.url = res.files[i].url
             this.files.push(files[i])
           }
         },

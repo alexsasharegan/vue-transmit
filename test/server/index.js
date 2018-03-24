@@ -5,6 +5,7 @@ const multer = require("multer");
 const express = require("express");
 const crypto = require("crypto");
 
+const tmp_dir = path.join(__dirname, "../tmp/");
 const pkg_assets = {
   vue: path.join(__dirname, "../node_modules/vue/dist/"),
   bootstrap: path.join(__dirname, "../node_modules/bootstrap/dist/css/"),
@@ -12,7 +13,6 @@ const pkg_assets = {
   vue_transmit: path.join(__dirname, "../../dist/"),
   vue_flex: path.join(__dirname, "../node_modules/vue-flex/dist/"),
 };
-const tmp_dir = path.join(__dirname, "../tmp/");
 
 const app = express();
 const server = http.createServer(app);
@@ -51,6 +51,7 @@ app.post("/api/upload/single", upload_single, async (req, res) => {
   }
 
   file.filename = hash + file.extension;
+  file.url = `/images/${file.filename}`;
 
   res.json({ file });
 });
@@ -79,6 +80,7 @@ app.post("/api/upload/multiple", upload_multiple, async (req, res) => {
 
     if (file.success) {
       file.filename = hash + file.extension;
+      file.url = `/images/${file.filename}`
     }
 
     return file;
@@ -97,6 +99,7 @@ app.post("/api/upload/multiple", upload_multiple, async (req, res) => {
 });
 
 app.use("/", express.static(path.join(__dirname, "../public/")));
+app.use("/images", express.static(tmp_dir));
 app.use(
   "/assets",
   express.static(pkg_assets.vue),
