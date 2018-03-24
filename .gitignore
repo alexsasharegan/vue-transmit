@@ -1,13 +1,12 @@
-node_modules/
+node_modules
 .*
 !.gitignore
 !.eslintrc.json
 !.editorconfig
 !.babelrc
 !.prettierrc
-/test/uploads/*
-/tmp/
 coverage
+tmp
 
 dist
 lib
