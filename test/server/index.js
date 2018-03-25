@@ -5,22 +5,27 @@ const multer = require("multer");
 const express = require("express");
 const crypto = require("crypto");
 
-const tmp_dir = path.join(__dirname, "../tmp/");
-const pkg_assets = {
-  vue: path.join(__dirname, "../node_modules/vue/dist/"),
-  bootstrap: path.join(__dirname, "../node_modules/bootstrap/dist/css/"),
-  bootstrap_vue: path.join(__dirname, "../node_modules/bootstrap-vue/dist/"),
-  vue_transmit: path.join(__dirname, "../../dist/"),
-  vue_flex: path.join(__dirname, "../node_modules/vue-flex/dist/"),
-};
-
 const app = express();
 const server = http.createServer(app);
 
-const storage_engine = multer.diskStorage({
-  destination: tmp_dir,
-});
+const firebase_conf = {};
+try {
+  Object.assign(
+    firebase_conf,
+    JSON.parse(fs.readFileSync(path.join(__dirname, ".firebase.json")))
+  );
+  console.info({ firebase_conf });
+} catch (err) {
+  console.error(`Error: firebase config file not found or malformed`, err);
+}
 
+/**
+ * -----------------------------------------------------------------------------
+ * File Uploading
+ * -----------------------------------------------------------------------------
+ */
+const tmp_dir = path.join(__dirname, "../tmp/");
+const storage_engine = multer.diskStorage({ destination: tmp_dir });
 const uploader = multer({ storage: storage_engine });
 const upload_single = uploader.single("file");
 const upload_multiple = uploader.array("file");
@@ -80,7 +85,7 @@ app.post("/api/upload/multiple", upload_multiple, async (req, res) => {
 
     if (file.success) {
       file.filename = hash + file.extension;
-      file.url = `/images/${file.filename}`
+      file.url = `/images/${file.filename}`;
     }
 
     return file;
@@ -98,6 +103,27 @@ app.post("/api/upload/multiple", upload_multiple, async (req, res) => {
   res.json({ files });
 });
 
+/**
+ * -----------------------------------------------------------------------------
+ * Firebase
+ * -----------------------------------------------------------------------------
+ */
+app.get("/api/firebase", (req, res) => {
+  res.json(firebase_conf);
+});
+
+/**
+ * -----------------------------------------------------------------------------
+ * Static Content handlers
+ * -----------------------------------------------------------------------------
+ */
+const pkg_assets = {
+  vue: path.join(__dirname, "../node_modules/vue/dist/"),
+  bootstrap: path.join(__dirname, "../node_modules/bootstrap/dist/css/"),
+  bootstrap_vue: path.join(__dirname, "../node_modules/bootstrap-vue/dist/"),
+  vue_transmit: path.join(__dirname, "../../dist/"),
+  vue_flex: path.join(__dirname, "../node_modules/vue-flex/dist/"),
+};
 app.use("/", express.static(path.join(__dirname, "../public/")));
 app.use("/images", express.static(tmp_dir));
 app.use(

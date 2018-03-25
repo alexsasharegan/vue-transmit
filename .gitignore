@@ -9,3 +9,7 @@ coverage
 tmp
 dist
 lib
+
+# Our `.*` rule covers this,
+# but better to be explicit in case that rule changes.
+.firebase.json
