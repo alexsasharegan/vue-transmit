@@ -27,6 +27,7 @@
     "test:site": "php -S localhost:3030 -t ./test/",
     "test:jest": "jest --coverage",
     "test": "npm run test:jest",
+    "link:pre-commit": "ln -s ../../scripts/pre-commit.sh ./.git/hooks/pre-commit",
     "size:min": "cat dist/vue-transmit.esm.js | wc -c",
     "size:gzip": "gzip -c dist/vue-transmit.esm.js | wc -c",
     "release:alpha": "standard-version --prerelease alpha",
