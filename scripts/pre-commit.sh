@@ -2,4 +2,4 @@
 
 PRETTIER=$PWD/node_modules/.bin/prettier
 
-$PRETTIER --config $PWD/.prettierrc --write $PWD/**/*.{js,ts,md}
+$PRETTIER --config $PWD/.prettierrc --ignore $PWD/.prettierignore --write $PWD/**/*.{js,ts,md}
