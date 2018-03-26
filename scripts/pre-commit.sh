@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-echo $PWD;
+PRETTIER=$PWD/node_modules/.bin/prettier
+
+$PRETTIER --config $PWD/.prettierrc --write $PWD/**/*.{js,ts,md}
