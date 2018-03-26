@@ -1,12 +1,17 @@
-import { PluginObject } from "vue";
-import { VueTransmit } from "./src/index";
-import { XHRUploadAdapter } from "./src/upload-adapters/xhr";
-
-const VueTransmitPlugin: PluginObject<undefined> = {
-  install(Vue) {
-    Vue.component("VueTransmit", VueTransmit);
-  },
-  name: "vue-transmit",
-};
-
-export { VueTransmitPlugin, VueTransmit, XHRUploadAdapter };
+export {
+  Dimensions,
+  DrawImageArgs,
+  ErrType,
+  ParamNameStyle,
+  UploadAdapterConstructor,
+  UploadAdapterInterface,
+  UploadErr,
+  UploadGroup,
+  UploadResult,
+  UploadStatuses,
+  VTransmitEvents,
+  VueTransmit,
+  VueTransmitPlugin,
+  XHRUploadAdapter,
+  XHRUploadOptions,
+} from ".";

@@ -2,14 +2,14 @@ import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
 import { ErrType } from "../core/utils";
 
-export interface UploaderConstructor<T = any> {
+export interface UploadAdapterConstructor<T = any> {
   new (
     context: VTransmitUploadContext,
     options: { [key: string]: any }
-  ): UploaderInterface<T>;
+  ): UploadAdapterInterface<T>;
 }
 
-export interface UploaderInterface<T = any> {
+export interface UploadAdapterInterface<T = any> {
   /**
    * Given a file, cancel it's underlying transport
    * and return a list of affected files
