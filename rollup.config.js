@@ -17,6 +17,7 @@ module.exports = [
       sourcemap: true,
       globals: {
         vue: "Vue",
+        firebase: "firebase",
       },
     },
   },
@@ -35,9 +36,7 @@ module.exports = [
     output: { ...output },
     plugins: [
       typescript(),
-      vue({
-        css: path.join(__dirname, `dist/${kebab_name}.css`),
-      }),
+      vue({ css: path.join(__dirname, `dist/${kebab_name}.css`) }),
     ],
   });
 
@@ -50,9 +49,7 @@ module.exports = [
     },
     plugins: [
       typescript(),
-      vue({
-        css: path.join(__dirname, `dist/${kebab_name}.css`),
-      }),
+      vue({ css: path.join(__dirname, `dist/${kebab_name}.css`) }),
       uglify(),
     ],
   });

@@ -4,8 +4,12 @@ import {
   XHRDriver,
   ParamNameStyle,
   XHRDriverOptions,
-  UploadGroup,
+  XHRUploadGroup,
 } from "./src/upload-adapters/xhr";
+import {
+  FirebaseDriver,
+  FirebaseUploadOptions,
+} from "./src/upload-adapters/firebase";
 import {
   DriverConstructor,
   DriverInterface,
@@ -33,7 +37,9 @@ export {
   XHRDriver,
   ParamNameStyle,
   XHRDriverOptions,
-  UploadGroup,
+  XHRUploadGroup,
+  FirebaseDriver,
+  FirebaseUploadOptions,
   DriverConstructor,
   DriverInterface,
   UploadErr,

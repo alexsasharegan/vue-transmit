@@ -109,6 +109,10 @@
                        v-model="options.uploadMultiple">
         Upload Multiple
       </b-form-checkbox>
+      <b-form-checkbox class="mb-3"
+                       v-model="useFirebase">
+        Firebase Driver
+      </b-form-checkbox>
     </header>
     <b-container tag="main">
       <b-row>
@@ -118,7 +122,8 @@
                         upload-area-classes="vh-20"
                         drag-class="dragging"
                         v-bind="options"
-                        :adapter-options="adapterOptions"
+                        :driver-options="driverOptions"
+                        :driver="driver"
                         @added-file="onAddedFile"
                         @success="onUploadSuccess"
                         @success-multiple="onUploadSuccessMultiple"
@@ -181,8 +186,8 @@
   <script src="/assets/vue.js"></script>
   <script src="/assets/bootstrap-vue.js"></script>
   <script src="/assets/vue-flex.js"></script>
-  <script src="/assets/vue-transmit.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+  <script src="/assets/vue-transmit.js"></script>
   <script>
     Vue.config.debug = true
     Vue.config.strict = true
@@ -199,6 +204,7 @@
             uploadMultiple: true,
             maxConcurrentUploads: 4,
           },
+          useFirebase: false,
           files: [],
           showModal: false,
           error: "",
@@ -211,12 +217,28 @@
           .then(config => firebase.initializeApp(config))
       },
       computed: {
-        adapterOptions() {
+        driverOptions() {
+          if (this.useFirebase) {
+            return {
+              storageRef(file) {
+                return firebase.storage().ref(`images/${file.name}`)
+              }
+            }
+          }
           return {
             url: this.url,
             timeout: 3000,
             errUploadError: xhr => xhr.response.message
           }
+        },
+        driver() {
+          if (this.useFirebase) {
+            console.log('using', VueTransmit.FirebaseDriver)
+            return VueTransmit.FirebaseDriver
+          }
+
+          console.log('using', VueTransmit.XHRDriver)
+          return VueTransmit.XHRDriver
         },
         url() {
           if (this.options.uploadMultiple) {

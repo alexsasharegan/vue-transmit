@@ -2,8 +2,8 @@ import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
 import { DriverInterface, UploadResult } from "../core/interfaces";
 import {
-  VTransmitEvents as Events,
-  UploadStatuses as Statuses,
+  VTransmitEvents,
+  UploadStatuses,
   ErrType,
   is_function,
 } from "../core/utils";
@@ -103,7 +103,7 @@ export type XHRDriverOptions<T = any> = {
   renameFile?: (name: string) => string;
 };
 
-export type UploadGroup = {
+export type XHRUploadGroup = {
   id: number;
   files: VTransmitFile[];
   xhr: XMLHttpRequest;
@@ -127,7 +127,7 @@ export class XHRDriver<T = any> implements DriverInterface {
   public renameFile: (name: string) => string;
   public responseParseFunc?: (xhr: XMLHttpRequest) => T;
 
-  private uploadGroups: { [key: number]: UploadGroup } = Object.create(null);
+  private uploadGroups: { [key: number]: XHRUploadGroup } = Object.create(null);
 
   constructor(context: VTransmitUploadContext, options: XHRDriverOptions<T>) {
     let {
@@ -154,7 +154,9 @@ export class XHRDriver<T = any> implements DriverInterface {
 
     if (!url) {
       throw new TypeError(
-        `The VueTransmit XHRUploadAdapter requires a 'url' parameter. Supply a string or a function returning a string.`
+        `${
+          this.constructor.name
+        } requires a 'url' parameter. Supply a string or a function returning a string.`
       );
     }
 
@@ -249,7 +251,7 @@ export class XHRDriver<T = any> implements DriverInterface {
       });
       xhr.addEventListener("load", () => {
         if (
-          files[0].status === Statuses.Canceled ||
+          files[0].status === UploadStatuses.Canceled ||
           xhr.readyState !== XMLHttpRequest.DONE
         ) {
           return;
@@ -314,11 +316,16 @@ export class XHRDriver<T = any> implements DriverInterface {
       }
 
       for (const file of files) {
-        this.context.emit(Events.Sending, file, xhr, formData);
+        this.context.emit(VTransmitEvents.Sending, file, xhr, formData);
       }
 
       if (this.context.props.uploadMultiple) {
-        this.context.emit(Events.SendingMultiple, files, xhr, formData);
+        this.context.emit(
+          VTransmitEvents.SendingMultiple,
+          files,
+          xhr,
+          formData
+        );
       }
 
       for (let i = 0, len = files.length; i < len; i++) {
@@ -362,7 +369,7 @@ export class XHRDriver<T = any> implements DriverInterface {
           file.handleProgress(e);
         }
         vm.$emit(
-          Events.UploadProgress,
+          VTransmitEvents.UploadProgress,
           file,
           file.upload.progress,
           file.upload.bytesSent

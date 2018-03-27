@@ -19,15 +19,17 @@ export interface DriverInterface<T = any> {
   uploadFiles(files: VTransmitFile[]): Promise<UploadResult<T>>;
 }
 
-export type UploadResult<T> =
-  | {
-      readonly ok: true;
-      data: T;
-    }
-  | {
-      readonly ok: false;
-      err: UploadErr;
-    };
+export type UploadResultOk<T> = {
+  readonly ok: true;
+  data: T;
+};
+
+export type UploadResultErr = {
+  readonly ok: false;
+  err: UploadErr;
+};
+
+export type UploadResult<T> = UploadResultOk<T> | UploadResultErr;
 
 export type UploadErr = {
   type: ErrType;
