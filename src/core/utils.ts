@@ -30,7 +30,7 @@ export function toMbps(bytes: number, seconds: number): number {
   return fromBytesToMbit(bytes) / seconds;
 }
 
-export function objFactory() {
+export function NewObject() {
   return {};
 }
 

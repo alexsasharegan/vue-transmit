@@ -63,21 +63,21 @@
 // @ts-ignore
 import Vue, { VueConstructor } from "vue";
 import {
-  objFactory,
+  NewObject,
   noop,
   resizeImg,
   webkitIsFile,
   webkitIsDir,
   UploadStatuses,
-  VTransmitEvents as Events,
+  VTransmitEvents,
   round,
   expectNever,
   ErrType,
 } from "../core/utils";
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
-import { XHRUploadAdapter } from "../upload-adapters/xhr";
-import { UploaderInterface } from "../core/interfaces";
+import { XHRDriver } from "../upload-adapters/xhr";
+import { DriverInterface } from "../core/interfaces";
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry;
 
@@ -99,11 +99,11 @@ export default Vue.extend({
     },
     uploadAreaAttrs: {
       type: Object,
-      default: objFactory,
+      default: NewObject,
     },
     uploadAreaListeners: {
       type: Object,
-      default: objFactory,
+      default: NewObject,
     },
     dragClass: {
       type: String,
@@ -124,20 +124,22 @@ export default Vue.extend({
       default: false,
     },
     /**
-     * Size in MB by default, or MiB if fileSizeBaseInBinary === true
+     * Size in MB by default, or MiB if useBinarySizeBase == true
      */
     maxFileSize: {
       type: Number,
       default: 256,
     },
     /**
-     * The base that is used to calculate the file size.
-     * You can change this to 1024 if you would rather display kibibytes, mebibytes, etc...
-     * 1024 is technically incorrect,
-     * because `1024 bytes` are `1 kibibyte` not `1 kilobyte`.
-     * You can change this to `1024` if you don't care about validity.
+     * By default, a base 10 size is used. This corresponds to KB, MB, GB, etc.
+     * If this property is true, a binary base will be used. This would
+     * correspond to KiB, MiB, GiB.
+     *
+     * Base 10: `1000 ** x` where `x` equal 1(KB), 2(MB), 3(GB), etc.
+     *
+     * Base 2: `1 << x` where `x` equal 10(KiB), 20(MiB), 30(GiB), etc.
      */
-    fileSizeBaseInBinary: {
+    useBinarySizeBase: {
       type: Boolean,
       default: false,
     },
@@ -234,10 +236,10 @@ export default Vue.extend({
     errMaxFileSizeExceeded: {
       type: Function,
       default(fileSize: number, maxFileSize: number, units: string) {
-        return `The file is too big (${round(
-          fileSize,
-          1
-        )}${units}). Max file size: ${round(maxFileSize, 1)}${units}.`;
+        return (
+          `The file is too big (${round(fileSize, 1)}${units}).` +
+          ` Max file size: ${round(maxFileSize, 1)}${units}.`
+        );
       },
     },
     errInvalidFileType: {
@@ -267,33 +269,35 @@ export default Vue.extend({
       type: Function,
       default: resizeImg,
     },
-    adapterOptions: {
+    driverOptions: {
       type: Object,
-      default: objFactory,
+      default: NewObject,
     },
-    uploadAdapter: {
+    driver: {
       type: Function,
-      default: XHRUploadAdapter,
+      default: XHRDriver,
     },
   },
 
   mounted() {
-    this.$on(Events.UploadProgress, this.updateTotalUploadProgress);
-    this.$on(Events.RemovedFile, this.updateTotalUploadProgress);
-    this.$on(Events.Canceled, (file: VTransmitFile) =>
-      this.$emit(Events.Complete, file)
+    this.$on(VTransmitEvents.UploadProgress, this.updateTotalUploadProgress);
+    this.$on(VTransmitEvents.RemovedFile, this.updateTotalUploadProgress);
+    this.$on(VTransmitEvents.Canceled, (file: VTransmitFile) =>
+      this.$emit(VTransmitEvents.Complete, file)
     );
-    this.$on(Events.Complete, (file: VTransmitFile) => {
+    this.$on(VTransmitEvents.Complete, (file: VTransmitFile) => {
       if (
         this.addedFiles.length === 0 &&
         this.uploadingFiles.length === 0 &&
         this.queuedFiles.length === 0
       ) {
-        Promise.resolve().then(() => this.$emit(Events.QueueComplete, file));
+        Promise.resolve().then(() =>
+          this.$emit(VTransmitEvents.QueueComplete, file)
+        );
       }
     });
 
-    this.$emit(Events.Initialize, this);
+    this.$emit(VTransmitEvents.Initialize, this);
   },
 
   data(): {
@@ -344,7 +348,7 @@ export default Vue.extend({
       return el;
     },
     fileSizeBase(): number {
-      if (this.fileSizeBaseInBinary) {
+      if (this.useBinarySizeBase) {
         return 1024;
       }
 
@@ -438,13 +442,10 @@ export default Vue.extend({
         isUploading: this.isUploading,
       };
     },
-    transport(): UploaderInterface {
-      let Adapter: any = this.uploadAdapter;
+    transport(): DriverInterface {
+      let Driver: any = this.driver;
       try {
-        return new Adapter(
-          new VTransmitUploadContext(this),
-          this.adapterOptions
-        );
+        return new Driver(new VTransmitUploadContext(this), this.driverOptions);
       } catch (err) {
         console.error(err);
         throw err;
@@ -458,7 +459,7 @@ export default Vue.extend({
         return;
       }
       if (acceptedFiles.length >= this.maxFiles) {
-        this.$emit(Events.MaxFilesReached, this.files);
+        this.$emit(VTransmitEvents.MaxFilesReached, this.files);
       }
     },
   },
@@ -481,7 +482,7 @@ export default Vue.extend({
       }
 
       this.$emit(
-        Events.AddedFiles,
+        VTransmitEvents.AddedFiles,
         Array.from(inputEl.files).map(this.addFile)
       );
 
@@ -493,20 +494,20 @@ export default Vue.extend({
       const vtFile = new VTransmitFile(file);
       vtFile.status = UploadStatuses.Added;
       this.files.push(vtFile);
-      this.$emit(Events.AddedFile, vtFile);
+      this.$emit(VTransmitEvents.AddedFile, vtFile);
       this.enqueueThumbnail(vtFile);
       this.acceptFile(vtFile, (error?: string) => {
         if (error) {
           vtFile.accepted = false;
           this.errorProcessing([vtFile], error);
-          this.$emit(Events.RejectedFile, vtFile);
-          this.$emit(Events.AcceptComplete, vtFile);
+          this.$emit(VTransmitEvents.RejectedFile, vtFile);
+          this.$emit(VTransmitEvents.AcceptComplete, vtFile);
           return;
         }
 
         vtFile.accepted = true;
-        this.$emit(Events.AcceptedFile, vtFile);
-        this.$emit(Events.AcceptComplete, vtFile);
+        this.$emit(VTransmitEvents.AcceptedFile, vtFile);
+        this.$emit(VTransmitEvents.AcceptComplete, vtFile);
         if (this.autoQueue) {
           this.enqueueFile(vtFile);
         }
@@ -521,7 +522,7 @@ export default Vue.extend({
         let mega = this.fileSizeBase * this.fileSizeBase;
         let fileSize = file.size / mega;
         let units = "MB";
-        if (this.fileSizeBaseInBinary) {
+        if (this.useBinarySizeBase) {
           units = "MiB";
         }
         return done(
@@ -538,7 +539,7 @@ export default Vue.extend({
 
       // Upload limit check
       if (this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles) {
-        this.$emit(Events.MaxFilesExceeded, file);
+        this.$emit(VTransmitEvents.MaxFilesExceeded, file);
         return done(this.errMaxFilesExceeded(this.maxFiles));
       }
 
@@ -551,9 +552,12 @@ export default Vue.extend({
       }
       const idxToRm = this.files.findIndex(f => f.id === file.id);
       if (idxToRm > -1) {
-        this.$emit(Events.RemovedFile, this.files.splice(idxToRm, 1)[0]);
+        this.$emit(
+          VTransmitEvents.RemovedFile,
+          this.files.splice(idxToRm, 1)[0]
+        );
         if (this.files.length === 0) {
-          this.$emit(Events.Reset);
+          this.$emit(VTransmitEvents.Reset);
         }
       }
     },
@@ -626,7 +630,7 @@ export default Vue.extend({
         () => {
           if (file.type === "image/svg+xml") {
             file.dataUrl = reader.result;
-            this.$emit(Events.Thumbnail, file, reader.result);
+            this.$emit(VTransmitEvents.Thumbnail, file, reader.result);
             callback();
           }
           this.createThumbnailFromUrl(file, reader.result, callback);
@@ -675,7 +679,7 @@ export default Vue.extend({
           );
           const thumbnail = canvas.toDataURL("image/png");
           file.dataUrl = thumbnail;
-          this.$emit(Events.Thumbnail, file, thumbnail);
+          this.$emit(VTransmitEvents.Thumbnail, file, thumbnail);
 
           if (callback) {
             return callback();
@@ -724,10 +728,10 @@ export default Vue.extend({
       for (file of files) {
         file.processing = true;
         file.status = UploadStatuses.Uploading;
-        this.$emit(Events.Processing, file);
+        this.$emit(VTransmitEvents.Processing, file);
       }
       if (this.uploadMultiple) {
-        this.$emit(Events.ProcessingMultiple, files);
+        this.$emit(VTransmitEvents.ProcessingMultiple, files);
       }
 
       return this.uploadFiles(files);
@@ -739,9 +743,9 @@ export default Vue.extend({
         file.status === UploadStatuses.Queued
       ) {
         file.status = UploadStatuses.Canceled;
-        this.$emit(Events.Canceled, file);
+        this.$emit(VTransmitEvents.Canceled, file);
         if (this.uploadMultiple) {
-          this.$emit(Events.CanceledMultiple, [file]);
+          this.$emit(VTransmitEvents.CanceledMultiple, [file]);
         }
       }
 
@@ -751,11 +755,11 @@ export default Vue.extend({
         let f: VTransmitFile;
         for (f of canceledFiles) {
           f.status = UploadStatuses.Canceled;
-          this.$emit(Events.Canceled, f);
+          this.$emit(VTransmitEvents.Canceled, f);
         }
 
         if (this.uploadMultiple) {
-          this.$emit(Events.CanceledMultiple, canceledFiles);
+          this.$emit(VTransmitEvents.CanceledMultiple, canceledFiles);
         }
       }
 
@@ -792,9 +796,9 @@ export default Vue.extend({
       for (f of files) {
         f.status = UploadStatuses.Timeout;
         f.endProgress();
-        this.$emit(Events.Timeout, f, message, data);
+        this.$emit(VTransmitEvents.Timeout, f, message, data);
       }
-      this.$emit(Events.TimeoutMultiple, files, message, data);
+      this.$emit(VTransmitEvents.TimeoutMultiple, files, message, data);
 
       if (this.autoProcessQueue) {
         this.processQueue();
@@ -815,7 +819,7 @@ export default Vue.extend({
           100 * progress.totalBytesSent / progress.totalBytes;
       }
 
-      this.$emit(Events.TotalUploadProgress, progress);
+      this.$emit(VTransmitEvents.TotalUploadProgress, progress);
     },
     uploadFinished(
       files: VTransmitFile[],
@@ -825,13 +829,13 @@ export default Vue.extend({
       for (const file of files) {
         file.status = UploadStatuses.Success;
         file.endProgress();
-        this.$emit(Events.Success, file, response, ...args);
-        this.$emit(Events.Complete, file);
+        this.$emit(VTransmitEvents.Success, file, response, ...args);
+        this.$emit(VTransmitEvents.Complete, file);
       }
 
       if (this.uploadMultiple) {
-        this.$emit(Events.SuccessMultiple, files, response, ...args);
-        this.$emit(Events.CompleteMultiple, files);
+        this.$emit(VTransmitEvents.SuccessMultiple, files, response, ...args);
+        this.$emit(VTransmitEvents.CompleteMultiple, files);
       }
 
       if (this.autoProcessQueue) {
@@ -842,13 +846,13 @@ export default Vue.extend({
       for (const file of files) {
         file.status = UploadStatuses.Error;
         file.endProgress();
-        this.$emit(Events.Error, file, message, data);
-        this.$emit(Events.Complete, file);
+        this.$emit(VTransmitEvents.Error, file, message, data);
+        this.$emit(VTransmitEvents.Complete, file);
       }
 
       if (this.uploadMultiple) {
-        this.$emit(Events.ErrorMultiple, files, message, data);
-        this.$emit(Events.CompleteMultiple, files);
+        this.$emit(VTransmitEvents.ErrorMultiple, files, message, data);
+        this.$emit(VTransmitEvents.CompleteMultiple, files);
       }
 
       if (this.autoProcessQueue) {
@@ -911,19 +915,19 @@ export default Vue.extend({
       } catch (error) {}
       e.dataTransfer.dropEffect =
         effect === "move" || effect === "linkMove" ? "move" : "copy";
-      this.$emit(Events.DragOver, e);
+      this.$emit(VTransmitEvents.DragOver, e);
     },
     handleDragEnter(e: DragEvent): void {
       this.dragging = true;
-      this.$emit(Events.DragEnter, e);
+      this.$emit(VTransmitEvents.DragEnter, e);
     },
     handleDragLeave(e: DragEvent): void {
       this.dragging = false;
-      this.$emit(Events.DragLeave, e);
+      this.$emit(VTransmitEvents.DragLeave, e);
     },
     handleDragEnd(e: DragEvent): void {
       this.dragging = false;
-      this.$emit(Events.DragEnd, e);
+      this.$emit(VTransmitEvents.DragEnd, e);
     },
     handleDrop(e: DragEvent): void {
       this.dragging = false;
@@ -934,8 +938,11 @@ export default Vue.extend({
       let files: File[];
       let items: DataTransferItem[];
 
-      this.$emit(Events.Drop, e);
-      this.$emit(Events.AddedFiles, (files = Array.from(e.dataTransfer.files)));
+      this.$emit(VTransmitEvents.Drop, e);
+      this.$emit(
+        VTransmitEvents.AddedFiles,
+        (files = Array.from(e.dataTransfer.files))
+      );
 
       if (!e.dataTransfer.items) {
         this.handleFiles(files);
@@ -958,7 +965,7 @@ export default Vue.extend({
       if (!e || !e.clipboardData || !e.clipboardData.items) {
         return;
       }
-      this.$emit(Events.Paste, e);
+      this.$emit(VTransmitEvents.Paste, e);
       const items = Array.from(e.clipboardData.items);
       if (items.length) {
         this.addFilesFromItems(items);

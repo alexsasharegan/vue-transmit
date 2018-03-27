@@ -1,6 +1,6 @@
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
-import { UploadAdapterInterface, UploadResult } from "../core/interfaces";
+import { DriverInterface, UploadResult } from "../core/interfaces";
 import {
   VTransmitEvents as Events,
   UploadStatuses as Statuses,
@@ -27,7 +27,7 @@ export enum ParamNameStyle {
  * - on success: emit to vue-transmit & update file status
  * - once complete: emit to vue-transmit & update file status
  */
-export type XHRUploadOptions<T = any> = {
+export type XHRDriverOptions<T = any> = {
   /**
    * A string representing the URL to send the request to
    * or a function called with an array of files for the upload
@@ -111,7 +111,7 @@ export type UploadGroup = {
 
 let group_id = 0;
 
-export class XHRUploadAdapter<T = any> implements UploadAdapterInterface {
+export class XHRDriver<T = any> implements DriverInterface {
   public context: VTransmitUploadContext;
   public url: StaticOrDynamic<string>;
   public method: StaticOrDynamic<string>;
@@ -129,7 +129,7 @@ export class XHRUploadAdapter<T = any> implements UploadAdapterInterface {
 
   private uploadGroups: { [key: number]: UploadGroup } = Object.create(null);
 
-  constructor(context: VTransmitUploadContext, options: XHRUploadOptions<T>) {
+  constructor(context: VTransmitUploadContext, options: XHRDriverOptions<T>) {
     let {
       url,
       method = "post",

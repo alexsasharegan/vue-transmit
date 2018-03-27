@@ -121,7 +121,7 @@
                         :adapter-options="adapterOptions"
                         @added-file="onAddedFile"
                         @success="onUploadSuccess"
-                        @success-multiple="onUploadSuccessMulti"
+                        @success-multiple="onUploadSuccessMultiple"
                         @timeout="onError"
                         @error="onError">
             <flex-col align-v="center"
@@ -243,7 +243,7 @@
             this.files.push(file)
           }
         },
-        onUploadSuccessMulti(files, res) {
+        onUploadSuccessMultiple(files, res) {
           console.log(...arguments)
           for (let i = 0, len = files.length; i < len; i++) {
             files[i].meta.url = res.files[i].url
@@ -256,11 +256,7 @@
         },
         listen(event) {
           this.$refs.uploader.$on(event, (...args) => {
-            console.log(event)
-            for (let arg of args) {
-              // console.log(`${typeof arg}: ${JSON.stringify(arg, undefined, 2)}`)
-              console.log(arg)
-            }
+            console.log(event, ...args)
           })
         },
         accept(file, done) {
@@ -275,39 +271,7 @@
         }
       },
       mounted() {
-        [
-          "drop",
-          "drag-start",
-          "drag-end",
-          "drag-enter",
-          "drag-over",
-          "drag-leave",
-          "accepted-file",
-          "rejected-file",
-          "accept-complete",
-          "added-file",
-          "added-files",
-          "removed-file",
-          "thumbnail",
-          "error",
-          "error-multiple",
-          "processing",
-          "processing-multiple",
-          "upload-progress",
-          "total-upload-progress",
-          "sending",
-          "sending-multiple",
-          "success",
-          "success-multiple",
-          "canceled",
-          "canceled-multiple",
-          "complete",
-          "complete-multiple",
-          "reset",
-          "max-files-exceeded",
-          "max-files-reached",
-          "queue-complete"
-        ].forEach(this.listen)
+        Object.keys(VueTransmit.VTransmitEvents).forEach(this.listen)
       },
     })
   </script>

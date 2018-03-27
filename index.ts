@@ -1,14 +1,14 @@
 import { PluginObject } from "vue";
 import { VueTransmit } from "./src/index";
 import {
-  XHRUploadAdapter,
+  XHRDriver,
   ParamNameStyle,
-  XHRUploadOptions,
+  XHRDriverOptions,
   UploadGroup,
 } from "./src/upload-adapters/xhr";
 import {
-  UploadAdapterConstructor,
-  UploadAdapterInterface,
+  DriverConstructor,
+  DriverInterface,
   UploadErr,
   UploadResult,
 } from "./src/core/interfaces";
@@ -30,12 +30,12 @@ const VueTransmitPlugin: PluginObject<undefined> = {
 export {
   VueTransmitPlugin,
   VueTransmit,
-  XHRUploadAdapter,
+  XHRDriver,
   ParamNameStyle,
-  XHRUploadOptions,
+  XHRDriverOptions,
   UploadGroup,
-  UploadAdapterConstructor,
-  UploadAdapterInterface,
+  DriverConstructor,
+  DriverInterface,
   UploadErr,
   UploadResult,
   Dimensions,

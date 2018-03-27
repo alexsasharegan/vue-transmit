@@ -30,9 +30,9 @@ module.exports = [
   },
 ].reduce((configs, { input, output }) => {
   configs.push({
-    external: ["vue"],
+    external: ["vue", "firebase"],
     input,
-    output: Object.assign({}, output),
+    output: { ...output },
     plugins: [
       typescript(),
       vue({
@@ -42,11 +42,12 @@ module.exports = [
   });
 
   configs.push({
-    external: ["vue"],
+    external: ["vue", "firebase"],
     input,
-    output: Object.assign({}, output, {
+    output: {
+      ...output,
       file: output.file.slice(0, output.file.lastIndexOf(".js")) + ".min.js",
-    }),
+    },
     plugins: [
       typescript(),
       vue({
