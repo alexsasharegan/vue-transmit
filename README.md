@@ -40,6 +40,7 @@ to add to the docs?
 * [Usage example](#usage) - implementation example
 * [FAQ](#faq) - Frequently Asked Questions
   * [I don't see the dropzone](#i-dont-see-the-dropzone)
+  * [How to add a button or text to the dropzone](#how-to-add-a-button-or-text-to-the-dropzone)
   * [Accessing the VueTransmit instance](#accessing-the-vuetransmit-component-instance)
   * [How to Remove a File](#how-to-remove-a-file)
 * [Lifecycle](#lifecycle) - Basic explanation of upload lifecycle
@@ -446,6 +447,8 @@ Default styles are extracted into a separate `.css` file and are entirely option
 ```
 
 Alternatively, you can style the dropzone using your own classes using the `uploadAreaClasses` and `dragClass` props.
+
+### How to add a button or text to the dropzone
 
 Vue Transmit doesn't add any markup for your dropzone target by default. Instead, it makes a default slot available for you to provide markup custom to your use-case. Any content you put between the opening and closing `<vue-transmit>` tags will be rendered inside the drop zone.
 
