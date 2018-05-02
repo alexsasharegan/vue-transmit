@@ -436,6 +436,24 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
 
 ## FAQ
 
+### I don't see the drop zone
+
+Default styles are extracted into a separate `.css` file and are entirely optional. If you are using Vue single-file components, you can include it via the `<style>` section:
+
+```css
+@import '~vue-transmit/dist/vue-transmit.css'
+```
+
+Alternatively, you can style the drop zone using your own classes using the `uploadAreaClasses` and `dragClass` props.
+
+Additionally, the default slot is also empty. Any content you put between the opening and closing `<vue-transmit>` tags will be rendered inside the drop zone.
+
+```html
+<vue-transmit>
+  <h3 class="text-center">Drop file here or click to upload.</h3>
+</vue-transmit>
+```
+
 ### Accessing the VueTransmit component instance
 
 It's always recommended to place a ref on your vue-transmit instance so that
