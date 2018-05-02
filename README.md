@@ -39,6 +39,7 @@ to add to the docs?
 * [VTransmitFile](#vtransmitfile) - the class that wraps the native File object
 * [Usage example](#usage) - implementation example
 * [FAQ](#faq) - Frequently Asked Questions
+  * [I don't see the dropzone](#i-dont-see-the-dropzone)
   * [Accessing the VueTransmit instance](#accessing-the-vuetransmit-component-instance)
   * [How to Remove a File](#how-to-remove-a-file)
 * [Lifecycle](#lifecycle) - Basic explanation of upload lifecycle
@@ -436,7 +437,7 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
 
 ## FAQ
 
-### I don't see the drop zone
+### I don't see the dropzone
 
 Default styles are extracted into a separate `.css` file and are entirely optional. If you are using Vue single-file components, you can include it via the `<style>` section:
 
@@ -444,9 +445,9 @@ Default styles are extracted into a separate `.css` file and are entirely option
 @import '~vue-transmit/dist/vue-transmit.css'
 ```
 
-Alternatively, you can style the drop zone using your own classes using the `uploadAreaClasses` and `dragClass` props.
+Alternatively, you can style the dropzone using your own classes using the `uploadAreaClasses` and `dragClass` props.
 
-Additionally, the default slot is also empty. Any content you put between the opening and closing `<vue-transmit>` tags will be rendered inside the drop zone.
+Vue Transmit doesn't add any markup for your dropzone target by default. Instead, it makes a default slot available for you to provide markup custom to your use-case. Any content you put between the opening and closing `<vue-transmit>` tags will be rendered inside the drop zone.
 
 ```html
 <vue-transmit>
