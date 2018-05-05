@@ -2,7 +2,8 @@
   "bracketSpacing": true,
   "semi": true,
   "printWidth": 80,
-  "useTabs": false,
+  "useTabs": true,
+  "tabWidth": 3,
   "singleQuote": false,
   "trailingComma": "es5",
   "proseWrap": "always"
