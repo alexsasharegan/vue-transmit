@@ -30,33 +30,33 @@
 </template>
 
 <style>
+.v-transmit__upload-area {
+  width: 100%;
+  border-radius: 1rem;
+  border: 2px dashed #bdbdbd;
+  min-height: 30vh;
+}
+
+@media (min-height: 1000px) {
   .v-transmit__upload-area {
-    width: 100%;
-    border-radius: 1rem;
-    border: 2px dashed #bdbdbd;
-    min-height: 30vh;
+    min-height: 300px;
   }
+}
 
-  @media (min-height: 1000px) {
-    .v-transmit__upload-area {
-      min-height: 300px;
-    }
-  }
-
-  .v-transmit__upload-area--is-dragging {
-    background: #e1f5fe
-      linear-gradient(
-        -45deg,
-        #fafafa 25%,
-        transparent 25%,
-        transparent 50%,
-        #fafafa 50%,
-        #fafafa 75%,
-        transparent 75%,
-        transparent
-      );
-    background-size: 40px 40px;
-  }
+.v-transmit__upload-area--is-dragging {
+  background: #e1f5fe
+    linear-gradient(
+      -45deg,
+      #fafafa 25%,
+      transparent 25%,
+      transparent 50%,
+      #fafafa 50%,
+      #fafafa 75%,
+      transparent 75%,
+      transparent
+    );
+  background-size: 40px 40px;
+}
 </style>
 
 <script lang="ts">
@@ -77,7 +77,7 @@ import {
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
 import { XHRDriver } from "../upload-adapters/xhr";
-import { DriverInterface } from "../core/interfaces";
+import { DriverInterface, DriverConstructor } from "../core/interfaces";
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry;
 
@@ -443,11 +443,11 @@ export default Vue.extend({
       };
     },
     transport(): DriverInterface {
-      let Driver: any = this.driver;
+      let Driver: DriverConstructor = <any>this.driver;
       try {
         return new Driver(new VTransmitUploadContext(this), this.driverOptions);
       } catch (err) {
-        console.error(err);
+        console.error(`[vue-transmit] Error resolving upload driver:`, err);
         throw err;
       }
     },
@@ -845,6 +845,7 @@ export default Vue.extend({
     errorProcessing(files: VTransmitFile[], message: string, data?: any) {
       for (const file of files) {
         file.status = UploadStatuses.Error;
+        file.errorMessage = message;
         file.endProgress();
         this.$emit(VTransmitEvents.Error, file, message, data);
         this.$emit(VTransmitEvents.Complete, file);
