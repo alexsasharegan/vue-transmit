@@ -1,5 +1,8 @@
 <template>
    <component :is="tag">
+      <slot v-if="filesSlotFirst"
+            name="files"
+            v-bind="fileSlotBindings" />
       <div class="v-transmit__upload-area"
            :class="[isDraggingClass, uploadAreaClasses]"
            :draggable="!disableDraggable"
@@ -14,8 +17,9 @@
            @drop.prevent.stop="handleDrop">
          <slot></slot>
       </div>
-      <slot name="files"
-            v-bind="fileSlotBindings"></slot>
+      <slot v-if="!filesSlotFirst"
+            name="files"
+            v-bind="fileSlotBindings" />
       <form :style="formStyles"
             ref="uploadForm">
          <input type="file"
@@ -108,6 +112,10 @@ export default Vue.extend({
 		dragClass: {
 			type: String,
 			default: null,
+		},
+		filesSlotFirst: {
+			type: Boolean,
+			default: false,
 		},
 		/**
 		 * Sets the maximum number of uploads that can be running at a given time.
