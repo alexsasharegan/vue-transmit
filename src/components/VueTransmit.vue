@@ -304,8 +304,13 @@ export default Vue.extend({
 				);
 			}
 		});
+		window.addEventListener("paste", <any>this.handlePaste);
 
 		this.$emit(VTransmitEvents.Initialize, this);
+	},
+
+	beforeDestroy() {
+		window.removeEventListener("paste", <any>this.handlePaste);
 	},
 
 	data(): {
@@ -998,7 +1003,8 @@ export default Vue.extend({
 
 			this.addFilesFromItems(items);
 		},
-		paste(e: ClipboardEvent): void {
+		handlePaste(e: ClipboardEvent): void {
+			let cb = e.clipboardData || window.clipboardData;
 			if (!e || !e.clipboardData || !e.clipboardData.items) {
 				return;
 			}
