@@ -2,301 +2,302 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible"
-        content="ie=edge">
-  <title>Vue Transmit Test</title>
-  <link rel="stylesheet"
-        href="/assets/bootstrap.min.css">
-  <link rel="stylesheet"
-        href="/assets/bootstrap-vue.css">
-  <link rel="stylesheet"
-        href="/assets/vue-flex.css">
-  <link rel="stylesheet"
-        href="/assets/vue-transmit.css">
-  <script>
-  </script>
-  <style>
-    #app {
-      font-family: 'Avenir', Helvetica, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      color: #2c3e50;
-    }
+   <meta charset="UTF-8">
+   <meta name="viewport"
+         content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible"
+         content="ie=edge">
+   <title>Vue Transmit Test</title>
+   <link rel="stylesheet"
+         href="/assets/bootstrap.min.css">
+   <link rel="stylesheet"
+         href="/assets/bootstrap-vue.css">
+   <link rel="stylesheet"
+         href="/assets/vue-flex.css">
+   <link rel="stylesheet"
+         href="/assets/vue-transmit.css">
+   <script>
+   </script>
+   <style>
+      #app {
+         font-family: 'Avenir', Helvetica, Arial, sans-serif;
+         -webkit-font-smoothing: antialiased;
+         -moz-osx-font-smoothing: grayscale;
+         color: #2c3e50;
+      }
 
-    .img--logo {
-      height: 10vh;
-    }
+      .img--logo {
+         height: 10vh;
+      }
 
-    .vh-20 {
-      height: 20vh;
-    }
+      .vh-20 {
+         height: 20vh;
+      }
 
-    .btn {
-      cursor: pointer;
-    }
+      .btn {
+         cursor: pointer;
+      }
 
-    .card-body {
-      max-height: 300px;
-      overflow-y: scroll;
-    }
+      .card-body {
+         max-height: 300px;
+         overflow-y: scroll;
+      }
 
-    [v-cloak] {
-      display: none;
-    }
-  </style>
+      [v-cloak] {
+         display: none;
+      }
+   </style>
 </head>
 
 <body>
-  <b-container fluid
-               tag="main"
-               id="app"
-               v-cloak>
-    <b-navbar toggleable="md"
-              class="mb-3"
-              type="light"
-              variant="light">
-      <b-nav-toggle target="nav_collapse"></b-nav-toggle>
-      <b-navbar-brand href="#">NavBar</b-navbar-brand>
-      <b-collapse is-nav
-                  id="nav_collapse">
-        <b-navbar-nav>
-          <b-nav-item href="#">Link</b-nav-item>
-          <b-nav-item href="#"
-                      disabled>Disabled</b-nav-item>
-        </b-navbar-nav>
-        <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
-          <b-nav-form>
-            <b-form-input size="sm"
-                          class="mr-sm-2"
-                          type="text"
-                          placeholder="Search" />
-            <b-button size="sm"
-                      class="my-2 my-sm-0"
-                      type="submit">Search</b-button>
-          </b-nav-form>
-          <b-nav-item-dropdown text="Lang"
-                               right>
-            <b-dropdown-item href="#">EN</b-dropdown-item>
-            <b-dropdown-item href="#">ES</b-dropdown-item>
-            <b-dropdown-item href="#">RU</b-dropdown-item>
-            <b-dropdown-item href="#">FA</b-dropdown-item>
-          </b-nav-item-dropdown>
-          <b-nav-item-dropdown right>
-            <!-- Using button-content slot -->
-            <template slot="button-content">
-              <em>User</em>
-            </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign out</b-dropdown-item>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-    <header class="text-center">
-      <a href="https://github.com/alexsasharegan/vue-transmit"
-         target="_blank">
-        <img class="img--logo"
-             src="/assets/logo.png">
-      </a>
-      <h1 class="mb-5">
-        <code>&lt;vue-transmit&gt;</code>
-      </h1>
-      <b-form-checkbox class="mb-3"
-                       v-model="options.uploadMultiple">
-        Upload Multiple
-      </b-form-checkbox>
-      <b-form-checkbox class="mb-3"
-                       v-model="useFirebase">
-        Firebase Driver
-      </b-form-checkbox>
-    </header>
-    <b-container tag="main">
-      <b-row>
-        <b-col cols="3"></b-col>
-        <b-col cols="6">
-          <vue-transmit ref="uploader"
-                        upload-area-classes="vh-20"
-                        drag-class="dragging"
-                        v-bind="options"
-                        :driver-options="driverOptions"
-                        :driver="driver"
-                        @added-file="onAddedFile"
-                        @success="onUploadSuccess"
-                        @success-multiple="onUploadSuccessMultiple"
-                        @timeout="onError"
-                        @error="onError">
-            <flex-col align-v="center"
-                      class="h-100">
-              <flex-row align-h="center">
-                <b-btn variant="primary"
-                       @click="triggerBrowse"
-                       class="w-50">
-                  Upload Files
-                </b-btn>
-              </flex-row>
-            </flex-col>
-            <template slot-scope="{ uploadingFiles }"
-                      slot="files">
-              <flex-row v-for="file in uploadingFiles"
-                        :key="file.id"
-                        align-v="center"
-                        no-wrap
-                        class="w-100 my-5"
-                        style="height: 100px;">
-                <img v-show="file.dataUrl"
-                     :src="file.dataUrl"
-                     :alt="file.name"
-                     class="img-fluid w-25">
-                <b-progress :value="file.upload.progress"
-                            show-progress
-                            :precision="2"
-                            :variant="file.upload.progress === 100 ? 'success' : 'warning'"
-                            :animated="file.upload.progress === 100"
-                            class="ml-2 w-100"></b-progress>
-              </flex-row>
-            </template>
-          </vue-transmit>
-        </b-col>
-      </b-row>
-      <b-row class="my-3">
-        <b-col v-for="file in files"
-               :key="file.id"
-               cols="4">
-          <b-card :title="file.name"
-                  :sub-title="file.type"
-                  :img-src="file.meta.url"
-                  :img-alt="file.name"
-                  img-top>
-            <pre>{{ file | json }}</pre>
-          </b-card>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-modal v-model="showModal"
-             title="File Upload: Error">
-      <p class="bg-danger text-white p-3 my-2"
-         v-html="error"></p>
-    </b-modal>
-  </b-container>
+   <b-container fluid
+                tag="main"
+                id="app"
+                v-cloak>
+      <b-navbar toggleable="md"
+                class="mb-3"
+                type="light"
+                variant="light">
+         <b-nav-toggle target="nav_collapse"></b-nav-toggle>
+         <b-navbar-brand href="#">NavBar</b-navbar-brand>
+         <b-collapse is-nav
+                     id="nav_collapse">
+            <b-navbar-nav>
+               <b-nav-item href="#">Link</b-nav-item>
+               <b-nav-item href="#"
+                           disabled>Disabled</b-nav-item>
+            </b-navbar-nav>
+            <!-- Right aligned nav items -->
+            <b-navbar-nav class="ml-auto">
+               <b-nav-form>
+                  <b-form-input size="sm"
+                                class="mr-sm-2"
+                                type="text"
+                                placeholder="Search" />
+                  <b-button size="sm"
+                            class="my-2 my-sm-0"
+                            type="submit">Search</b-button>
+               </b-nav-form>
+               <b-nav-item-dropdown text="Lang"
+                                    right>
+                  <b-dropdown-item href="#">EN</b-dropdown-item>
+                  <b-dropdown-item href="#">ES</b-dropdown-item>
+                  <b-dropdown-item href="#">RU</b-dropdown-item>
+                  <b-dropdown-item href="#">FA</b-dropdown-item>
+               </b-nav-item-dropdown>
+               <b-nav-item-dropdown right>
+                  <!-- Using button-content slot -->
+                  <template slot="button-content">
+                     <em>User</em>
+                  </template>
+                  <b-dropdown-item href="#">Profile</b-dropdown-item>
+                  <b-dropdown-item href="#">Sign out</b-dropdown-item>
+               </b-nav-item-dropdown>
+            </b-navbar-nav>
+         </b-collapse>
+      </b-navbar>
+      <header class="text-center">
+         <a href="https://github.com/alexsasharegan/vue-transmit"
+            target="_blank">
+            <img class="img--logo"
+                 src="/assets/logo.png">
+         </a>
+         <h1 class="mb-5">
+            <code>&lt;vue-transmit&gt;</code>
+         </h1>
+         <b-form-checkbox class="mb-3"
+                          v-model="options.uploadMultiple">
+            Upload Multiple
+         </b-form-checkbox>
+         <b-form-checkbox class="mb-3"
+                          v-model="useFirebase">
+            Firebase Driver
+         </b-form-checkbox>
+      </header>
+      <b-container tag="main">
+         <b-row>
+            <b-col cols="3"></b-col>
+            <b-col cols="6">
+               <vue-transmit ref="uploader"
+                             upload-area-classes="vh-20"
+                             drag-class="dragging"
+                             v-bind="options"
+                             :driver-options="driverOptions"
+                             :driver="driver"
+                             @added-file="onAddedFile"
+                             @success="onUploadSuccess"
+                             @success-multiple="onUploadSuccessMultiple"
+                             @timeout="onError"
+                             @error="onError">
+                  <flex-col align-v="center"
+                            class="h-100">
+                     <flex-row align-h="center">
+                        <b-btn variant="primary"
+                               @click="triggerBrowse"
+                               class="w-50">
+                           Upload Files
+                        </b-btn>
+                     </flex-row>
+                  </flex-col>
+                  <template slot-scope="{ uploadingFiles }"
+                            slot="files">
+                     <flex-row v-for="file in uploadingFiles"
+                               :key="file.id"
+                               align-v="center"
+                               no-wrap
+                               class="w-100 my-5"
+                               style="height: 100px;">
+                        <img v-show="file.dataUrl"
+                             :src="file.dataUrl"
+                             :alt="file.name"
+                             class="img-fluid w-25">
+                        <b-progress :value="file.upload.progress"
+                                    show-progress
+                                    :precision="2"
+                                    :variant="file.upload.progress === 100 ? 'success' : 'warning'"
 
-  <script src="/assets/vue.js"></script>
-  <script src="/assets/bootstrap-vue.js"></script>
-  <script src="/assets/vue-flex.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-  <script src="/assets/vue-transmit.js"></script>
-  <script>
-    Vue.config.debug = true
-    Vue.config.strict = true
-    Vue.use(VueTransmit.VueTransmitPlugin)
-    Vue.use(vueFlex)
-    window.app = new Vue({
-      el: '#app',
-      data() {
-        return {
-          options: {
-            acceptedFileTypes: ['image/*'],
-            clickable: false,
-            accept: this.accept,
-            uploadMultiple: true,
-            maxConcurrentUploads: 4,
-          },
-          useFirebase: false,
-          files: [],
-          showModal: false,
-          error: "",
-          count: 0
-        }
-      },
-      created() {
-        fetch("/api/firebase", { method: "GET", })
-          .then(res => res.json())
-          .then(config => firebase.initializeApp(config))
-      },
-      computed: {
-        driverOptions() {
-          if (this.useFirebase) {
+                                    :animated="file.upload.progress === 100"
+                                    class="ml-2 w-100"></b-progress>
+                     </flex-row>
+                  </template>
+               </vue-transmit>
+            </b-col>
+         </b-row>
+         <b-row class="my-3">
+            <b-col v-for="file in files"
+                   :key="file.id"
+                   cols="4">
+               <b-card :title="file.name"
+                       :sub-title="file.type"
+                       :img-src="file.meta.url"
+                       :img-alt="file.name"
+                       img-top>
+                  <pre>{{ file | json }}</pre>
+               </b-card>
+            </b-col>
+         </b-row>
+      </b-container>
+      <b-modal v-model="showModal"
+               title="File Upload: Error">
+         <p class="bg-danger text-white p-3 my-2"
+            v-html="error"></p>
+      </b-modal>
+   </b-container>
+
+   <script src="/assets/vue.js"></script>
+   <script src="/assets/bootstrap-vue.js"></script>
+   <script src="/assets/vue-flex.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+   <script src="/assets/vue-transmit.js"></script>
+   <script>
+      Vue.config.debug = true
+      Vue.config.strict = true
+      Vue.use(VueTransmit.VueTransmitPlugin)
+      Vue.use(vueFlex)
+      window.app = new Vue({
+         el: '#app',
+         data() {
             return {
-              storageRef(file) {
-                return firebase.storage().ref(`images/${file.name}`)
-              }
+               options: {
+                  acceptedFileTypes: ['image/*'],
+                  clickable: false,
+                  accept: this.accept,
+                  uploadMultiple: true,
+                  maxConcurrentUploads: 4,
+               },
+               useFirebase: false,
+               files: [],
+               showModal: false,
+               error: "",
+               count: 0
             }
-          }
-          return {
-            url: this.url,
-            timeout: 3000,
-            errUploadError: xhr => xhr.response.message
-          }
-        },
-        driver() {
-          if (this.useFirebase) {
-            console.log('using', VueTransmit.FirebaseDriver)
-            return VueTransmit.FirebaseDriver
-          }
+         },
+         created() {
+            fetch("/api/firebase", { method: "GET", })
+               .then(res => res.json())
+               .then(config => firebase.initializeApp(config))
+         },
+         computed: {
+            driverOptions() {
+               if (this.useFirebase) {
+                  return {
+                     storageRef(file) {
+                        return firebase.storage().ref(`images/${file.name}`)
+                     }
+                  }
+               }
+               return {
+                  url: this.url,
+                  timeout: 3000,
+                  errUploadError: xhr => xhr.response.message
+               }
+            },
+            driver() {
+               if (this.useFirebase) {
+                  console.log('using', VueTransmit.FirebaseDriver)
+                  return VueTransmit.FirebaseDriver
+               }
 
-          console.log('using', VueTransmit.XHRDriver)
-          return VueTransmit.XHRDriver
-        },
-        url() {
-          if (this.options.uploadMultiple) {
-            return `/api/upload/multiple`
-          }
+               console.log('using', VueTransmit.XHRDriver)
+               return VueTransmit.XHRDriver
+            },
+            url() {
+               if (this.options.uploadMultiple) {
+                  return `/api/upload/multiple`
+               }
 
-          return `/api/upload/single`
-        }
-      },
-      methods: {
-        triggerBrowse() {
-          this.$refs.uploader.triggerBrowseFiles()
-        },
-        onAddedFile(file) {
-          console.log(
-            this.$refs.uploader.inputEl.value,
-            this.$refs.uploader.inputEl.files
-          )
-        },
-        onUploadSuccess(file, res) {
-          console.log(res)
-          if (!this.options.uploadMultiple) {
-            file.meta.url = res.file.url
-            this.files.push(file)
-          }
-        },
-        onUploadSuccessMultiple(files, res) {
-          console.log(...arguments)
-          for (let i = 0, len = files.length; i < len; i++) {
-            files[i].meta.url = res.files[i].url
-            this.files.push(files[i])
-          }
-        },
-        onError(file, errorMsg) {
-          this.error = errorMsg
-          this.showModal = true
-        },
-        listen(event) {
-          this.$refs.uploader.$on(event, (...args) => {
-            console.log(event, ...args)
-          })
-        },
-        accept(file, done) {
-          this.count++
-          console.log(JSON.stringify(file, undefined, 2))
-          done()
-        }
-      },
-      filters: {
-        json(value) {
-          return JSON.stringify(value, null, 2)
-        }
-      },
-      mounted() {
-        Object.keys(VueTransmit.VTransmitEvents).forEach(this.listen)
-      },
-    })
-  </script>
+               return `/api/upload/single`
+            }
+         },
+         methods: {
+            triggerBrowse() {
+               this.$refs.uploader.triggerBrowseFiles()
+            },
+            onAddedFile(file) {
+               console.log(
+                  this.$refs.uploader.inputEl.value,
+                  this.$refs.uploader.inputEl.files
+               )
+            },
+            onUploadSuccess(file, res) {
+               console.log(res)
+               if (!this.options.uploadMultiple) {
+                  file.meta.url = res.file.url
+                  this.files.push(file)
+               }
+            },
+            onUploadSuccessMultiple(files, res) {
+               console.log(...arguments)
+               for (let i = 0, len = files.length; i < len; i++) {
+                  files[i].meta.url = res.files[i].url
+                  this.files.push(files[i])
+               }
+            },
+            onError(file, errorMsg) {
+               this.error = errorMsg
+               this.showModal = true
+            },
+            listen(event) {
+               this.$refs.uploader.$on(event, (...args) => {
+                  console.log(event, ...args)
+               })
+            },
+            accept(file, done) {
+               this.count++
+               console.log(JSON.stringify(file, undefined, 2))
+               done()
+            }
+         },
+         filters: {
+            json(value) {
+               return JSON.stringify(value, null, 2)
+            }
+         },
+         mounted() {
+            Object.keys(VueTransmit.VTransmitEvents).forEach(this.listen)
+         },
+      })
+   </script>
 </body>
 
 </html>

@@ -18,7 +18,9 @@ export interface SpeedStats {
 
 export class VTransmitFile {
 	private _dataUrl: string = "";
-
+	/**
+	 * The browser native file object obtained from the file input.
+	 */
 	public nativeFile: File;
 	public id: string = VTransmitFile.idFactory();
 	public status: UploadStatuses = UploadStatuses.None;
@@ -36,7 +38,7 @@ export class VTransmitFile {
 	/**
 	 * `adapterData` is data meant for use by an upload adapter only.
 	 */
-	public adapterData: AnyObject = {};
+	public driverData: AnyObject = {};
 	/**
 	 * `meta` is a place to add custom properties.
 	 */
@@ -62,7 +64,6 @@ export class VTransmitFile {
 		this.size = file.size;
 		this.type = file.type;
 		this.webkitRelativePath = file.webkitRelativePath;
-
 		this.upload.total = file.size;
 	}
 

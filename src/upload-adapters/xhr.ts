@@ -8,8 +8,19 @@ import {
 	is_function,
 } from "../core/utils";
 
-export type StaticOrDynamic<T> = T | ((files: VTransmitFile[]) => T);
 export type ParamName = string | ((file: VTransmitFile) => string);
+export type StaticOrDynamic<T> = T | ((files: VTransmitFile[]) => T);
+
+function resolveStaticOrDynamic<T>(
+	x: StaticOrDynamic<T>,
+	files: VTransmitFile[]
+): T {
+	if (is_function(x)) {
+		return x(files);
+	}
+
+	return x;
+}
 
 export enum ParamNameStyle {
 	Empty,
@@ -194,39 +205,29 @@ export class XHRDriver<T = any> implements DriverInterface {
 			const xhr = new XMLHttpRequest();
 			const updateProgress = this.handleUploadProgress(files);
 			const id = group_id++;
-			const url = is_function(this.url) ? this.url(files) : this.url;
-			const method = is_function(this.method)
-				? this.method(files)
-				: this.method;
-			const timeout = is_function(this.timeout)
-				? this.timeout(files)
-				: this.timeout;
-			const withCredentials = is_function(this.withCredentials)
-				? this.withCredentials(files)
-				: this.withCredentials;
-			const responseType = is_function(this.responseType)
-				? this.responseType(files)
-				: this.responseType;
-			const params = is_function(this.params)
-				? this.params(files)
-				: this.params;
-			const headers = is_function(this.headers)
-				? this.headers(files)
-				: this.headers;
+			const params = resolveStaticOrDynamic(this.params, files);
+			const headers = resolveStaticOrDynamic(this.headers, files);
 
 			this.uploadGroups[id] = { id, xhr, files };
 
 			for (const file of files) {
-				file.adapterData.groupID = id;
+				file.driverData.groupID = id;
 				file.startProgress();
 			}
 
-			xhr.open(method, url, true);
+			xhr.open(
+				resolveStaticOrDynamic(this.method, files),
+				resolveStaticOrDynamic(this.url, files),
+				true
+			);
 			// Setting the timeout after open because of IE11 issue:
 			// @link https://gitlab.com/meno/dropzone/issues/8
-			xhr.timeout = timeout;
-			xhr.withCredentials = withCredentials;
-			xhr.responseType = responseType;
+			xhr.timeout = resolveStaticOrDynamic(this.timeout, files);
+			xhr.withCredentials = resolveStaticOrDynamic(
+				this.withCredentials,
+				files
+			);
+			xhr.responseType = resolveStaticOrDynamic(this.responseType, files);
 
 			xhr.addEventListener("error", () => {
 				this.rmGroup(id);
@@ -290,7 +291,7 @@ export class XHRDriver<T = any> implements DriverInterface {
 					}
 				}
 
-				// Called at load (when complete) will enable all the progress done logic.
+				// Called on load (complete) to complete progress tracking logic.
 				updateProgress();
 				if (xhr.status < 200 || xhr.status >= 300) {
 					return resolve({
@@ -384,9 +385,12 @@ export class XHRDriver<T = any> implements DriverInterface {
 	}
 
 	getParamName(file: VTransmitFile, index: string | number): string {
-		let paramName = is_function(this.paramName)
-			? this.paramName(file)
-			: this.paramName;
+		let paramName: string;
+		if (is_function(this.paramName)) {
+			paramName = this.paramName(file);
+		} else {
+			paramName = this.paramName;
+		}
 
 		if (!this.context.props.uploadMultiple) {
 			return paramName;
@@ -408,13 +412,13 @@ export class XHRDriver<T = any> implements DriverInterface {
 	}
 
 	cancelUpload(file: VTransmitFile): VTransmitFile[] {
-		let group = this.uploadGroups[file.adapterData.groupID];
+		let group = this.uploadGroups[file.driverData.groupID];
 		if (!group) {
 			return [];
 		}
 
 		group.xhr.abort();
-		this.rmGroup(file.adapterData.groupID);
+		this.rmGroup(file.driverData.groupID);
 
 		return [...group.files];
 	}

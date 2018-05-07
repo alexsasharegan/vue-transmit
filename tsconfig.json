@@ -22,6 +22,6 @@
 		"skipLibCheck": true,
 		"strict": true
 	},
-	"include": ["src", "./index.ts", "./index.umd.ts"],
+	"include": ["src"],
 	"exclude": ["node_modules", "vendor", "dist"]
 }

@@ -45,9 +45,8 @@ export class FirebaseDriver implements DriverInterface {
 			ps.push(
 				new Promise(resolve => {
 					let ref = this.options.storageRef(file);
-					let metadata = this.options.metadata
-						? this.options.metadata(file)
-						: undefined;
+					let metadata =
+						this.options.metadata && this.options.metadata(file);
 					let task = ref.put(files[i].nativeFile, metadata);
 					this.cancelTokens[file.id] = () => task.cancel();
 					task.on(firebase.storage.TaskEvent.STATE_CHANGED, {

@@ -10,13 +10,13 @@ const server = http.createServer(app);
 
 const firebase_conf = {};
 try {
-  Object.assign(
-    firebase_conf,
-    JSON.parse(fs.readFileSync(path.join(__dirname, ".firebase.json")))
-  );
-  console.info({ firebase_conf });
+	Object.assign(
+		firebase_conf,
+		JSON.parse(fs.readFileSync(path.join(__dirname, ".firebase.json")))
+	);
+	console.info({ firebase_conf });
 } catch (err) {
-  console.error(`Error: firebase config file not found or malformed`, err);
+	console.error(`Error: firebase config file not found or malformed`, err);
 }
 
 /**
@@ -31,76 +31,76 @@ const upload_single = uploader.single("file");
 const upload_multiple = uploader.array("file");
 
 app.post("/api/upload/single", upload_single, async (req, res) => {
-  const file = req.file;
-  file.extension = file.originalname.slice(file.originalname.lastIndexOf("."));
-  const shasum = crypto.createHash("sha1");
-  const rx = fs.createReadStream(req.file.path);
+	const file = req.file;
+	file.extension = file.originalname.slice(file.originalname.lastIndexOf("."));
+	const shasum = crypto.createHash("sha1");
+	const rx = fs.createReadStream(req.file.path);
 
-  rx.on("data", bytes => shasum.update(bytes));
-  const hash = await new Promise(resolve =>
-    rx.on("end", () => {
-      resolve(shasum.digest("hex"));
-    })
-  );
+	rx.on("data", bytes => shasum.update(bytes));
+	const hash = await new Promise(resolve =>
+		rx.on("end", () => {
+			resolve(shasum.digest("hex"));
+		})
+	);
 
-  const ok = await new Promise(resolve =>
-    fs.rename(req.file.path, path.join(tmp_dir, hash + file.extension), err =>
-      resolve(!err)
-    )
-  );
+	const ok = await new Promise(resolve =>
+		fs.rename(req.file.path, path.join(tmp_dir, hash + file.extension), err =>
+			resolve(!err)
+		)
+	);
 
-  if (!ok) {
-    res.status(400);
-    res.end();
-    return;
-  }
+	if (!ok) {
+		res.status(400);
+		res.end();
+		return;
+	}
 
-  file.filename = hash + file.extension;
-  file.url = `/images/${file.filename}`;
+	file.filename = hash + file.extension;
+	file.url = `/images/${file.filename}`;
 
-  res.json({ file });
+	res.json({ file });
 });
 
 app.post("/api/upload/multiple", upload_multiple, async (req, res) => {
-  const ps = req.files.map(async file => {
-    file.extension = file.originalname.slice(
-      file.originalname.lastIndexOf(".")
-    );
+	const ps = req.files.map(async file => {
+		file.extension = file.originalname.slice(
+			file.originalname.lastIndexOf(".")
+		);
 
-    const shasum = crypto.createHash("sha1");
-    const rx = fs.createReadStream(file.path);
+		const shasum = crypto.createHash("sha1");
+		const rx = fs.createReadStream(file.path);
 
-    rx.on("data", bytes => shasum.update(bytes));
-    const hash = await new Promise(resolve =>
-      rx.on("end", () => {
-        resolve(shasum.digest("hex"));
-      })
-    );
+		rx.on("data", bytes => shasum.update(bytes));
+		const hash = await new Promise(resolve =>
+			rx.on("end", () => {
+				resolve(shasum.digest("hex"));
+			})
+		);
 
-    file.success = await new Promise(resolve =>
-      fs.rename(file.path, path.join(tmp_dir, hash + file.extension), err =>
-        resolve(!err)
-      )
-    );
+		file.success = await new Promise(resolve =>
+			fs.rename(file.path, path.join(tmp_dir, hash + file.extension), err =>
+				resolve(!err)
+			)
+		);
 
-    if (file.success) {
-      file.filename = hash + file.extension;
-      file.url = `/images/${file.filename}`;
-    }
+		if (file.success) {
+			file.filename = hash + file.extension;
+			file.url = `/images/${file.filename}`;
+		}
 
-    return file;
-  });
+		return file;
+	});
 
-  const files = await Promise.all(ps);
+	const files = await Promise.all(ps);
 
-  if (!files.every(f => f.success)) {
-    res.status(400);
-    res.json({ files });
-    res.end();
-    return;
-  }
+	if (!files.every(f => f.success)) {
+		res.status(400);
+		res.json({ files });
+		res.end();
+		return;
+	}
 
-  res.json({ files });
+	res.json({ files });
 });
 
 /**
@@ -109,7 +109,7 @@ app.post("/api/upload/multiple", upload_multiple, async (req, res) => {
  * -----------------------------------------------------------------------------
  */
 app.get("/api/firebase", (req, res) => {
-  res.json(firebase_conf);
+	res.json(firebase_conf);
 });
 
 /**
@@ -118,30 +118,30 @@ app.get("/api/firebase", (req, res) => {
  * -----------------------------------------------------------------------------
  */
 const pkg_assets = {
-  vue: path.join(__dirname, "../node_modules/vue/dist/"),
-  bootstrap: path.join(__dirname, "../node_modules/bootstrap/dist/css/"),
-  bootstrap_vue: path.join(__dirname, "../node_modules/bootstrap-vue/dist/"),
-  vue_transmit: path.join(__dirname, "../../dist/"),
-  vue_flex: path.join(__dirname, "../node_modules/vue-flex/dist/"),
+	vue: path.join(__dirname, "../node_modules/vue/dist/"),
+	bootstrap: path.join(__dirname, "../node_modules/bootstrap/dist/css/"),
+	bootstrap_vue: path.join(__dirname, "../node_modules/bootstrap-vue/dist/"),
+	vue_transmit: path.join(__dirname, "../../dist/"),
+	vue_flex: path.join(__dirname, "../node_modules/vue-flex/dist/"),
 };
 app.use("/", express.static(path.join(__dirname, "../public/")));
 app.use("/images", express.static(tmp_dir));
 app.use(
-  "/assets",
-  express.static(pkg_assets.vue),
-  express.static(pkg_assets.bootstrap),
-  express.static(pkg_assets.bootstrap_vue),
-  express.static(pkg_assets.vue_flex),
-  express.static(pkg_assets.vue_transmit)
+	"/assets",
+	express.static(pkg_assets.vue),
+	express.static(pkg_assets.bootstrap),
+	express.static(pkg_assets.bootstrap_vue),
+	express.static(pkg_assets.vue_flex),
+	express.static(pkg_assets.vue_transmit)
 );
 
 server.listen(
-  {
-    host: "127.0.0.1",
-    port: 3124,
-  },
-  () => {
-    let { address, family, port } = server.address();
-    console.info(`Listening on http://${address}:${port} [${family}]`);
-  }
+	{
+		host: "127.0.0.1",
+		port: 3124,
+	},
+	() => {
+		let { address, family, port } = server.address();
+		console.info(`Listening on http://${address}:${port} [${family}]`);
+	}
 );

@@ -6,13 +6,12 @@ import uglify from "rollup-plugin-uglify";
 const is_production = process.env.NODE_ENV === `production`;
 const kebab_name = "vue-transmit";
 const pascal_name = "VueTransmit";
-const ts_opts = { verbosity: 3, clean: true };
 const vue_opts = { css: path.join(__dirname, `dist/${kebab_name}.css`) };
-const plugins = [ts(ts_opts), vue(vue_opts)];
+const plugins = [ts(), vue(vue_opts)];
 
 module.exports = [
 	{
-		input: "index.umd.ts",
+		input: "src/index.umd.ts",
 		output: {
 			format: "umd",
 			name: pascal_name,
@@ -25,7 +24,7 @@ module.exports = [
 		},
 	},
 	{
-		input: path.resolve(__dirname, "index.ts"),
+		input: path.resolve(__dirname, "src/index.ts"),
 		output: {
 			format: "es",
 			file: `./dist/${kebab_name}.esm.js`,
