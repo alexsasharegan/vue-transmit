@@ -584,17 +584,13 @@ export default Vue.extend({
 			this.getFilesWithStatus(...statuses).map(this.removeFile);
 		},
 		removeAllFiles(cancelInProgressUploads = false): void {
-			let f: VTransmitFile;
-			let filesToRemove: VTransmitFile[] = [];
-			for (f of this.files) {
-				if (
-					f.status !== UploadStatuses.Uploading ||
-					cancelInProgressUploads
-				) {
-					filesToRemove.push(f);
-				}
+			let filesToRemove: VTransmitFile[] = this.files;
+			if (!cancelInProgressUploads) {
+				filesToRemove = filesToRemove.filter(
+					f => f.status !== UploadStatuses.Uploading
+				);
 			}
-			filesToRemove.map(f => this.removeFile(f));
+			filesToRemove.map(this.removeFile);
 		},
 		triggerBrowseFiles(): void {
 			if (this.inputEl) {
