@@ -35,6 +35,8 @@ export class VTransmitFile {
 	public width: number = 0;
 	public height: number = 0;
 	public errorMessage: string = "";
+	public thumbnailLoaded: boolean = false;
+
 	/**
 	 * `adapterData` is data meant for use by an upload adapter only.
 	 */
@@ -104,7 +106,7 @@ export class VTransmitFile {
 	}
 
 	get dataUrl() {
-		return this._dataUrl || "";
+		return this.thumbnailLoaded ? this._dataUrl : "";
 	}
 
 	set dataUrl(value) {
@@ -115,6 +117,7 @@ export class VTransmitFile {
 			configurable: true,
 			writable: true,
 		});
+		this.thumbnailLoaded = true;
 	}
 
 	static idFactory() {
