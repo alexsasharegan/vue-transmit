@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.1.3"></a>
+## [8.1.3](https://github.com/alexsasharegan/vue-transmit/compare/v8.1.2...v8.1.3) (2018-05-09)
+
+
+### Bug Fixes
+
+* **VTransmitFile:** problem with thumbnail update ([#52](https://github.com/alexsasharegan/vue-transmit/issues/52)) ([aab8ed9](https://github.com/alexsasharegan/vue-transmit/commit/aab8ed9)), closes [#50](https://github.com/alexsasharegan/vue-transmit/issues/50)
+
+
+
 <a name="8.1.2"></a>
 ## [8.1.2](https://github.com/alexsasharegan/vue-transmit/compare/v8.1.1...v8.1.2) (2018-03-23)
 
