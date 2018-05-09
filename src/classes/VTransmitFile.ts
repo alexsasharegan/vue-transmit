@@ -44,6 +44,7 @@ class VTransmitFile {
 	xhr: XMLHttpRequest = undefined
 	private _dataUrl: string
 	errorMessage: string = undefined
+	thumbnailLoaded: boolean = false
 
 	constructor(...data: object[]) {
 		assign(this, ...data)
@@ -111,7 +112,7 @@ class VTransmitFile {
 	}
 
 	get dataUrl() {
-		return this._dataUrl || ""
+		return this.thumbnailLoaded ? this._dataUrl : (this._dataUrl || "")
 	}
 
 	set dataUrl(value) {
@@ -121,6 +122,7 @@ class VTransmitFile {
 			configurable: true,
 			writable: true,
 		})
+		this.thumbnailLoaded = true
 	}
 
 	static fromNativeFile(file: File, ...data) {
