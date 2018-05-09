@@ -29,6 +29,7 @@ declare class VTransmitFile {
     xhr: XMLHttpRequest;
     private _dataUrl;
     errorMessage: string;
+    thumbnailLoaded: boolean;
     constructor(...data: object[]);
     set(...data: object[]): VTransmitFile;
     copyNativeFile(file: File): VTransmitFile;
