@@ -436,11 +436,7 @@ export default class VueTransmit extends Vue {
     this.getFilesWithStatus(...statuses).map(this.removeFile);
   }
   removeAllFiles(cancelInProgressUploads = false): void {
-    for (const file of this.files) {
-      if (file.status !== STATUSES.UPLOADING || cancelInProgressUploads) {
-        this.removeFile(file);
-      }
-    }
+    this.files.filter(f => f.status !== STATUSES.UPLOADING || cancelInProgressUploads).map(this.removeFile);
   }
   triggerBrowseFiles(): void {
     this.inputEl.click();
