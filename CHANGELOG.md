@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.1.4"></a>
+## [8.1.4](https://github.com/alexsasharegan/vue-transmit/compare/v8.1.3...v8.1.4) (2018-05-09)
+
+
+### Bug Fixes
+
+* **component:** iteration bug in removeAllFiles method ([#53](https://github.com/alexsasharegan/vue-transmit/issues/53)) ([200a662](https://github.com/alexsasharegan/vue-transmit/commit/200a662))
+
+
+
 <a name="8.1.3"></a>
 ## [8.1.3](https://github.com/alexsasharegan/vue-transmit/compare/v8.1.2...v8.1.3) (2018-05-09)
 
