@@ -5,11 +5,11 @@ import {
 	ParamNameStyle,
 	XHRDriverOptions,
 	XHRUploadGroup,
-} from "./upload-adapters/xhr";
+} from "./upload-drivers/xhr";
 import {
 	FirebaseDriver,
 	FirebaseUploadOptions,
-} from "./upload-adapters/firebase";
+} from "./upload-drivers/firebase";
 import {
 	DriverConstructor,
 	DriverInterface,

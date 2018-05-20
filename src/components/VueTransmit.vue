@@ -80,7 +80,7 @@ import {
 } from "../core/utils";
 import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
-import { XHRDriver } from "../upload-adapters/xhr";
+import { XHRDriver } from "../upload-drivers/xhr";
 import { DriverInterface, DriverConstructor } from "../core/interfaces";
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry;

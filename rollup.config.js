@@ -1,21 +1,24 @@
 import path from "path";
-import ts from "rollup-plugin-typescript2";
-import vue from "rollup-plugin-vue";
-import uglify from "rollup-plugin-uglify";
+import TS from "rollup-plugin-typescript2";
+import VuePlugin from "rollup-plugin-vue";
+import { uglify as UglifyPlugin } from "rollup-plugin-uglify";
+import { minify } from "uglify-es";
 
 const is_production = process.env.NODE_ENV === `production`;
-const kebab_name = "vue-transmit";
-const pascal_name = "VueTransmit";
-const vue_opts = { css: path.join(__dirname, `dist/${kebab_name}.css`) };
-const plugins = [ts(), vue(vue_opts)];
+const vtKebab = "vue-transmit";
+const vtPascal = "VueTransmit";
+const cssOut = path.join(__dirname, `dist/${vtKebab}.css`);
+const vue_opts = { css: cssOut };
+const ts_opts = { include: ["*.ts+(|x)", "**/*.ts+(|x)", RegExp(".*.ts?.*")] };
+const plugins = [VuePlugin(vue_opts), TS()];
 
-module.exports = [
+export default [
 	{
 		input: "src/index.umd.ts",
 		output: {
 			format: "umd",
-			name: pascal_name,
-			file: `./dist/${kebab_name}.js`,
+			name: vtPascal,
+			file: `./dist/${vtKebab}.js`,
 			sourcemap: true,
 			globals: {
 				vue: "Vue",
@@ -27,7 +30,7 @@ module.exports = [
 		input: path.resolve(__dirname, "src/index.ts"),
 		output: {
 			format: "es",
-			file: `./dist/${kebab_name}.esm.js`,
+			file: `./dist/${vtKebab}.esm.js`,
 			sourcemap: true,
 		},
 	},
@@ -36,7 +39,7 @@ module.exports = [
 		external: ["vue", "firebase"],
 		input,
 		output: { ...output },
-		plugins,
+		plugins: plugins,
 	});
 
 	configs.push({
@@ -46,7 +49,7 @@ module.exports = [
 			...output,
 			file: replaceExtension(output.file, ".min.js"),
 		},
-		plugins: plugins.concat(uglify()),
+		plugins: [...plugins, UglifyPlugin({}, minify)],
 	});
 
 	return configs;

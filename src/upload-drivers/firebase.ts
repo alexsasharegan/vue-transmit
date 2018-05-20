@@ -38,11 +38,11 @@ export class FirebaseDriver implements DriverInterface {
 
 	uploadFiles(files: VTransmitFile[]): Promise<UploadResult<any>> {
 		console.log("firebase upload", { files });
-		const ps: Promise<any>[] = [];
+		const tasks: Promise<any>[] = [];
 
 		for (let i = 0, len = files.length; i < len; i++) {
 			let file = files[i];
-			ps.push(
+			tasks.push(
 				new Promise(resolve => {
 					let ref = this.options.storageRef(file);
 					let metadata =
@@ -68,7 +68,7 @@ export class FirebaseDriver implements DriverInterface {
 			);
 		}
 
-		return Promise.all(ps).then(
+		return Promise.all(tasks).then(
 			() => <UploadResultOk<{}>>{ ok: true, data: {} }
 		);
 	}
