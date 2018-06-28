@@ -30,6 +30,9 @@ declare class VTransmitFile {
     private _dataUrl;
     errorMessage: string;
     thumbnailLoaded: boolean;
+    isChunked: boolean;
+    chunkLength: number;
+    chunkIndex: number;
     constructor(...data: object[]);
     set(...data: object[]): VTransmitFile;
     copyNativeFile(file: File): VTransmitFile;
@@ -37,6 +40,7 @@ declare class VTransmitFile {
     handleProgress(e: ProgressEvent): void;
     startProgress(): VTransmitFile;
     endProgress(): VTransmitFile;
+    chunkify(maxBytes: number): VTransmitFile[];
     nativeFile: File;
     dataUrl: string;
     static fromNativeFile(file: File, ...data: any[]): VTransmitFile;

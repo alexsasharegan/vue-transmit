@@ -5,10 +5,7 @@ export declare const assign: {
     <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
     (target: object, ...sources: any[]): any;
 };
-export declare const defineProperty: {
-    (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
-    (o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
-};
+export declare const defineProperty: (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any;
 export declare function uniqueId(prefix: string): string;
 export declare function copyOwnAndInheritedProps(obj: object): object;
 export declare type Rounding = "round" | "ceil" | "floor" | "trunc";

@@ -1,64 +1,64 @@
 <template>
-	<component :is="tag">
-		<div class="v-transmit__upload-area"
-		     :class="[isDraggingClass, uploadAreaClasses]"
-		     :draggable="!disabledDraggable"
-		     v-bind="uploadAreaAttrs"
-		     v-on="uploadAreaListeners"
-		     @click="handleClickUploaderAction"
-		     @dragstart="handleDragStart"
-		     @dragend="handleDragEnd"
-		     @dragenter.prevent.stop="handleDragEnter"
-		     @dragover.prevent.stop="handleDragOver"
-		     @dragleave="handleDragLeave"
-		     @drop.prevent.stop="handleDrop">
-			<slot></slot>
-		</div>
-		<slot name="files"
-		      v-bind="fileSlotBindings"></slot>
-		<form :style="formStyles"
-		      ref="uploadForm">
-			<input type="file"
-			       ref="hiddenFileInput"
-			       :multiple="multiple"
-			       :class="[maxFilesReachedClass]"
-			       :accept="filesToAccept"
-			       :capture="capture"
-			       @change="onFileInputChange">
-		</form>
-	</component :is="tag">
+   <component :is="tag">
+      <div class="v-transmit__upload-area"
+           :class="[isDraggingClass, uploadAreaClasses]"
+           :draggable="!disabledDraggable"
+           v-bind="uploadAreaAttrs"
+           v-on="uploadAreaListeners"
+           @click="handleClickUploaderAction"
+           @dragstart="handleDragStart"
+           @dragend="handleDragEnd"
+           @dragenter.prevent.stop="handleDragEnter"
+           @dragover.prevent.stop="handleDragOver"
+           @dragleave="handleDragLeave"
+           @drop.prevent.stop="handleDrop">
+         <slot></slot>
+      </div>
+      <slot name="files"
+            v-bind="fileSlotBindings"></slot>
+      <form :style="formStyles"
+            ref="uploadForm">
+         <input type="file"
+                ref="hiddenFileInput"
+                :multiple="multiple"
+                :class="[maxFilesReachedClass]"
+                :accept="filesToAccept"
+                :capture="capture"
+                @change="onFileInputChange">
+      </form>
+   </component :is="tag">
 </template>
 
 <style lang="scss">
-	$border-color: #bdbdbd;
-	$drop-color: #e1f5fe;
-	$drop-color-alt: #fafafa;
+   $border-color: #bdbdbd;
+   $drop-color: #e1f5fe;
+   $drop-color-alt: #fafafa;
 
-	.v-transmit__upload-area {
-	  width: 100%;
-	  border-radius: 1rem;
-	  border: 2px dashed $border-color;
-	  min-height: 30vh;
+   .v-transmit__upload-area {
+     width: 100%;
+     border-radius: 1rem;
+     border: 2px dashed $border-color;
+     min-height: 30vh;
 
-	  @media (min-height: 1000px) {
-	    min-height: 300px;
-	  }
-	}
+     @media (min-height: 1000px) {
+       min-height: 300px;
+     }
+   }
 
-	.v-transmit__upload-area--is-dragging {
-	  background: $drop-color
-	    linear-gradient(
-	      -45deg,
-	      $drop-color-alt 25%,
-	      transparent 25%,
-	      transparent 50%,
-	      $drop-color-alt 50%,
-	      $drop-color-alt 75%,
-	      transparent 75%,
-	      transparent
-	    );
-	  background-size: 40px 40px;
-	}
+   .v-transmit__upload-area--is-dragging {
+     background: $drop-color
+       linear-gradient(
+         -45deg,
+         $drop-color-alt 25%,
+         transparent 25%,
+         transparent 50%,
+         $drop-color-alt 50%,
+         $drop-color-alt 75%,
+         transparent 75%,
+         transparent
+       );
+     background-size: 40px 40px;
+   }
 </style>
 
 <script lang="ts">
@@ -222,6 +222,9 @@ export default class VueTransmit extends Vue {
    */
   @Prop({ type: Boolean, default: true })
   autoQueue: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  withChunking: boolean;
 
   /**
    * If null, no capture type will be specified
@@ -398,27 +401,30 @@ export default class VueTransmit extends Vue {
     this.formEl.reset();
   }
   addFile(file: File): VTransmitFile {
-    const vTransmitFile = VTransmitFile.fromNativeFile(file);
-    vTransmitFile.status = STATUSES.ADDED;
-    this.files.push(vTransmitFile);
-    this.$emit("added-file", vTransmitFile);
-    this.enqueueThumbnail(vTransmitFile);
-    this.acceptFile(vTransmitFile, error => {
+    const vtFile = VTransmitFile.fromNativeFile(file);
+    vtFile.status = STATUSES.ADDED;
+    this.files.push(vtFile);
+    this.$emit("added-file", vtFile);
+    this.enqueueThumbnail(vtFile);
+    this.acceptFile(vtFile, error => {
       if (error) {
-        vTransmitFile.accepted = false;
-        this.errorProcessing([vTransmitFile], error);
-        this.$emit("rejected-file", vTransmitFile);
+        vtFile.accepted = false;
+        this.errorProcessing([vtFile], error);
+        this.$emit("rejected-file", vtFile);
       } else {
-        vTransmitFile.accepted = true;
-        this.$emit("accepted-file", vTransmitFile);
+        vtFile.accepted = true;
+        if (vtFile.size > this.maxFileSize * 1024 * 1024) {
+          vtFile.isChunked = true;
+        }
+        this.$emit("accepted-file", vtFile);
         if (this.autoQueue) {
-          this.enqueueFile(vTransmitFile);
+          this.enqueueFile(vtFile);
         }
       }
-      this.$emit("accept-complete", vTransmitFile);
+      this.$emit("accept-complete", vtFile);
     });
 
-    return vTransmitFile;
+    return vtFile;
   }
   removeFile(file: VTransmitFile): void {
     if (file.status === STATUSES.UPLOADING) {
@@ -436,7 +442,9 @@ export default class VueTransmit extends Vue {
     this.getFilesWithStatus(...statuses).map(this.removeFile);
   }
   removeAllFiles(cancelInProgressUploads = false): void {
-    this.files.filter(f => f.status !== STATUSES.UPLOADING || cancelInProgressUploads).map(this.removeFile);
+    this.files
+      .filter(f => f.status !== STATUSES.UPLOADING || cancelInProgressUploads)
+      .map(this.removeFile);
   }
   triggerBrowseFiles(): void {
     this.inputEl.click();
@@ -572,6 +580,11 @@ export default class VueTransmit extends Vue {
     }
   }
   processFile(file: VTransmitFile): void {
+    if (file.isChunked) {
+      this.processFiles(file.chunkify(this.maxFileSize * 1024 * 1024));
+      return;
+    }
+
     this.processFiles([file]);
   }
   processFiles(files: VTransmitFile[]): void {
@@ -828,7 +841,7 @@ export default class VueTransmit extends Vue {
     }
   }
   acceptFile(file: VTransmitFile, done: Function): void {
-    if (file.size > this.maxFileSize * 1024 * 1024) {
+    if (file.size > this.maxFileSize * 1024 * 1024 && !this.withChunking) {
       done(
         this.dictFileTooBig.replace(
           hbsRegex,
