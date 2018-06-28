@@ -80,12 +80,14 @@ class VTransmitFile {
     return this.set(...data.map(copyOwnAndInheritedProps));
   }
 
-  handleProgress(e: ProgressEvent): void {
+  handleProgress(data: { bytesSent: number; totalBytes: number }): void {
     this.startProgress();
-    const total = e.total || this.upload.total;
-    this.upload.progress = Math.min(100, (100 * e.loaded) / total);
-    this.upload.bytesSent = e.loaded;
-    this.upload.total = total;
+    this.upload.progress = Math.min(
+      100,
+      100 * (data.bytesSent / data.totalBytes)
+    );
+    this.upload.bytesSent = data.bytesSent;
+    this.upload.total = data.totalBytes;
     this.upload.time = (Date.now() - this.upload.start) / 1000;
     // Recalc the upload speed in bytes/sec
     this.upload.speed.kbps = round(
@@ -97,6 +99,13 @@ class VTransmitFile {
     if (this.upload.progress === 100) {
       this.endProgress();
     }
+  }
+
+  handleProgressEvent(e: ProgressEvent): void {
+    this.handleProgress({
+      bytesSent: e.loaded,
+      totalBytes: e.total || this.upload.total,
+    });
   }
 
   startProgress(): VTransmitFile {
