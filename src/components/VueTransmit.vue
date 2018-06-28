@@ -75,6 +75,7 @@ import {
   IDimensions,
   webkitIsFile,
   webkitIsDir,
+  defaultRenameChunk,
 } from "../core/utils";
 import VTransmitFile from "../classes/VTransmitFile";
 
@@ -225,6 +226,15 @@ export default class VueTransmit extends Vue {
 
   @Prop({ type: Boolean, default: false })
   withChunking: boolean;
+
+  @Prop({
+    type: Function,
+    default: defaultRenameChunk,
+  })
+  renameChunk: (
+    parentFile: VTransmitFile,
+    meta: { chunkLength: number; chunkIndex: number }
+  ) => string;
 
   /**
    * If null, no capture type will be specified
@@ -580,11 +590,6 @@ export default class VueTransmit extends Vue {
     }
   }
   processFile(file: VTransmitFile): void {
-    if (file.isChunked) {
-      this.processFiles(file.chunkify(this.maxFileSize * 1024 * 1024));
-      return;
-    }
-
     this.processFiles([file]);
   }
   processFiles(files: VTransmitFile[]): void {
@@ -629,6 +634,13 @@ export default class VueTransmit extends Vue {
     }
   }
   uploadFile(file: VTransmitFile): void {
+    if (file.isChunked) {
+      this.uploadFiles(
+        file.chunkify(this.maxFileSize * 1024 * 1024, this.renameChunk)
+      );
+      return;
+    }
+
     this.uploadFiles([file]);
   }
   uploadFiles(files: VTransmitFile[]): void {

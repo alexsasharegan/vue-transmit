@@ -32,6 +32,7 @@
     "lodash-es": "^4.17.10"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.0",
     "ajv": "^6.5.1",
     "ajv-keywords": "^3.2.0",
     "autoprefixer": "^7.2.6",
