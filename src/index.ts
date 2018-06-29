@@ -1,3 +1,3 @@
-import VueTransmit from "./components/VueTransmit.vue"
+import VueTransmit from "./components/VueTransmit.vue";
 
-export { VueTransmit }
+export { VueTransmit };

@@ -30,13 +30,25 @@ declare class VTransmitFile {
     private _dataUrl;
     errorMessage: string;
     thumbnailLoaded: boolean;
+    originalRef: VTransmitFile | null;
+    isChunked: boolean;
+    chunkLength: number;
+    chunkIndex: number;
     constructor(...data: object[]);
     set(...data: object[]): VTransmitFile;
     copyNativeFile(file: File): VTransmitFile;
     copyOwnAndInheritedProps(...data: object[]): VTransmitFile;
-    handleProgress(e: ProgressEvent): void;
+    handleProgress(data: {
+        bytesSent: number;
+        totalBytes: number;
+    }): void;
+    handleProgressEvent(e: ProgressEvent): void;
     startProgress(): VTransmitFile;
     endProgress(): VTransmitFile;
+    chunkify(maxBytes: number, rename: (parentFile: VTransmitFile, meta: {
+        chunkIndex: number;
+        chunkLength: number;
+    }) => string): VTransmitFile[];
     nativeFile: File;
     dataUrl: string;
     static fromNativeFile(file: File, ...data: any[]): VTransmitFile;

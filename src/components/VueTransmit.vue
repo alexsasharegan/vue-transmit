@@ -75,6 +75,8 @@ import {
   IDimensions,
   webkitIsFile,
   webkitIsDir,
+  defaultRenameChunk,
+  expectNever,
 } from "../core/utils";
 import VTransmitFile from "../classes/VTransmitFile";
 
@@ -174,10 +176,10 @@ export default class VueTransmit extends Vue {
    * This is the same as adding hidden input fields in the form element.
    */
   @Prop({ type: Object, default: objFactory })
-  params: object;
+  params: { [x: string]: any };
 
   @Prop({ type: Object, default: objFactory })
-  headers: object;
+  headers: { [x: string]: any };
 
   @Prop({ type: String, default: "" })
   responseType: XMLHttpRequestResponseType;
@@ -222,6 +224,18 @@ export default class VueTransmit extends Vue {
    */
   @Prop({ type: Boolean, default: true })
   autoQueue: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  withChunking: boolean;
+
+  @Prop({
+    type: Function,
+    default: defaultRenameChunk,
+  })
+  renameChunk: (
+    parentFile: VTransmitFile,
+    meta: { chunkLength: number; chunkIndex: number }
+  ) => string;
 
   /**
    * If null, no capture type will be specified
@@ -302,14 +316,14 @@ export default class VueTransmit extends Vue {
     if (this.$refs.hiddenFileInput instanceof HTMLInputElement) {
       el = this.$refs.hiddenFileInput;
     }
-    return el;
+    return el!;
   }
   get formEl(): HTMLFormElement {
     let el = null;
     if (this.$refs.uploadForm instanceof HTMLFormElement) {
       el = this.$refs.uploadForm;
     }
-    return el;
+    return el!;
   }
   get filesToAccept(): string {
     return this.acceptedFileTypes.join(",");
@@ -351,7 +365,7 @@ export default class VueTransmit extends Vue {
     // Loose equality checks null && undefined
     return this.maxFiles != null && this.acceptedFiles.length >= this.maxFiles;
   }
-  get maxFilesReachedClass(): string {
+  get maxFilesReachedClass(): string | null {
     return this.maxFilesReached ? "v-transmit__max-files--reached" : null;
   }
   get isDraggingClass(): { [key: string]: boolean } {
@@ -394,31 +408,37 @@ export default class VueTransmit extends Vue {
     return this.files.filter(f => statuses.indexOf(f.status) > -1);
   }
   onFileInputChange(): void {
+    if (!this.inputEl.files) {
+      return;
+    }
     this.$emit("added-files", Array.from(this.inputEl.files).map(this.addFile));
     this.formEl.reset();
   }
   addFile(file: File): VTransmitFile {
-    const vTransmitFile = VTransmitFile.fromNativeFile(file);
-    vTransmitFile.status = STATUSES.ADDED;
-    this.files.push(vTransmitFile);
-    this.$emit("added-file", vTransmitFile);
-    this.enqueueThumbnail(vTransmitFile);
-    this.acceptFile(vTransmitFile, error => {
+    const vtFile = VTransmitFile.fromNativeFile(file);
+    vtFile.status = STATUSES.ADDED;
+    this.files.push(vtFile);
+    this.$emit("added-file", vtFile);
+    this.enqueueThumbnail(vtFile);
+    this.acceptFile(vtFile, (error: any) => {
       if (error) {
-        vTransmitFile.accepted = false;
-        this.errorProcessing([vTransmitFile], error);
-        this.$emit("rejected-file", vTransmitFile);
+        vtFile.accepted = false;
+        this.errorProcessing([vtFile], error);
+        this.$emit("rejected-file", vtFile);
       } else {
-        vTransmitFile.accepted = true;
-        this.$emit("accepted-file", vTransmitFile);
+        vtFile.accepted = true;
+        if (vtFile.size > this.maxFileSize * 1024 * 1024) {
+          vtFile.isChunked = true;
+        }
+        this.$emit("accepted-file", vtFile);
         if (this.autoQueue) {
-          this.enqueueFile(vTransmitFile);
+          this.enqueueFile(vtFile);
         }
       }
-      this.$emit("accept-complete", vTransmitFile);
+      this.$emit("accept-complete", vtFile);
     });
 
-    return vTransmitFile;
+    return vtFile;
   }
   removeFile(file: VTransmitFile): void {
     if (file.status === STATUSES.UPLOADING) {
@@ -436,7 +456,9 @@ export default class VueTransmit extends Vue {
     this.getFilesWithStatus(...statuses).map(this.removeFile);
   }
   removeAllFiles(cancelInProgressUploads = false): void {
-    this.files.filter(f => f.status !== STATUSES.UPLOADING || cancelInProgressUploads).map(this.removeFile);
+    this.files
+      .filter(f => f.status !== STATUSES.UPLOADING || cancelInProgressUploads)
+      .map(this.removeFile);
   }
   triggerBrowseFiles(): void {
     this.inputEl.click();
@@ -501,7 +523,7 @@ export default class VueTransmit extends Vue {
   createThumbnailFromUrl(
     file: VTransmitFile,
     imageUrl: string,
-    callback?: Function
+    callback: () => void
   ): void {
     const imgEl = document.createElement("img");
 
@@ -516,6 +538,9 @@ export default class VueTransmit extends Vue {
         });
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          return callback();
+        }
         canvas.width = resizeInfo.dWidth;
         canvas.height = resizeInfo.dHeight;
         ctx.drawImage(
@@ -533,9 +558,7 @@ export default class VueTransmit extends Vue {
         file.dataUrl = thumbnail;
         this.$emit("thumbnail", file, thumbnail);
 
-        if (callback) {
-          return callback();
-        }
+        callback();
       },
       false
     );
@@ -566,7 +589,7 @@ export default class VueTransmit extends Vue {
     } else {
       for (let i = processingLength; i < this.maxConcurrentUploads; i++) {
         if (queuedFiles.length) {
-          this.processFile(queuedFiles.shift());
+          this.processFile(queuedFiles.shift()!);
         }
       }
     }
@@ -618,7 +641,202 @@ export default class VueTransmit extends Vue {
   uploadFile(file: VTransmitFile): void {
     this.uploadFiles([file]);
   }
+
+  uploadChunkedFile(file: VTransmitFile): void {
+    let chunks = file.chunkify(
+      this.maxFileSize * 1024 * 1024,
+      this.renameChunk
+    );
+
+    let xhrs: XMLHttpRequest[] = [];
+    let cancel = () => xhrs.forEach(xhr => xhr.abort());
+    let totalBytes = file.size;
+    let progress: { [id: string]: number } = chunks.reduce(
+      (acc, f) => Object.assign(acc, { [f.id]: 0 }),
+      {}
+    );
+    let chunkResponses: Array<{ [x: string]: any }> = [];
+
+    const enum ErrorType {
+      Any,
+      Timeout,
+      Status,
+    }
+
+    interface VTError {
+      source: "vtransmit";
+      type: ErrorType;
+      error: any;
+    }
+
+    let promises = chunks.map(
+      chunk =>
+        new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhrs.push(xhr);
+          xhr.open(this.method, this.url, true);
+
+          xhr.timeout = this.timeout;
+          xhr.withCredentials = Boolean(this.withCredentials);
+          xhr.responseType = this.responseType;
+
+          xhr.addEventListener("error", evt =>
+            reject({
+              source: "vtransmit",
+              type: ErrorType.Any,
+              error: evt,
+            })
+          );
+
+          xhr.upload.addEventListener("progress", evt => {
+            progress[chunk.id] = evt.loaded;
+            file.handleProgress({
+              totalBytes,
+              bytesSent: Object.keys(progress).reduce(
+                (bytesSent, id) => bytesSent + progress[id],
+                0
+              ),
+            });
+            this.$emit(
+              "upload-progress",
+              file,
+              file.upload.progress,
+              file.upload.bytesSent
+            );
+          });
+
+          xhr.addEventListener("timeout", evt => {
+            file.status = STATUSES.TIMEOUT;
+            file.endProgress();
+            cancel();
+            this.$emit("timeout", file, evt, xhr);
+
+            if (this.autoProcessQueue) {
+              this.processQueue();
+            }
+          });
+
+          xhr.addEventListener("load", () => {
+            if (
+              file.status === STATUSES.CANCELED ||
+              xhr.readyState !== XMLHttpRequest.DONE
+            ) {
+              return;
+            }
+
+            let response = xhr.response;
+
+            if (!xhr.responseType) {
+              let contentType = xhr.getResponseHeader("content-type");
+              response = xhr.responseText;
+
+              if (contentType && contentType.indexOf("application/json") > -1) {
+                try {
+                  response = JSON.parse(response);
+                } catch (err) {
+                  response = "Invalid JSON response from server.";
+                }
+              }
+            }
+
+            if (xhr.status < 200 || xhr.status >= 300) {
+              cancel();
+              return reject({
+                source: "vtransmit",
+                type: ErrorType.Status,
+                error: xhr,
+              });
+            }
+
+            chunkResponses.push(response);
+            resolve();
+          });
+
+          // Use null proto obj for the following 'for in' loop
+          const headers = Object.assign(
+            Object.create(null),
+            this.defaultHeaders,
+            this.headers
+          );
+
+          for (const headerName in headers) {
+            if (headers[headerName]) {
+              xhr.setRequestHeader(headerName, headers[headerName]);
+            }
+          }
+
+          const formData = new FormData();
+          for (const key in this.params) {
+            formData.append(key, this.params[key]);
+          }
+
+          formData.set("chunkIndex", chunk.chunkIndex.toString(10));
+          formData.set("chunkLength", chunk.chunkLength.toString(10));
+
+          this.$emit("sending", chunk, xhr, formData);
+
+          formData.append(this.paramName, chunk.nativeFile, chunk.name);
+
+          xhr.send(formData);
+        })
+    );
+
+    Promise.all(promises)
+      .then(() => {
+        file.endProgress();
+        file.status = STATUSES.SUCCESS;
+        file.endProgress();
+        this.$emit("success", file, chunkResponses);
+        this.$emit("complete", file);
+
+        if (this.autoProcessQueue) {
+          this.processQueue();
+        }
+      })
+      .catch((err: VTError | Error) => {
+        if (err instanceof Error || err.source !== "vtransmit") {
+          console.error(err);
+          throw err;
+        }
+
+        switch (err.type) {
+          case ErrorType.Timeout:
+            this.$emit("timeout", file, err.error);
+            break;
+
+          case ErrorType.Status:
+            const xhr: XMLHttpRequest = err.error;
+            if (file.status !== STATUSES.CANCELED) {
+              const message = this.dictResponseError.replace(
+                hbsRegex,
+                hbsReplacer({
+                  statusText: xhr.statusText,
+                  statusCode: xhr.status,
+                })
+              );
+              this.errorProcessing([file], message);
+            }
+            break;
+
+          case ErrorType.Any:
+            const errEvt: ErrorEvent = err.error;
+            this.errorProcessing([file], String(errEvt.error));
+            break;
+
+          default:
+            expectNever(err.type);
+        }
+      });
+  }
+
   uploadFiles(files: VTransmitFile[]): void {
+    files.filter(f => f.isChunked).forEach(this.uploadChunkedFile);
+    files = files.filter(f => !f.isChunked);
+
+    if (files.length == 0) {
+      return;
+    }
+
     const xhr = new XMLHttpRequest();
     for (const file of files) {
       file.xhr = xhr;
@@ -725,17 +943,17 @@ export default class VueTransmit extends Vue {
       }
       vm.$emit("timeout-multiple", files, e, xhr);
 
-      if (this.autoProcessQueue) {
-        this.processQueue();
+      if (vm.autoProcessQueue) {
+        vm.processQueue();
       }
     };
   }
-  handleUploadProgress(files): (e?: ProgressEvent) => void {
+  handleUploadProgress(files: VTransmitFile[]): (e?: ProgressEvent) => void {
     const vm = this;
     return function onProgressFn(e?: ProgressEvent): void {
       if (e instanceof ProgressEvent) {
         for (const file of files) {
-          file.handleProgress(e);
+          file.handleProgressEvent(e);
         }
       } else {
         let allFilesFinished = true;
@@ -782,7 +1000,7 @@ export default class VueTransmit extends Vue {
 
     this.$emit("total-upload-progress", progress);
   }
-  getParamName(index): string {
+  getParamName(index: string | number): string {
     return this.paramName + (this.uploadMultiple ? `[${index}]` : "");
   }
   uploadFinished(
@@ -828,7 +1046,7 @@ export default class VueTransmit extends Vue {
     }
   }
   acceptFile(file: VTransmitFile, done: Function): void {
-    if (file.size > this.maxFileSize * 1024 * 1024) {
+    if (file.size > this.maxFileSize * 1024 * 1024 && !this.withChunking) {
       done(
         this.dictFileTooBig.replace(
           hbsRegex,
@@ -956,7 +1174,10 @@ export default class VueTransmit extends Vue {
     for (const item of items) {
       // Newer API on standards track
       if (item.getAsFile && item.kind == "file") {
-        this.addFile(item.getAsFile());
+        let f = item.getAsFile();
+        if (f) {
+          this.addFile(f);
+        }
         continue;
       }
 
@@ -978,7 +1199,7 @@ export default class VueTransmit extends Vue {
       }
     }
   }
-  addFilesFromDirectory(directory: WebKitDirectoryEntry, path): void {
+  addFilesFromDirectory(directory: WebKitDirectoryEntry, path: string): void {
     directory.createReader().readEntries(
       <any>((entries: FileSystemEntry[]) => {
         for (const entry of entries) {
@@ -1010,8 +1231,8 @@ export default class VueTransmit extends Vue {
   mounted() {
     this.$on("upload-progress", this.updateTotalUploadProgress);
     this.$on("removed-file", this.updateTotalUploadProgress);
-    this.$on("canceled", file => this.$emit("complete", file));
-    this.$on("complete", file => {
+    this.$on("canceled", (file: VTransmitFile) => this.$emit("complete", file));
+    this.$on("complete", (file: VTransmitFile) => {
       if (
         this.addedFiles.length === 0 &&
         this.uploadingFiles.length === 0 &&

@@ -68,6 +68,7 @@ try {
 	echo json_encode([
 		'message' => 'File is uploaded successfully.',
 		'url' => $path,
+		'post' => $_POST,
 	]);
 }
 catch (RuntimeException $e) {

@@ -108,7 +108,7 @@
                         upload-area-classes="vh-20"
                         drag-class="dragging"
                         v-bind="options"
-												@added-file="onAddedFile"
+                        @added-file="onAddedFile"
                         @success="onUploadSuccess"
                         @error="onError">
             <flex-col align-v="center"
@@ -180,7 +180,9 @@
             acceptedFileTypes: ['image/*'],
             url: './upload.php',
             clickable: false,
-            accept: this.accept
+						accept: this.accept,
+						withChunking: true,
+						maxFileSize: .5,
           },
           files: [],
           showModal: false,
@@ -190,13 +192,13 @@
       methods: {
         triggerBrowse() {
           this.$refs.uploader.triggerBrowseFiles()
-				},
-				onAddedFile(file) {
-					console.log(
-						this.$refs.uploader.inputEl.value,
-						this.$refs.uploader.inputEl.files
-					)
-				},
+        },
+        onAddedFile(file) {
+          console.log(
+            this.$refs.uploader.inputEl.value,
+            this.$refs.uploader.inputEl.files
+          )
+        },
         onUploadSuccess(file, res) {
           console.log(res)
           file.src = res.url

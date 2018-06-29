@@ -5,10 +5,7 @@ export declare const assign: {
     <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
     (target: object, ...sources: any[]): any;
 };
-export declare const defineProperty: {
-    (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
-    (o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
-};
+export declare const defineProperty: (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any;
 export declare function uniqueId(prefix: string): string;
 export declare function copyOwnAndInheritedProps(obj: object): object;
 export declare type Rounding = "round" | "ceil" | "floor" | "trunc";
@@ -40,3 +37,15 @@ export interface IDimensions {
 export declare function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArgs;
 export declare function webkitIsFile(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitFileEntry;
 export declare function webkitIsDir(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitDirectoryEntry;
+/**
+ * For a file named `image.jpg`,
+ * returns a chunk name in the format:
+ * ```
+'image--chunk-1-of-2.jpg'
+```
+ */
+export declare function defaultRenameChunk(parentFile: VTransmitFile, meta: {
+    chunkIndex: number;
+    chunkLength: number;
+}): string;
+export declare function expectNever(_: never, msg?: string): never;
