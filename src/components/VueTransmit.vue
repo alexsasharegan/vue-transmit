@@ -1,64 +1,64 @@
 <template>
-   <component :is="tag">
-      <div class="v-transmit__upload-area"
-           :class="[isDraggingClass, uploadAreaClasses]"
-           :draggable="!disabledDraggable"
-           v-bind="uploadAreaAttrs"
-           v-on="uploadAreaListeners"
-           @click="handleClickUploaderAction"
-           @dragstart="handleDragStart"
-           @dragend="handleDragEnd"
-           @dragenter.prevent.stop="handleDragEnter"
-           @dragover.prevent.stop="handleDragOver"
-           @dragleave="handleDragLeave"
-           @drop.prevent.stop="handleDrop">
-         <slot></slot>
-      </div>
-      <slot name="files"
-            v-bind="fileSlotBindings"></slot>
-      <form :style="formStyles"
-            ref="uploadForm">
-         <input type="file"
-                ref="hiddenFileInput"
-                :multiple="multiple"
-                :class="[maxFilesReachedClass]"
-                :accept="filesToAccept"
-                :capture="capture"
-                @change="onFileInputChange">
-      </form>
-   </component :is="tag">
+	<component :is="tag">
+		<div class="v-transmit__upload-area"
+		     :class="[isDraggingClass, uploadAreaClasses]"
+		     :draggable="!disabledDraggable"
+		     v-bind="uploadAreaAttrs"
+		     v-on="uploadAreaListeners"
+		     @click="handleClickUploaderAction"
+		     @dragstart="handleDragStart"
+		     @dragend="handleDragEnd"
+		     @dragenter.prevent.stop="handleDragEnter"
+		     @dragover.prevent.stop="handleDragOver"
+		     @dragleave="handleDragLeave"
+		     @drop.prevent.stop="handleDrop">
+			<slot></slot>
+		</div>
+		<slot name="files"
+		      v-bind="fileSlotBindings"></slot>
+		<form :style="formStyles"
+		      ref="uploadForm">
+			<input type="file"
+			       ref="hiddenFileInput"
+			       :multiple="multiple"
+			       :class="[maxFilesReachedClass]"
+			       :accept="filesToAccept"
+			       :capture="capture"
+			       @change="onFileInputChange">
+		</form>
+	</component :is="tag">
 </template>
 
 <style lang="scss">
-   $border-color: #bdbdbd;
-   $drop-color: #e1f5fe;
-   $drop-color-alt: #fafafa;
+	$border-color: #bdbdbd;
+	$drop-color: #e1f5fe;
+	$drop-color-alt: #fafafa;
 
-   .v-transmit__upload-area {
-     width: 100%;
-     border-radius: 1rem;
-     border: 2px dashed $border-color;
-     min-height: 30vh;
+	.v-transmit__upload-area {
+	  width: 100%;
+	  border-radius: 1rem;
+	  border: 2px dashed $border-color;
+	  min-height: 30vh;
 
-     @media (min-height: 1000px) {
-       min-height: 300px;
-     }
-   }
+	  @media (min-height: 1000px) {
+	    min-height: 300px;
+	  }
+	}
 
-   .v-transmit__upload-area--is-dragging {
-     background: $drop-color
-       linear-gradient(
-         -45deg,
-         $drop-color-alt 25%,
-         transparent 25%,
-         transparent 50%,
-         $drop-color-alt 50%,
-         $drop-color-alt 75%,
-         transparent 75%,
-         transparent
-       );
-     background-size: 40px 40px;
-   }
+	.v-transmit__upload-area--is-dragging {
+	  background: $drop-color
+	    linear-gradient(
+	      -45deg,
+	      $drop-color-alt 25%,
+	      transparent 25%,
+	      transparent 50%,
+	      $drop-color-alt 50%,
+	      $drop-color-alt 75%,
+	      transparent 75%,
+	      transparent
+	    );
+	  background-size: 40px 40px;
+	}
 </style>
 
 <script lang="ts">
@@ -76,6 +76,7 @@ import {
   webkitIsFile,
   webkitIsDir,
   defaultRenameChunk,
+  expectNever,
 } from "../core/utils";
 import VTransmitFile from "../classes/VTransmitFile";
 
@@ -663,7 +664,6 @@ export default class VueTransmit extends Vue {
     }
 
     interface VTError {
-      ok: false;
       source: "vtransmit";
       type: ErrorType;
       error: any;
@@ -683,7 +683,6 @@ export default class VueTransmit extends Vue {
           xhr.addEventListener("error", evt =>
             reject({
               source: "vtransmit",
-              ok: false,
               type: ErrorType.Any,
               error: evt,
             })
@@ -745,6 +744,7 @@ export default class VueTransmit extends Vue {
               return reject({
                 source: "vtransmit",
                 type: ErrorType.Status,
+                error: xhr,
               });
             }
 
@@ -756,7 +756,6 @@ export default class VueTransmit extends Vue {
           const headers = Object.assign(
             Object.create(null),
             this.defaultHeaders,
-            { "Transfer-Encoding": "chunked" },
             this.headers
           );
 
@@ -802,11 +801,30 @@ export default class VueTransmit extends Vue {
 
         switch (err.type) {
           case ErrorType.Timeout:
-            //
+            this.$emit("timeout", file, err.error);
+            break;
+
+          case ErrorType.Status:
+            const xhr: XMLHttpRequest = err.error;
+            if (file.status !== STATUSES.CANCELED) {
+              const message = this.dictResponseError.replace(
+                hbsRegex,
+                hbsReplacer({
+                  statusText: xhr.statusText,
+                  statusCode: xhr.status,
+                })
+              );
+              this.errorProcessing([file], message);
+            }
+            break;
+
+          case ErrorType.Any:
+            const errEvt: ErrorEvent = err.error;
+            this.errorProcessing([file], String(errEvt.error));
             break;
 
           default:
-            break;
+            expectNever(err.type);
         }
       });
   }
@@ -814,6 +832,10 @@ export default class VueTransmit extends Vue {
   uploadFiles(files: VTransmitFile[]): void {
     files.filter(f => f.isChunked).forEach(this.uploadChunkedFile);
     files = files.filter(f => !f.isChunked);
+
+    if (files.length == 0) {
+      return;
+    }
 
     const xhr = new XMLHttpRequest();
     for (const file of files) {

@@ -37,3 +37,15 @@ export interface IDimensions {
 export declare function resizeImg(file: VTransmitFile, dims: IDimensions): IDrawImageArgs;
 export declare function webkitIsFile(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitFileEntry;
 export declare function webkitIsDir(entry: WebKitFileEntry | WebKitDirectoryEntry): entry is WebKitDirectoryEntry;
+/**
+ * For a file named `image.jpg`,
+ * returns a chunk name in the format:
+ * ```
+'image--chunk-1-of-2.jpg'
+```
+ */
+export declare function defaultRenameChunk(parentFile: VTransmitFile, meta: {
+    chunkIndex: number;
+    chunkLength: number;
+}): string;
+export declare function expectNever(_: never, msg?: string): never;

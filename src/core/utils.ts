@@ -159,3 +159,7 @@ export function defaultRenameChunk(
     meta.chunkLength
   }${ext}`;
 }
+
+export function expectNever(_: never, msg = `unexpected condition`): never {
+  throw new Error(msg);
+}
