@@ -184,7 +184,7 @@ vue-transmit
 
 ## Props: <code>&lt;vue-transmit&gt;</code>
 
-[**View Source**](./src/components/VueTransmit.vue#L87)
+[**View Source**](./src/components/VueTransmit.vue#L91)
 
 | Property               | Type                  | Default/Function Signature                                                                                                                                                                 |
 | ---------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -218,7 +218,7 @@ vue-transmit
 
 ## Adapter Options: XHRUploadAdapter
 
-[**View Source**](./src/upload-adapters/xhr.ts#L24-L79)
+[**View Source**](./src/upload-drivers/xhr.ts#L41)
 
 | Property          | Type                                                              | Default/Function Signature                        |
 | ----------------- | ----------------------------------------------------------------- | ------------------------------------------------- |
