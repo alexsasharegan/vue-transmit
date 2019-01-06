@@ -1,95 +1,95 @@
 {
-  "name": "vue-transmit",
-  "version": "9.0.0-alpha.11",
-  "description": "Vue.js drag & drop uploader based on Dropzone.js",
-  "module": "dist/vue-transmit.esm.js",
-  "main": "dist/vue-transmit.js",
-  "types": "dist/index.d.ts",
-  "keywords": [
-    "dragndrop",
-    "drag and drop",
-    "file upload",
-    "upload"
-  ],
-  "directories": {
-    "test": "test"
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "clean": "scripts/clean.js",
-    "predev": "npm run clean",
-    "dev": "cross-env NODE_ENV=development rollup -c ./rollup.config.js",
-    "prebuild": "npm run clean",
-    "build": "cross-env NODE_ENV=production rollup -c ./rollup.config.js",
-    "prepublishOnly": "npm run build",
-    "test:site": "php -S localhost:3030 -t ./test/",
-    "test:jest": "jest --coverage",
-    "test": "npm run test:jest",
-    "precommit": "pretty-quick --staged",
-    "size:min": "cat dist/vue-transmit.esm.js | wc -c",
-    "size:gzip": "gzip -c dist/vue-transmit.esm.js | wc -c",
-    "release:alpha": "standard-version --prerelease alpha",
-    "postrelease:alpha": "git push --follow-tags origin master && npm publish --tag prerelease",
-    "release:beta": "standard-version --prerelease beta",
-    "postrelease:beta": "git push --follow-tags origin master && npm publish --tag prerelease",
-    "release": "standard-version",
-    "postrelease": "git push --follow-tags origin master && npm publish"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testMatch": [
-      "**/__tests__/*.(ts|js)",
-      "**/?(*.)(spec|test).(js|ts)"
-    ],
-    "coverageDirectory": "coverage",
-    "collectCoverage": true,
-    "mapCoverage": true
-  },
-  "peerDependencies": {
-    "vue": "^2.5.0"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "cross-env": "^5.1.5",
-    "firebase": "^5.0.3",
-    "husky": "^0.14.3",
-    "jest": "^22.4.4",
-    "lodash": "^4.17.10",
-    "postcss": "^6.0.22",
-    "prettier": "^1.12.1",
-    "pretty-quick": "^1.5.0",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.59.1",
-    "rollup-plugin-postcss": "^1.6.1",
-    "rollup-plugin-typescript2": "^0.14.0",
-    "rollup-plugin-uglify": "^4.0.0",
-    "rollup-plugin-vue": "^3.0.0",
-    "standard-version": "^4.3.0",
-    "ts-jest": "^22.4.6",
-    "typescript": "^2.8.3",
-    "uglify-es": "^3.3.9",
-    "uglify-js": "^3.3.25",
-    "vue": "^2.5.16",
-    "vue-template-compiler": "^2.5.16"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alexsasharegan/vue-transmit.git"
-  },
-  "author": "Alex Regan <alex.joseph.regan@gmail.com> (https://github.com/alexsasharegan)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/alexsasharegan/vue-dropzone/issues"
-  },
-  "homepage": "https://github.com/alexsasharegan/vue-dropzone#readme"
+	"name": "vue-transmit",
+	"version": "9.0.0-alpha.11",
+	"description": "Vue.js drag & drop uploader based on Dropzone.js",
+	"module": "dist/vue-transmit.esm.js",
+	"main": "dist/vue-transmit.js",
+	"types": "dist/index.d.ts",
+	"keywords": [
+		"dragndrop",
+		"drag and drop",
+		"file upload",
+		"upload"
+	],
+	"directories": {
+		"test": "test"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"clean": "scripts/clean.js",
+		"predev": "npm run clean",
+		"dev": "cross-env NODE_ENV=development rollup -c ./rollup.config.js",
+		"prebuild": "npm run clean",
+		"build": "cross-env NODE_ENV=production rollup -c ./rollup.config.js",
+		"prepublishOnly": "npm run build",
+		"test:site": "php -S localhost:3030 -t ./test/",
+		"test:jest": "jest --coverage",
+		"test": "npm run test:jest",
+		"precommit": "pretty-quick --staged",
+		"size:min": "cat dist/vue-transmit.esm.js | wc -c",
+		"size:gzip": "gzip -c dist/vue-transmit.esm.js | wc -c",
+		"release:alpha": "standard-version --prerelease alpha",
+		"postrelease:alpha": "git push --follow-tags origin master && npm publish --tag prerelease",
+		"release:beta": "standard-version --prerelease beta",
+		"postrelease:beta": "git push --follow-tags origin master && npm publish --tag prerelease",
+		"release": "standard-version",
+		"postrelease": "git push --follow-tags origin master && npm publish"
+	},
+	"jest": {
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js"
+		],
+		"transform": {
+			"\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+		},
+		"testMatch": [
+			"**/__tests__/*.(ts|js)",
+			"**/?(*.)(spec|test).(js|ts)"
+		],
+		"coverageDirectory": "coverage",
+		"collectCoverage": true,
+		"mapCoverage": true
+	},
+	"peerDependencies": {
+		"vue": "^2.5.0"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@types/jest": "^23.3.12",
+		"cross-env": "^5.2.0",
+		"firebase": "^5.7.2",
+		"husky": "^1.3.1",
+		"jest": "^23.6.0",
+		"lodash": "^4.17.11",
+		"postcss": "^7.0.7",
+		"prettier": "^1.15.3",
+		"pretty-quick": "^1.8.0",
+		"rimraf": "^2.6.3",
+		"rollup": "^1.0.2",
+		"rollup-plugin-postcss": "^1.6.3",
+		"rollup-plugin-typescript2": "^0.18.1",
+		"rollup-plugin-uglify": "^6.0.0",
+		"rollup-plugin-vue": "^4.3.2",
+		"standard-version": "^4.4.0",
+		"ts-jest": "^23.10.5",
+		"typescript": "^3.2.2",
+		"uglify-es": "^3.3.9",
+		"uglify-js": "^3.4.9",
+		"vue": "^2.5.21",
+		"vue-template-compiler": "^2.5.21"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alexsasharegan/vue-transmit.git"
+	},
+	"author": "Alex Regan <alex.joseph.regan@gmail.com> (https://github.com/alexsasharegan)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/alexsasharegan/vue-dropzone/issues"
+	},
+	"homepage": "https://github.com/alexsasharegan/vue-dropzone#readme"
 }
