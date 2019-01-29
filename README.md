@@ -8,6 +8,12 @@
 [![GitHub stars](https://img.shields.io/github/stars/alexsasharegan/vue-transmit.svg?style=for-the-badge)](https://github.com/alexsasharegan/vue-transmit/stargazers)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=for-the-badge)](https://conventionalcommits.org)
 
+**STATUS: Unmaintained**
+
+_I am currently unable to give this project much attention. I won't be
+addressing issues or creating new versions for the forseeable future. Feel free
+to fork this project and hack away though!_
+
 A Vue.js drag & drop uploader based on Dropzone.js (`~22KB`, `~6.5KB` gzipped).
 Many thanks to [Matias Meno](https://gitlab.com/meno/dropzone/tree/master) for
 paving the way with the original Dropzone.js!
@@ -24,26 +30,26 @@ to add to the docs?
 
 ## Table of Contents
 
-* [Features](#features) - Vue Transmit features
-* [v8.x](#v8xx) - Info for v8.x users
-* [Installation](#installation) - Package install
-  * [Builds](#builds) - ESM, UMD build info
-* [Component Props](#props-vue-transmit) - Vue component props
-* [XHR Adapter Options](#adapter-options-xhruploadadapter) - Default adapter
-  options
-* [Component Events](#events) - Events emitted from VueTransmit
-* [File Statuses](#file-statuses) - enum of `file.status` values
-* [Slots](#slots) - Component slots
-  * [Slot: default](#default-slotsdefault) - default slot
-  * [Slot: `"files"`](#files-scoped-slotsfiles) - files slot
-* [VTransmitFile](#vtransmitfile) - the class that wraps the native File object
-* [Usage example](#usage) - implementation example
-* [FAQ](#faq) - Frequently Asked Questions
-  * [I don't see the dropzone](#i-dont-see-the-dropzone)
-  * [How to add a button or text to the dropzone](#how-to-add-a-button-or-text-to-the-dropzone)
-  * [Accessing the VueTransmit instance](#accessing-the-vuetransmit-component-instance)
-  * [How to Remove a File](#how-to-remove-a-file)
-* [Lifecycle](#lifecycle) - Basic explanation of upload lifecycle
+-  [Features](#features) - Vue Transmit features
+-  [v8.x](#v8xx) - Info for v8.x users
+-  [Installation](#installation) - Package install
+   -  [Builds](#builds) - ESM, UMD build info
+-  [Component Props](#props-vue-transmit) - Vue component props
+-  [XHR Adapter Options](#adapter-options-xhruploadadapter) - Default adapter
+   options
+-  [Component Events](#events) - Events emitted from VueTransmit
+-  [File Statuses](#file-statuses) - enum of `file.status` values
+-  [Slots](#slots) - Component slots
+   -  [Slot: default](#default-slotsdefault) - default slot
+   -  [Slot: `"files"`](#files-scoped-slotsfiles) - files slot
+-  [VTransmitFile](#vtransmitfile) - the class that wraps the native File object
+-  [Usage example](#usage) - implementation example
+-  [FAQ](#faq) - Frequently Asked Questions
+   -  [I don't see the dropzone](#i-dont-see-the-dropzone)
+   -  [How to add a button or text to the dropzone](#how-to-add-a-button-or-text-to-the-dropzone)
+   -  [Accessing the VueTransmit instance](#accessing-the-vuetransmit-component-instance)
+   -  [How to Remove a File](#how-to-remove-a-file)
+-  [Lifecycle](#lifecycle) - Basic explanation of upload lifecycle
 
 ## Download
 
@@ -80,14 +86,14 @@ uploads reactively, since the native object properties are read-only. This class
 also adds useful information not present in the native File object (dimensions,
 upload stats, etc.).
 
-* HTML 5 file uploads
-* Emits upload lifecycle events (accepted, sending, progress, success, etc.)
-* Image thumbnail previews
-* Support for concurrent uploads
-* Modular upload transport layer
-* Completely written in Vue.js&mdash;no wrapper components
-* Scoped slots allow for fully customizable styling
-* Written in modern TypeScript/ES6 with modules
+-  HTML 5 file uploads
+-  Emits upload lifecycle events (accepted, sending, progress, success, etc.)
+-  Image thumbnail previews
+-  Support for concurrent uploads
+-  Modular upload transport layer
+-  Completely written in Vue.js&mdash;no wrapper components
+-  Scoped slots allow for fully customizable styling
+-  Written in modern TypeScript/ES6 with modules
 
 _\* Note: this library uses some built-ins (`Array.from`, `Promise`) that
 require
@@ -153,10 +159,10 @@ const { VueTransmit } = window.VueTransmit;
 
 // Your component using VueTransmit
 const MyComponent = Vue.extend({
-  name: "my-component",
-  components: {
-    "vue-transmit": VueTransmit,
-  },
+	name: "my-component",
+	components: {
+		"vue-transmit": VueTransmit,
+	},
 });
 ```
 
@@ -283,15 +289,15 @@ Accepted/rejected is derived from the `file.accepted` boolean property.
 
 ```ts
 enum UploadStatuses {
-  None = "",
-  Added = "added",
-  Queued = "queued",
-  Accepted = "queued",
-  Uploading = "uploading",
-  Canceled = "canceled",
-  Error = "error",
-  Timeout = "timeout",
-  Success = "success",
+	None = "",
+	Added = "added",
+	Queued = "queued",
+	Accepted = "queued",
+	Uploading = "uploading",
+	Canceled = "canceled",
+	Error = "error",
+	Timeout = "timeout",
+	Success = "success",
 }
 ```
 
@@ -308,18 +314,18 @@ This slot receives a number of props:
 
 ```ts
 interface FilesSlotProps {
-  files: VTransmitFile[];
-  acceptedFiles: VTransmitFile[];
-  rejectedFiles: VTransmitFile[];
-  addedFiles: VTransmitFile[];
-  queuedFiles: VTransmitFile[];
-  uploadingFiles: VTransmitFile[];
-  canceledFiles: VTransmitFile[];
-  failedFiles: VTransmitFile[];
-  timeoutFiles: VTransmitFile[];
-  successfulFiles: VTransmitFile[];
-  activeFiles: VTransmitFile[];
-  isUploading: boolean;
+	files: VTransmitFile[];
+	acceptedFiles: VTransmitFile[];
+	rejectedFiles: VTransmitFile[];
+	addedFiles: VTransmitFile[];
+	queuedFiles: VTransmitFile[];
+	uploadingFiles: VTransmitFile[];
+	canceledFiles: VTransmitFile[];
+	failedFiles: VTransmitFile[];
+	timeoutFiles: VTransmitFile[];
+	successfulFiles: VTransmitFile[];
+	activeFiles: VTransmitFile[];
+	isUploading: boolean;
 }
 ```
 
@@ -327,34 +333,33 @@ interface FilesSlotProps {
 
 ```json
 {
-  "_nativeFile": {},
-  "id": "v-transmit-file-1",
-  "accepted": true,
-  "lastModified": 1478117443000,
-  "lastModifiedDate": "2016-11-02T20:10:43.000Z",
-  "name": "cosmo.jpg",
-  "processing": true,
-  "size": 142776,
-  "status": "success",
-  "type": "image/jpeg",
-  "upload": {
-    "bytesSent": 142776,
-    "progress": 100,
-    "speed": {
-      "kbps": 10.06,
-      "mbps": 0.01
-    },
-    "start": 1503273157993,
-    "end": 1503273158029,
-    "time": 0.036,
-    "total": 142776
-  },
-  "webkitRelativePath": "",
-  "width": 700,
-  "height": 700,
-  "xhr": {},
-  "dataUrl":
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAgAElEQVR4XlS9B7RmZ3UluG/="
+	"_nativeFile": {},
+	"id": "v-transmit-file-1",
+	"accepted": true,
+	"lastModified": 1478117443000,
+	"lastModifiedDate": "2016-11-02T20:10:43.000Z",
+	"name": "cosmo.jpg",
+	"processing": true,
+	"size": 142776,
+	"status": "success",
+	"type": "image/jpeg",
+	"upload": {
+		"bytesSent": 142776,
+		"progress": 100,
+		"speed": {
+			"kbps": 10.06,
+			"mbps": 0.01
+		},
+		"start": 1503273157993,
+		"end": 1503273158029,
+		"time": 0.036,
+		"total": 142776
+	},
+	"webkitRelativePath": "",
+	"width": 700,
+	"height": 700,
+	"xhr": {},
+	"dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAgAElEQVR4XlS9B7RmZ3UluG/="
 }
 ```
 
@@ -371,68 +376,82 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
 
 ```html
 <template>
-  <main id="root" class="mt-5">
-    <div class="container">
-      <div class="row">
-        <header class="col-12 text-center">
-          <h1 class="mb-5"><code>&lt;vue-transmit&gt;</code></h1>
-        </header>
-        <vue-transmit class="col-12"
-                      tag="section"
-                      v-bind="options"
-                      upload-area-classes="bg-faded"
-                      ref="uploader">
-          <div class="d-flex align-items-center justify-content-center w-100"
-                style="height:50vh; border-radius: 1rem;">
-            <button class="btn btn-primary"
-                    @click="triggerBrowse">Upload Files</button>
-          </div>
-          <!-- Scoped slot -->
-          <template slot="files" slot-scope="props">
-            <div v-for="(file, i) in props.files" :key="file.id" :class="{'mt-5': i === 0}">
-              <div class="media">
-                <img :src="file.dataUrl" class="img-fluid d-flex mr-3">
-                <div class="media-body">
-                  <h3>{{ file.name }}</h3>
-                  <div class="progress" style="width: 50vw;">
-                    <div class="progress-bar bg-success"
-                        :style="{width: file.upload.progress + '%'}"></div>
-                  </div>
-                  <pre>{{ file | json }} </pre>
-                </div>
-              </div>
-            </div>
-          </template>
-        </vue-transmit>
-      </div>
-    </div>
-  </main>
+	<main id="root" class="mt-5">
+		<div class="container">
+			<div class="row">
+				<header class="col-12 text-center">
+					<h1 class="mb-5"><code>&lt;vue-transmit&gt;</code></h1>
+				</header>
+				<vue-transmit
+					class="col-12"
+					tag="section"
+					v-bind="options"
+					upload-area-classes="bg-faded"
+					ref="uploader"
+				>
+					<div
+						class="d-flex align-items-center justify-content-center w-100"
+						style="height:50vh; border-radius: 1rem;"
+					>
+						<button class="btn btn-primary" @click="triggerBrowse">
+							Upload Files
+						</button>
+					</div>
+					<!-- Scoped slot -->
+					<template slot="files" slot-scope="props">
+						<div
+							v-for="(file, i) in props.files"
+							:key="file.id"
+							:class="{'mt-5': i === 0}"
+						>
+							<div class="media">
+								<img
+									:src="file.dataUrl"
+									class="img-fluid d-flex mr-3"
+								/>
+								<div class="media-body">
+									<h3>{{ file.name }}</h3>
+									<div class="progress" style="width: 50vw;">
+										<div
+											class="progress-bar bg-success"
+											:style="{width: file.upload.progress + '%'}"
+										></div>
+									</div>
+									<pre>{{ file | json }} </pre>
+								</div>
+							</div>
+						</div>
+					</template>
+				</vue-transmit>
+			</div>
+		</div>
+	</main>
 </template>
 
 <script>
-  Vue.use(VueTransmit)
-  window.app = new Vue({
-    el: '#root',
-    data: {
-      options: {
-        acceptedFileTypes: ['image/*'],
-        clickable: false,
-        adapterOptions: {
-          url: './upload.php',
-        },
-      }
-    },
-    methods: {
-      triggerBrowse() {
-        this.$refs.uploader.triggerBrowseFiles()
-      },
-    },
-    filters: {
-      json(value) {
-        return JSON.stringify(value, null, 2)
-      }
-    }
-  })
+	Vue.use(VueTransmit);
+	window.app = new Vue({
+		el: "#root",
+		data: {
+			options: {
+				acceptedFileTypes: ["image/*"],
+				clickable: false,
+				adapterOptions: {
+					url: "./upload.php",
+				},
+			},
+		},
+		methods: {
+			triggerBrowse() {
+				this.$refs.uploader.triggerBrowseFiles();
+			},
+		},
+		filters: {
+			json(value) {
+				return JSON.stringify(value, null, 2);
+			},
+		},
+	});
 </script>
 ```
 
@@ -440,21 +459,27 @@ Now navigate to [http://localhost:3030/](http://localhost:3030/).
 
 ### I don't see the dropzone
 
-Default styles are extracted into a separate `.css` file and are entirely optional. If you are using Vue single-file components, you can include it via the `<style>` section:
+Default styles are extracted into a separate `.css` file and are entirely
+optional. If you are using Vue single-file components, you can include it via
+the `<style>` section:
 
 ```css
-@import '~vue-transmit/dist/vue-transmit.css'
+@import "~vue-transmit/dist/vue-transmit.css";
 ```
 
-Alternatively, you can style the dropzone using your own classes using the `uploadAreaClasses` and `dragClass` props.
+Alternatively, you can style the dropzone using your own classes using the
+`uploadAreaClasses` and `dragClass` props.
 
 ### How to add a button or text to the dropzone
 
-Vue Transmit doesn't add any markup for your dropzone target by default. Instead, it makes a default slot available for you to provide markup custom to your use-case. Any content you put between the opening and closing `<vue-transmit>` tags will be rendered inside the drop zone.
+Vue Transmit doesn't add any markup for your dropzone target by default.
+Instead, it makes a default slot available for you to provide markup custom to
+your use-case. Any content you put between the opening and closing
+`<vue-transmit>` tags will be rendered inside the drop zone.
 
 ```html
 <vue-transmit>
-  <h3 class="text-center">Drop file here or click to upload.</h3>
+	<h3 class="text-center">Drop file here or click to upload.</h3>
 </vue-transmit>
 ```
 
@@ -483,32 +508,33 @@ this.$refs.vtransmit.removeAllFiles((cancelInProgressUploads = false)); // all f
 The upload process has many stages, each with different possible outcomes. Here
 is an overview of the lifecycle of an upload with Vue Transmit:
 
-* Trigger event
-  * input on `change`: value of `input.files` is read and passed to `vm.addFile`
-  * target on `drop`: value of `event.dataTransfer["files" || "items"]` is
-    read/traversed and passed to `vm.addFile`
-* Add File
-  * instantiate `VTransmitFile` from native file object (for reactivity & extra
-    info)
-  * status `added`
-  * pushed onto `vm.files`
-  * thumbnail is enqueued
-* Accept File
-  * check size, type, upload limit
-  * invoke `accept` function for consumer validation
-  * `accept` or `reject` complete
-  * if `autoQueue`, enqueue file
-* Enqueue file
-  * check that file status is `added` & has been accepted
-  * status = `queued`
-  * if `autoProcessQueue`, invoke `processQueue` async _(like node
-    `setImmediate`)_
-* Process queue
-  * check number of uploading files against upload limit
-  * invoke `processFiles` with max amount of queued files options allow
-* Process files
-  * do upload
-* Progress updates
-* Complete upload
-  * status = `success || error`
-  * process queue to handle buffered files
+-  Trigger event
+   -  input on `change`: value of `input.files` is read and passed to
+      `vm.addFile`
+   -  target on `drop`: value of `event.dataTransfer["files" || "items"]` is
+      read/traversed and passed to `vm.addFile`
+-  Add File
+   -  instantiate `VTransmitFile` from native file object (for reactivity &
+      extra info)
+   -  status `added`
+   -  pushed onto `vm.files`
+   -  thumbnail is enqueued
+-  Accept File
+   -  check size, type, upload limit
+   -  invoke `accept` function for consumer validation
+   -  `accept` or `reject` complete
+   -  if `autoQueue`, enqueue file
+-  Enqueue file
+   -  check that file status is `added` & has been accepted
+   -  status = `queued`
+   -  if `autoProcessQueue`, invoke `processQueue` async _(like node
+      `setImmediate`)_
+-  Process queue
+   -  check number of uploading files against upload limit
+   -  invoke `processFiles` with max amount of queued files options allow
+-  Process files
+   -  do upload
+-  Progress updates
+-  Complete upload
+   -  status = `success || error`
+   -  process queue to handle buffered files
