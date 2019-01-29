@@ -1,8 +1,7 @@
 import path from "path";
 import TS from "rollup-plugin-typescript2";
 import VuePlugin from "rollup-plugin-vue";
-import { uglify as UglifyPlugin } from "rollup-plugin-uglify";
-import { minify } from "uglify-es";
+import { terser } from "rollup-plugin-terser";
 
 const is_production = process.env.NODE_ENV === `production`;
 const vtKebab = "vue-transmit";
@@ -10,7 +9,7 @@ const vtPascal = "VueTransmit";
 const cssOut = path.join(__dirname, `dist/${vtKebab}.css`);
 const vue_opts = { css: cssOut };
 const ts_opts = { include: ["*.ts+(|x)", "**/*.ts+(|x)", RegExp(".*.ts?.*")] };
-const plugins = [VuePlugin(vue_opts), TS()];
+const plugins = [VuePlugin(vue_opts), TS({ clean: true, verbosity: 1 })];
 
 export default [
 	{
@@ -49,7 +48,7 @@ export default [
 			...output,
 			file: replaceExtension(output.file, ".min.js"),
 		},
-		plugins: [...plugins, UglifyPlugin({}, minify)],
+		plugins: [...plugins, terser()],
 	});
 
 	return configs;

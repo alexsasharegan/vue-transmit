@@ -1,5 +1,6 @@
 import { uniqueId, round, toKbps, toMbps } from "../core/utils";
 import { UploadStatuses } from "../core/utils";
+import { AnyObject } from "../types";
 
 export interface UploadStats {
 	bytesSent: number;
@@ -31,7 +32,7 @@ export class VTransmitFile {
 	public processing: boolean = false;
 	public size: number;
 	public type: string;
-	public webkitRelativePath: USVString;
+	public webkitRelativePath: string;
 	public width: number = 0;
 	public height: number = 0;
 	public errorMessage: string = "";
@@ -61,10 +62,12 @@ export class VTransmitFile {
 	constructor(file: File) {
 		this.nativeFile = file;
 		this.lastModified = file.lastModified;
+		// @ts-ignore
 		this.lastModifiedDate = file.lastModifiedDate;
 		this.name = file.name;
 		this.size = file.size;
 		this.type = file.type;
+		// @ts-ignore
 		this.webkitRelativePath = file.webkitRelativePath;
 		this.upload.total = file.size;
 	}
@@ -72,7 +75,7 @@ export class VTransmitFile {
 	handleProgress(e: ProgressEvent): void {
 		this.startProgress();
 		const total = e.total || this.upload.total;
-		this.upload.progress = Math.min(100, 100 * e.loaded / total);
+		this.upload.progress = Math.min(100, (100 * e.loaded) / total);
 		this.upload.bytesSent = e.loaded;
 		this.upload.total = total;
 		this.upload.time = (Date.now() - this.upload.start) / 1000;

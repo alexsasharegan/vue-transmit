@@ -1,6 +1,7 @@
 import VueTransmit from "../components/VueTransmit.vue";
 import { VTransmitFile } from "./VTransmitFile";
 import { UploadStatuses } from "../core/utils";
+import { AnyObject } from "../types";
 
 export class VTransmitUploadContext {
 	public Statuses = UploadStatuses;

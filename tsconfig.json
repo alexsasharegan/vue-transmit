@@ -4,7 +4,7 @@
 		"outDir": "dist",
 		"declarationDir": "dist",
 		"allowSyntheticDefaultImports": true,
-		"lib": ["dom", "esnext"],
+		"lib": ["dom", "es2015", "esnext"],
 		"target": "es5",
 		"module": "es2015",
 		"moduleResolution": "node",

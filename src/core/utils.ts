@@ -1,4 +1,5 @@
 import { VTransmitFile } from "../classes/VTransmitFile";
+import { WebKitDirectoryEntry, WebKitEntry, WebKitFileEntry } from "../types";
 
 export function is_function(x: any): x is Function {
 	return typeof x == "function";
@@ -161,14 +162,10 @@ export function resizeImg(
 	return coords;
 }
 
-export function webkitIsFile(
-	entry: WebKitFileEntry | WebKitDirectoryEntry
-): entry is WebKitFileEntry {
+export function webkitIsFile(entry: WebKitEntry): entry is WebKitFileEntry {
 	return entry.isFile;
 }
 
-export function webkitIsDir(
-	entry: WebKitFileEntry | WebKitDirectoryEntry
-): entry is WebKitDirectoryEntry {
+export function webkitIsDir(entry: WebKitEntry): entry is WebKitDirectoryEntry {
 	return entry.isDirectory;
 }

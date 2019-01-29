@@ -7,6 +7,7 @@ import {
 	ErrType,
 	is_function,
 } from "../core/utils";
+import { Dictionary } from "../types";
 
 export type ParamName = string | ((file: VTransmitFile) => string);
 export type StaticOrDynamic<T> = T | ((files: VTransmitFile[]) => T);
@@ -182,6 +183,7 @@ export class XHRDriver<T = any> implements DriverInterface {
 		this.multipleParamNameStyle = multipleParamNameStyle;
 		this.params = params;
 		this.headers = headers;
+		// @ts-ignore
 		this.responseType = responseType;
 		this.responseParseFunc = responseParseFunc;
 		this.errUploadError = errUploadError;

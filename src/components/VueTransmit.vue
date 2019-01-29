@@ -1,36 +1,35 @@
 <template>
-   <component :is="tag">
-      <slot v-if="filesSlotFirst"
-            name="files"
-            v-bind="fileSlotBindings" />
-      <div class="v-transmit__upload-area"
-           :class="[isDraggingClass, uploadAreaClasses]"
-           :draggable="!disableDraggable"
-           v-bind="uploadAreaAttrs"
-           v-on="uploadAreaListeners"
-           @click="handleClickUploaderAction"
-           @dragstart="handleDragStart"
-           @dragend="handleDragEnd"
-           @dragenter.prevent.stop="handleDragEnter"
-           @dragover.prevent.stop="handleDragOver"
-           @dragleave="handleDragLeave"
-           @drop.prevent.stop="handleDrop">
-         <slot></slot>
-      </div>
-      <slot v-if="!filesSlotFirst"
-            name="files"
-            v-bind="fileSlotBindings" />
-      <form :style="formStyles"
-            ref="uploadForm">
-         <input type="file"
-                ref="hiddenFileInput"
-                :multiple="multiple"
-                :class="[maxFilesReachedClass]"
-                :accept="filesToAccept"
-                :capture="capture"
-                @change="onFileInputChange">
-      </form>
-   </component :is="tag">
+	<component :is="tag">
+		<slot v-if="filesSlotFirst" name="files" v-bind="fileSlotBindings" />
+		<div
+			class="v-transmit__upload-area"
+			:class="[isDraggingClass, uploadAreaClasses]"
+			:draggable="!disableDraggable"
+			v-bind="uploadAreaAttrs"
+			v-on="uploadAreaListeners"
+			@click="handleClickUploaderAction"
+			@dragstart="handleDragStart"
+			@dragend="handleDragEnd"
+			@dragenter.prevent.stop="handleDragEnter"
+			@dragover.prevent.stop="handleDragOver"
+			@dragleave="handleDragLeave"
+			@drop.prevent.stop="handleDrop"
+		>
+			<slot />
+		</div>
+		<slot v-if="!filesSlotFirst" name="files" v-bind="fileSlotBindings" />
+		<form :style="formStyles" ref="uploadForm">
+			<input
+				type="file"
+				ref="hiddenFileInput"
+				:multiple="multiple"
+				:class="[maxFilesReachedClass]"
+				:accept="filesToAccept"
+				:capture="capture"
+				@change="onFileInputChange"
+			/>
+		</form>
+	</component>
 </template>
 
 <style>
@@ -82,6 +81,7 @@ import { VTransmitFile } from "../classes/VTransmitFile";
 import { VTransmitUploadContext } from "../classes/VTransmitUploadContext";
 import { XHRDriver } from "../upload-drivers/xhr";
 import { DriverInterface, DriverConstructor } from "../core/interfaces";
+import { Dictionary, WebKitFileEntry, WebKitDirectoryEntry } from "../types";
 
 type FileSystemEntry = WebKitFileEntry | WebKitDirectoryEntry;
 
@@ -204,7 +204,7 @@ export default Vue.extend({
 		 * for a reference.
 		 */
 		acceptedFileTypes: {
-			type: Array,
+			type: Array as () => string[],
 			default() {
 				return [];
 			},
@@ -649,11 +649,15 @@ export default Vue.extend({
 				"load",
 				() => {
 					if (file.type === "image/svg+xml") {
-						file.dataUrl = reader.result;
+						file.dataUrl = reader.result as any;
 						this.$emit(VTransmitEvents.Thumbnail, file, reader.result);
 						callback();
 					}
-					this.createThumbnailFromUrl(file, reader.result, callback);
+					this.createThumbnailFromUrl(
+						file,
+						reader.result as any,
+						callback
+					);
 				},
 				false
 			);
@@ -847,7 +851,7 @@ export default Vue.extend({
 
 			if (this.activeFiles.length) {
 				progress.totalProgress =
-					100 * progress.totalBytesSent / progress.totalBytes;
+					(100 * progress.totalBytesSent) / progress.totalBytes;
 			}
 
 			this.$emit(VTransmitEvents.TotalUploadProgress, progress);
@@ -947,6 +951,9 @@ export default Vue.extend({
 			this.$emit("drag-start", e);
 		},
 		handleDragOver(e: DragEvent): void {
+			if (!e.dataTransfer) {
+				return;
+			}
 			this.dragging = true;
 			let effect;
 			try {
@@ -1002,7 +1009,6 @@ export default Vue.extend({
 			this.addFilesFromItems(items);
 		},
 		handlePaste(e: ClipboardEvent): void {
-			let cb = e.clipboardData || window.clipboardData;
 			if (!e || !e.clipboardData || !e.clipboardData.items) {
 				return;
 			}
